@@ -6,6 +6,7 @@ import slide4 from "../../Assets/Images/slider4.webp";
 import slide5 from "../../Assets/Images/slider5.webp";
 import slide6 from "../../Assets/Images/Slider2.jpeg";
 import slide7 from "../../Assets/Images/slider7.webp";
+import slide8 from "../../Assets/Images/WomenSlider0.webp";
 
 // Import Men plage Slide Images
 
