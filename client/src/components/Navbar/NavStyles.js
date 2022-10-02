@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { height } from "@mui/system";
+// import { height } from "@mui/system";
 
 export const NavbarContainer = styled.div`
   box-sizing: border-box;
@@ -76,9 +76,10 @@ export const NavbarLink = styled(Link)`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
+  font-family: Whitney Semibold;
   align-items: center;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
   height: 80px;
   color: #282c3f;
   padding: 0 15px;
@@ -145,9 +146,9 @@ export const Span = styled.span`
   width: 23px;
   height: 12px;
   margin: 0 0 5px -10px;
-  font-family: Whitney;
+  font-family: Whitney Semibold;
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
@@ -159,10 +160,11 @@ export const Span = styled.span`
 export const StdNavbarLink = styled(Link)`
   box-sizing: border-box;
   display: flex;
+  font-family: Whitney Semibold;
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
   height: 80px;
   color: #282c3f;
   padding: 0 15px;
@@ -200,6 +202,7 @@ export const StdContainer = styled.div`
     min-width: 164px;
     height: 40px;
     display: flex;
+    font-family: Whitney Semibold;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -212,9 +215,8 @@ export const StdContainer = styled.div`
   }
   .StudioLabel {
     min-width: 109px;
-    font-family: Whitney;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.43;
     text-align: center;
     color: #282c3f;
@@ -460,6 +462,7 @@ export const SvgImageContainer = styled.div`
     }
     .desktop-superscriptTag {
       box-sizing: content-box;
+      padding: 5px;
       width: 25px;
       height: 15px;
       background: #ff3f6c !important;

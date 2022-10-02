@@ -9,6 +9,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Men from "./pages/Men";
+import Products from "./pages/Products";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/shop/men" element={<Men />} />
+          <Route path="/:id" element={<Products />} />
         </Routes>
       </Router>
     </div>
