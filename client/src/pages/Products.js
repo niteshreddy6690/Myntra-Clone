@@ -1,19 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar/Navbar";
 import { Link } from "react-router-dom";
-import images1 from "../Assets/Images/Men/Men1.webp";
-import images2 from "../Assets/Images/Men/Men2.webp";
-import images3 from "../Assets/Images/3.webp";
-import Banner from "../components/Banner/Banner";
 
+import Banner from "../components/Banner/Banner";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// import required modules
+import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
+
+//Import images
+
+import images1 from "../Assets/Images/Men/MenA1.webp";
+import images2 from "../Assets/Images/Men/MenA2.webp";
+import images3 from "../Assets/Images/Men/MenA3.webp";
+import images4 from "../Assets/Images/Men/MenA4.webp";
+import images5 from "../Assets/Images/Men/MenA5.webp";
+
+import imagesB1 from "../Assets/Images/Men/MenB1.webp";
+import imagesB2 from "../Assets/Images/Men/MenB2.webp";
+import imagesB3 from "../Assets/Images/Men/MenB3.webp";
+import imagesB4 from "../Assets/Images/Men/MenB4.webp";
+
+import imagesC1 from "../Assets/Images/Men/MenC1.webp";
+import imagesC2 from "../Assets/Images/Men/MenC2.webp";
+import imagesC3 from "../Assets/Images/Men/MenC3.webp";
+import imagesC4 from "../Assets/Images/Men/MenC4.jpeg";
+
+// SwiperCore.use([Pagination, Autoplay]);
 const products = [
   {
     id: "1",
     brand: "HRX by Hrithik Roshan",
     Gender: ["men"],
     Desc: "Rapid Dry Training T-shirt",
-    img: [images1, images2, images1],
+    img: [images1, images2, images3, images4, images5],
     size: ["L", "M", "XL", "XS", "XXL"],
     OriginalPrice: "1999",
     discountPercentage: "60",
@@ -25,7 +46,7 @@ const products = [
     color: ["green", "limegreen"],
     Gender: ["men"],
     Desc: "Rapid Dry Training T-shirt",
-    img: [images2, images1, images1],
+    img: [imagesB1, imagesB2, imagesB1, imagesB3, imagesB4],
     size: ["L", "M", "XL", "XS", "XXL"],
     OriginalPrice: "1999",
     discountPercentage: "20",
@@ -36,7 +57,7 @@ const products = [
     brand: "HRX by Hrithik Roshan",
     Gender: ["men"],
     Desc: "Rapid Dry Training T-shirt",
-    img: [images1, images1, images1],
+    img: [imagesC1, imagesC2, imagesC3, imagesC1, imagesC4],
     size: ["L", "M", "XL", "XS", "XXL"],
     OriginalPrice: "1999",
     discountPercentage: "30",
@@ -196,7 +217,8 @@ const TitleContainer = styled.div`
 `;
 
 const Header1 = styled.h1`
-  font-weight: 600;
+  font-family: Whitney Semibold;
+  font-weight: 500;
   letter-spacing: 0.5px;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -227,6 +249,7 @@ const LeftSection = styled.div`
   flex-wrap: wrap;
   flex-direction: column;
   flex: 1;
+  font-family: Whitney Semibold;
 `;
 const Section = styled.section``;
 const LeftSectionDiv = styled.div`
@@ -246,13 +269,13 @@ const FilterDiv = styled.div`
 `;
 const FilterSpan = styled.span`
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 500;
 `;
 const CategoriesDiv = styled(FilterDiv)`
   padding: 20px 0 15px 25px;
 `;
 const CategoriesSpan = styled.span`
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
   font-size: 14px;
   margin: 0 0 18px;
@@ -279,6 +302,7 @@ const Label = styled.label`
   text-overflow: ellipsis;
   min-height: 20px;
   color: #282c3f;
+  font-family: Whitney Book;
   font-size: 14px;
 `;
 
@@ -383,6 +407,7 @@ const ProductHeader3 = styled.h3`
 `;
 const ProductHeader4 = styled.h4`
   color: #535766;
+  font-family: Whitney Book;
   font-size: 14px;
   line-height: 1;
   margin-bottom: 0;
@@ -419,7 +444,8 @@ const ProductOriginalPrice = styled.span`
 `;
 const ProductDiscountPercentage = styled.span`
   color: #ff905a;
-  font-weight: 400;
+  font-family: Whitney Book;
+  font-weight: 500;
   font-size: 12px;
   margin-left: 5px;
 `;
@@ -428,6 +454,23 @@ const ProductDiscountPercentage = styled.span`
 // };
 const Products = () => {
   const [isHover, setHover] = useState(false);
+  const swiperRef = React.useRef([]);
+  const onInit = function (Swiper) {
+    swiperRef.current = Swiper;
+  };
+  // const refSlider = useRef();
+  const handleMouseEnter = () => {
+    if (swiperRef.current) {
+      swiperRef.current.autoplay.start();
+    }
+    console.log(swiperRef.current);
+  };
+  const handleMouseLeave = () => {
+    if (swiperRef.current) {
+      swiperRef.current.autoplay.stop();
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -532,17 +575,57 @@ const Products = () => {
                   {products?.map((product) => (
                     <RLi
                       key={product.id}
-                      onMouseOver={() => setHover(true)}
-                      onMouseOut={() => setHover(false)}
+                      // onMouseOver={() => setHover(true)}
+                      // onMouseOut={() => setHover(false)}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
                     >
-                      <NavLink to="/">
+                      <NavLink
+                        to={`/${product.Gender}/${product.brand.replaceAll(
+                          " ",
+                          "-"
+                        )}/${product.Desc.replaceAll(" ", "-")}`}
+                      >
                         <ImageSliderContainer>
-                          <ProductSliderContainer isHover={isHover}>
+                          <ProductSliderContainer>
+                            <Swiper
+                              onInit={onInit}
+                              spaceBetween={0}
+                              centeredSlides={true}
+                              // autoplay={{
+                              //   delay: 2500,
+                              //   // disableOnInteraction: false,
+                              // }}
+                              autoplay={false}
+                              // autoplayDisableOnInteraction={false}
+                              pagination={{
+                                clickable: true,
+                              }}
+                              loop={true}
+                              modules={[Autoplay, Pagination]}
+                              // autoplay={{ delay: 25000 }}
+                              // // speed={1300}
+                              // spaceBetween={50}
+                              // slidesPerView={1}
+                              // allowTouchMove={false}
+                              // pagination={{ clickable: true }}
+                            >
+                              {product.img.map((image) => (
+                                <SwiperSlide>
+                                  <Image
+                                    // style={{ height: "50%" }}
+                                    src={image}
+                                  />
+                                </SwiperSlide>
+                              ))}
+                            </Swiper>
+                          </ProductSliderContainer>
+                          {/* <ProductSliderContainer isHover={isHover}>
                             {product.img.slice(0, 1).map((image) => (
                               <Image src={image} alt="Product" />
                             ))}
-                            {/* <Image src={product.img} alt="Product" /> */}
-                          </ProductSliderContainer>
+                            <Image src={product.img} alt="Product" />
+                          </ProductSliderContainer> */}
                         </ImageSliderContainer>
                         <ProductMetaInfo>
                           <ProductHeader3>{product.brand}</ProductHeader3>
@@ -565,8 +648,8 @@ const Products = () => {
                       </NavLink>
                     </RLi>
                   ))}
-                  <RLi></RLi>
-                  <RLi></RLi>
+                  <li></li>
+                  <li></li>
                 </RUl>
               </RSecttion>
             </RightSectionRowBase>

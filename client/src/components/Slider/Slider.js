@@ -39,7 +39,7 @@ const Slider = ({ sliders }) => {
           clickable: true,
         }}
         loop={true}
-        modules={[Autoplay, Pagination, Navigation]}
+        modules={[Autoplay, Pagination]}
       >
         <>
           {sliders?.map((item) => (
