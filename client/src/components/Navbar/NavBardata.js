@@ -6,12 +6,12 @@ export const links = [
     subLinks: [
       {
         group: "Topwear",
-        to: "/shop/men-topwear",
+        to: "/men-topwear",
         links: [
-          { to: "/shop/men", name: "T-Shirt" },
-          { to: "/shop/men", name: "Casual Shirt" },
-          { to: "/shop/men", name: "Formal Shirt" },
-          { to: "/shop/men", name: "SweatShirt" },
+          { to: "/men-tshirt", name: "T-Shirt" },
+          { to: "/men-casual-shirt", name: "Casual Shirt" },
+          { to: "/men-formal-shirt", name: "Formal Shirt" },
+          { to: "/men-sweat-shirt", name: "SweatShirt" },
           { to: "/shop/men", name: "Sweaters" },
           { to: "/shop/men", name: "Jackets" },
           { to: "/shop/men", name: "Blazers & Coates" },
@@ -115,10 +115,10 @@ export const links = [
         group: "Topwear",
         to: "/shop/women-topwear",
         links: [
+          { to: "/shop/men", name: "sub wome" },
           { to: "/shop/men", name: "sub women" },
-          { to: "/shop/men", name: "sub women" },
-          { to: "/shop/men", name: "sub women" },
-          { to: "/shop/men", name: "sub women" },
+          { to: "/shop/men", name: "sub womn" },
+          { to: "/shop/men", name: "sub woen" },
         ],
       },
       {

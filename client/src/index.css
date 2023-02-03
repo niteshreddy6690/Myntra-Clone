@@ -1,93 +1,125 @@
 body {
   margin: 0;
-  padding: 0;
-  width: 100%;
-
-  /* font-family: "Whitney", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family: "Whitney", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif; */
-  font-family: "Whitney", "Whitney Semibold", -apple-system, BlinkMacSystemFont,
-    Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
+    "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-@font-face {
-  font-family: "Whitney";
-  font-style: normal;
-  font-weight: 500;
-  src: local("Whitney"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneymedium.woff") format("woff");
+
+.removeScroll::-webkit-scrollbar {
+  display: none;
+  overflow: hidden;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
+html {
+  scroll-behavior: smooth;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-@font-face {
+/* @font-face {
   font-family: "Whitney";
   font-style: normal;
   font-weight: 500;
   src: local("Whitney"),
     url("https://fonts.cdnfonts.com/s/38487/whitneymedium.woff") format("woff");
+} */
+
+/* @font-face {
+  font-family: "Whitney";
+  font-style: normal;
+  font-weight: 500;
+  src: local("whitneymedium"), url("./fonts/whitneymedium.otf") format("otf");
 }
+
 @font-face {
   font-family: "Whitney";
   font-style: italic;
   font-weight: 500;
-  src: local("Whitney"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneymediumitalic.woff")
-      format("woff");
+  src: local("whitneymediumitalic"),
+    url("./fonts/whitneymediumitalic.otf") format("otf");
 }
 @font-face {
   font-family: "Whitney";
   font-style: normal;
   font-weight: 700;
-  src: local("Whitney"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneybold.woff") format("woff");
+  src: local("whitneybold"), url("./fonts/whitneybold.otf") format("otf");
 }
 @font-face {
   font-family: "Whitney Semibold";
   font-style: normal;
   font-weight: 500;
-  src: local("Whitney Semibold"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneysemibold.woff")
-      format("woff");
+  src: local("whitneysemibold"),
+    url("./fonts/whitneysemibold.otf") format("otf");
 }
 @font-face {
   font-family: "Whitney Book";
   font-style: normal;
   font-weight: 500;
-  src: local("Whitney Book"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneybook.woff") format("woff");
+  src: local("whitneybook"), url("./fonts/whitneybook.otf") format("otf");
 }
 @font-face {
   font-family: "Whitney Light";
   font-style: normal;
   font-weight: 500;
-  src: local("Whitney Light"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneylight.woff") format("woff");
-}
-@font-face {
+  src: local("whitneylight"), url("./fonts/whitneylight.otf") format("otf");
+} */
+/* @font-face {
   font-family: "Whitney Semibold";
   font-style: italic;
   font-weight: 500;
-  src: local("Whitney Semibold"),
-    url("https://fonts.cdnfonts.com/s/38487/WhitneySemiboldItalic.woff")
+  src: local("fonts/WhitneySemiboldItalic.otf");
+  url("https://fonts.cdnfonts.com/s/38487/WhitneySemiboldItalic.woff")
       format("woff");
 }
 @font-face {
   font-family: "Whitney Book";
   font-style: italic;
   font-weight: 500;
-  src: local("Whitney Book"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneybookitalic.woff")
+  src: local("fonts/whitneybookitalic.otf");
+  url("https://fonts.cdnfonts.com/s/38487/whitneybookitalic.woff")
       format("woff");
 }
 @font-face {
   font-family: "Whitney Light";
   font-style: italic;
   font-weight: 500;
-  src: local("Whitney Light"),
-    url("https://fonts.cdnfonts.com/s/38487/whitneylightitalic.woff")
+  src: local("fonts/whitneylightitalic.otf");
+  url("https://fonts.cdnfonts.com/s/38487/whitneylightitalic.woff")
       format("woff");
+}
+*/
+
+@font-face {
+  font-family: Whitney;
+  font-style: normal;
+  font-weight: 500;
+  src: local("whitneymedium"),
+    url("./fonts/whitneymedium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Whitney Semibold;
+  font-style: normal;
+  font-weight: 500;
+  src: local("whitneysemibold"),
+    url("./fonts/whitneysemibold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Whitney Light";
+  font-style: normal;
+  font-weight: 500;
+  src: local("whitneylight"), url("./fonts/whitneylight.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Whitney Book";
+  font-style: normal;
+  font-weight: 500;
+  src: local("whitneybook"), url("./fonts/whitneybook.ttf") format("truetype");
 }

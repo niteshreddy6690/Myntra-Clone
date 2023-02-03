@@ -1,21 +1,28 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar/Navbar";
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
 import Banner from "../components/Banner/Banner";
+import axios from "axios";
+import Similar from "../components/ViewSimilar/Similar";
+import Checkbox from "./Checkbox";
+// import Carousel from "nuka-carousel";
 import { Swiper, SwiperSlide } from "swiper/react";
+import FavoriteIcon from "@mui/icons-material/FavoriteBorderTwoTone";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+
+// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 // import required modules
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 
 //Import images
-
-import images1 from "../Assets/Images/Men/MenA1.webp";
-import images2 from "../Assets/Images/Men/MenA2.webp";
-import images3 from "../Assets/Images/Men/MenA3.webp";
-import images4 from "../Assets/Images/Men/MenA4.webp";
-import images5 from "../Assets/Images/Men/MenA5.webp";
+import images1 from "../Assets/Images/Men/Men1.webp";
+import images2 from "../Assets/Images/Men/Men2.webp";
+import images3 from "../Assets/Images/Men/Men3.webp";
+import images4 from "../Assets/Images/Men/Men4.webp";
+import images5 from "../Assets/Images/Men/Men5.webp";
+import images6 from "../Assets/Images/Men/Men6.webp";
 
 import imagesB1 from "../Assets/Images/Men/MenB1.webp";
 import imagesB2 from "../Assets/Images/Men/MenB2.webp";
@@ -27,142 +34,156 @@ import imagesC2 from "../Assets/Images/Men/MenC2.webp";
 import imagesC3 from "../Assets/Images/Men/MenC3.webp";
 import imagesC4 from "../Assets/Images/Men/MenC4.jpeg";
 
+import imagesD1 from "../Assets/Images/Men/MenD1.jpeg";
+import imagesD2 from "../Assets/Images/Men/MenD2.jpeg";
+import imagesD3 from "../Assets/Images/Men/MenD3.jpeg";
+import imagesD4 from "../Assets/Images/Men/MenD4.jpeg";
+import imagesD5 from "../Assets/Images/Men/MenD5.jpeg";
+import imagesD6 from "../Assets/Images/Men/MenD6.jpeg";
+
+import imagesE1 from "../Assets/Images/Men/MenE1.webp";
+import imagesE2 from "../Assets/Images/Men/MenE2.webp";
+import imagesE3 from "../Assets/Images/Men/MenE3.webp";
+import imagesE4 from "../Assets/Images/Men/MenE4.webp";
+import imagesE5 from "../Assets/Images/Men/MenE5.webp";
+import imagesE6 from "../Assets/Images/Men/MenE6.webp";
+
 // SwiperCore.use([Pagination, Autoplay]);
-const products = [
-  {
-    id: "1",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images1, images2, images3, images4, images5],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "60",
-    inStock: true,
-  },
-  {
-    id: "2",
-    brand: "HRX by Hrithik Roshan",
-    color: ["green", "limegreen"],
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [imagesB1, imagesB2, imagesB1, imagesB3, imagesB4],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "20",
-    inStock: true,
-  },
-  {
-    id: "3",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [imagesC1, imagesC2, imagesC3, imagesC1, imagesC4],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "30",
-    inStock: true,
-  },
-  {
-    id: "4",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images2, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "40",
-    inStock: true,
-  },
-  {
-    id: "5",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images1, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "60",
-    inStock: true,
-  },
-  {
-    id: "6",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images2, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "60",
-    inStock: true,
-  },
-  {
-    id: "7",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images1, images2, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "50",
-    inStock: true,
-  },
-  {
-    id: "8",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images2, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "65",
-    inStock: true,
-  },
-  {
-    id: "9",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images1, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "60",
-    inStock: true,
-  },
-  {
-    id: "8",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images2, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "65",
-    inStock: true,
-  },
-  {
-    id: "9",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images2, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "60",
-    inStock: true,
-  },
-  {
-    id: "9",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images2, images1, images1],
-    size: ["L", "M", "XL", "XS", "XXL"],
-    OriginalPrice: "1999",
-    discountPercentage: "60",
-    inStock: true,
-  },
-];
+// const products = [
+//   {
+//     id: "1",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images1, images2, images3, images4, images5, images6],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "60",
+//     inStock: true,
+//   },
+//   {
+//     id: "2",
+//     brand: "HRX by Hrithik Roshan",
+//     color: ["green", "limegreen"],
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [imagesB1, imagesB2, imagesB1, imagesB3, imagesB4],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "20",
+//     inStock: true,
+//   },
+//   {
+//     id: "3",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [imagesC1, imagesC2, imagesC3, imagesC1, imagesC4],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "30",
+//     inStock: true,
+//   },
+//   {
+//     id: "4",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [imagesD2, imagesD1, imagesD3, imagesD4, imagesD5, imagesD6],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "40",
+//     inStock: true,
+//   },
+//   {
+//     id: "5",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [imagesE1, imagesE2, imagesE3, imagesE4, imagesE5, imagesE6],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "60",
+//     inStock: true,
+//   },
+//   {
+//     id: "6",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images2, images1, images1],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "60",
+//     inStock: true,
+//   },
+//   {
+//     id: "7",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images1, images2, images1],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "50",
+//     inStock: true,
+//   },
+//   {
+//     id: "8",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images2, images1, images1],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "65",
+//     inStock: true,
+//   },
+//   {
+//     id: "9",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images1, images1, images1],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "60",
+//     inStock: true,
+//   },
+//   {
+//     id: "10",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images2, images1, images1],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "65",
+//     inStock: true,
+//   },
+//   {
+//     id: "11",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images2, images1, images1],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "60",
+//     inStock: true,
+//   },
+//   {
+//     id: "12",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images2, images1, images1],
+//     size: ["L", "M", "XL", "XS", "XXL"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "60",
+//     inStock: true,
+//   },
+// ];
 
 const Main = styled.div`
   margin: 0 auto;
@@ -240,7 +261,6 @@ const Span = styled.span`
   font-size: 16px;
   margin: 0;
 `;
-
 const LeftSection = styled.div`
   min-width: 252px;
   max-width: 252px;
@@ -251,7 +271,9 @@ const LeftSection = styled.div`
   flex: 1;
   font-family: Whitney Semibold;
 `;
-const Section = styled.section``;
+const Section = styled.section`
+  /* width: 100%; */
+`;
 const LeftSectionDiv = styled.div`
   box-sizing: border-box;
   position: static;
@@ -324,6 +346,9 @@ const RightSection = styled.div`
 `;
 const RSecttion = styled.div`
   width: 100%;
+  /* overflow: hidden;
+  overflow-y: scroll;
+  height: 100%; */
 `;
 
 const RightSectionRowBase = styled.div`
@@ -336,6 +361,7 @@ const RightSectionRowBase = styled.div`
   padding-top: 24px;
   padding-left: 15px;
   padding-right: 20px;
+  /* background-color: red; */
 `;
 const RUl = styled.ul`
   display: flex;
@@ -349,15 +375,22 @@ const RUl = styled.ul`
   padding: 0px;
   list-style: none;
 `;
+
 const RLi = styled.li`
   width: 210px;
-  text-align: left;
   position: relative;
+  text-align: left;
   vertical-align: top;
   overflow: hidden;
   display: inline-block;
   box-sizing: border-box;
   margin: 0 10px 30px;
+  cursor: pointer;
+
+  /* &hover .wishlistContainer {
+    display: block;
+    height: 50px;
+  } */
 
   &:hover {
     box-shadow: 0 2px 16px 4px rgb(40 44 63 / 7%);
@@ -378,21 +411,183 @@ const ProductSliderContainer = styled.div`
   width: 100%;
   height: 100%;
   display: block;
-  /* display: ${({ isHover }) => (isHover ? "none" : "block")}; */
+`;
+const SwiperCarousel = styled(Swiper)`
+  .swiper-horizontal > .swiper-pagination-bullets,
+  .swiper-pagination-bullets.swiper-pagination-horizontal,
+  .swiper-pagination-custom,
+  .swiper-pagination-fraction {
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+  }
+
+  .swiper-pagination {
+    z-index: 2;
+    position: absolute;
+    top: 280px;
+    height: 20px;
+    left: 0;
+    text-align: center;
+    background-color: #fff;
+    transform: ${({ isHover }) =>
+      isHover ? "translateY(-20px)" : "translateY(0px)"};
+    transition: transform 0.2s;
+  }
+  &:hover {
+  }
+  .swiper-pagination-bullet {
+    background: #d4d5d9;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    opacity: 1;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #ff3f6c;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
 `;
 const Image = styled.img`
   width: 100%;
   height: 100%;
+`;
+
+const ViewSimilar = styled.div`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 5;
+  top: 215px;
+  right: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #dadade;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  text-align: center;
+  will-change: contents;
+  background-color: #ffffff;
+  color: #000;
+  font-size: 12px;
+  line-height: 28px;
+
+  .myntraweb-sprite {
+    background: url(https://constant.myntassets.com/web/assets/img/MyntraWebSprite_27_01_2021.png);
+    background-size: 1404px 105px;
+    display: inline-block;
+  }
+  span,
+  .first {
+    background-size: 6000% 486.36%;
+    background-position: 10.4% 71%;
+    width: 20px;
+    height: 20px;
+  }
+  .image-grid-similarColorsIcon {
+    vertical-align: middle;
+  }
+  .image-grid-iconText {
+    font-weight: 500;
+    color: #ff517b;
+    vertical-align: middle;
+    visibility: hidden;
+    margin-left: 10px;
+    font-size: 14px;
+  }
+  .second {
+    font-size: 12px;
+    margin-top: 0 !important;
+    margin-left: 6px !important;
+  }
+  &:hover {
+    border-radius: 42px;
+    width: 120px;
+    text-align: left;
+    padding-left: 13px;
+    transition: width 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    .image-grid-iconText {
+      font-family: Whitney Semibold;
+      font-weight: 500;
+      color: #ff517b;
+      vertical-align: middle;
+      visibility: visible;
+      margin-left: 10px;
+      font-size: 12px;
+    }
+  }
+`;
+const WishlistContainer = styled.div`
+  color: black;
+  display: block;
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  top: 280px;
+  background: #fff;
+  width: 100%;
+  height: 40px;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  cursor: default;
+`;
+const WishListDivWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 0px;
+  margin: 5px 0px 0px 0px;
+  font-size: 14px;
+  border: 1px solid #d4d5d9;
+  border-radius: 2px;
+  color: ${({ isWishlist }) => (isWishlist ? "#FFF" : "#282c3f")};
+  background-color: ${({ isWishlist }) =>
+    isWishlist ? "rgb(83, 87, 102)" : "#fff"};
+
+  &:hover {
+    cursor: pointer;
+    border: ${({ isWishlist }) =>
+      isWishlist ? "1px solid #d4d5d9" : "1px solid #535766"};
+  }
+`;
+const WishlistSpan = styled.span`
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Whitney Semibold";
+  font-weight: 500;
+  margin-left: 5px;
+  letter-spacing: 0.3px;
+  font-size: 12px;
+  z-index: 1000;
 `;
 const ProductMetaInfo = styled.div`
   position: relative;
   z-index: 3;
   background: #fff;
   padding: 0 10px;
+  padding-top: 10px;
   height: 100%;
-  margin-top: 12px;
   box-sizing: border-box;
   overflow: hidden;
+`;
+
+const ProductSizeContainer = styled.h4`
+  font-family: Whitney book;
+  font-size: 14px;
+  color: #535665;
+  line-height: 1;
+  display: ${({ isHover }) => (isHover ? "block" : "none")};
+  margin-top: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0;
+  margin-bottom: 5px;
+  font-weight: 400;
 `;
 const ProductHeader3 = styled.h3`
   font-family: Whitney Semibold;
@@ -400,10 +595,13 @@ const ProductHeader3 = styled.h3`
   font-weight: 500;
   line-height: 1;
   color: #282c3f;
+  /* margin-top: 5px; */
   margin-bottom: 6px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  opacity: ${({ isHover }) => (isHover ? "0" : "1")};
+  /* display: ${({ isHover }) => (isHover ? "none" : "block")}; */
 `;
 const ProductHeader4 = styled.h4`
   color: #535766;
@@ -416,10 +614,10 @@ const ProductHeader4 = styled.h4`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 400;
-  display: block;
+  display: ${({ isHover }) => (isHover ? "none" : "block")};
 `;
 const ProductPriceContainer = styled.div`
-  font-family: Whitney Semibold;
+  font-family: Whitney;
   font-size: 16px;
   line-height: 15px;
   margin: 10px 0 6px;
@@ -444,37 +642,214 @@ const ProductOriginalPrice = styled.span`
 `;
 const ProductDiscountPercentage = styled.span`
   color: #ff905a;
-  font-family: Whitney Book;
+  font-family: Whitney Light;
   font-weight: 500;
   font-size: 12px;
   margin-left: 5px;
 `;
-// const ProductListItem = ({ product, children }) => {
-//   <RLi></RLi>;
-// };
-const Products = () => {
+
+const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
   const [isHover, setHover] = useState(false);
+  const [isWishlist, setWishlist] = useState(false);
   const swiperRef = React.useRef([]);
   const onInit = function (Swiper) {
     swiperRef.current = Swiper;
   };
-  // const refSlider = useRef();
+
+  const handelAddToWishlist = async (id) => {
+    const res = await axios.post("http://localhost:8080/api/wishlist/", { id });
+    if (res) setWishlist(true);
+  };
+
   const handleMouseEnter = () => {
+    if (wishlistProducts?.includes(product._id)) {
+      setWishlist(true);
+    }
     if (swiperRef.current) {
+      setHover(true);
       swiperRef.current.autoplay.start();
     }
-    console.log(swiperRef.current);
   };
   const handleMouseLeave = () => {
     if (swiperRef.current) {
+      setHover(false);
       swiperRef.current.autoplay.stop();
+      swiperRef.current.slideTo(1);
     }
   };
+  // useEffect(() => {
+  //   if (wishlistProducts && wishlistProducts?.includes(product._id)) {
+  //     console.log("Product exist in wishlist");
+  //     // setWishlist(true);
+  //   }
+  // });
+
+  useEffect(() => {
+    // swiperRef.current.autoplay.stop();
+    // console.log(Swiper);
+    swiperRef.current.params.autoplay.delay = 2000;
+  }, []);
+
+  return (
+    <>
+      <RLi
+        key={product.id}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <NavLink
+          target="_blank"
+          to={`/${product.gender.toLowerCase()}/${product.brand
+            .replaceAll(" ", "-")
+            .toLowerCase()}/${product.description
+            .replaceAll(" ", "-")
+            .toLowerCase()}/${product._id}/buy`}
+        >
+          <SwiperCarousel
+            initialSlide={0}
+            speed={400}
+            onInit={onInit}
+            spaceBetween={0}
+            centeredSlides={true}
+            pagination={{
+              clickable: true,
+            }}
+            loop={true}
+            modules={[Autoplay, Pagination]}
+            isHover={isHover}
+          >
+            <ImageSliderContainer>
+              <ProductSliderContainer>
+                {product.images.map((image) => (
+                  <SwiperSlide>
+                    <Image src={image} loading="lazy" />
+                  </SwiperSlide>
+                ))}
+              </ProductSliderContainer>
+            </ImageSliderContainer>
+            <ProductMetaInfo>
+              <ProductHeader3 isHover={isHover}>{product.brand}</ProductHeader3>
+              <ProductHeader4 isHover={isHover}>
+                {product.description}
+              </ProductHeader4>
+              <ProductSizeContainer isHover={isHover}>
+                Size :
+                {product.size?.map((size, index) => (
+                  <span style={{ color: `#535665` }}>
+                    {(index ? ", " : "") + ` ${size}`}
+                  </span>
+                ))}
+              </ProductSizeContainer>
+              <ProductPriceContainer>
+                <span>
+                  <ProductDiscountedPrice>
+                    {`Rs. ${Math.floor(
+                      product.price -
+                        product.price * (product.discountPercentage / 100)
+                    )}`}
+                  </ProductDiscountedPrice>
+                  <ProductOriginalPrice>{`Rs.${product.price}`}</ProductOriginalPrice>
+                </span>
+                <ProductDiscountPercentage>
+                  {`(${product.discountPercentage}%OFF)`}
+                </ProductDiscountPercentage>
+              </ProductPriceContainer>
+            </ProductMetaInfo>
+          </SwiperCarousel>
+        </NavLink>
+
+        {isHover ? (
+          <WishlistContainer isHover={isHover} className="wishlistContainer">
+            <WishListDivWrapper
+              isHover={isHover}
+              onClick={() => handelAddToWishlist(product._id)}
+              isWishlist={isWishlist}
+            >
+              {isWishlist ? (
+                <FavoriteRoundedIcon
+                  style={{
+                    fontSize: "20px",
+                    color: "red",
+                  }}
+                />
+              ) : (
+                <FavoriteIcon
+                  style={{
+                    fontSize: "20px",
+                  }}
+                />
+              )}
+              <WishlistSpan>
+                {isWishlist ? `wishlisted` : `wishlist`}
+              </WishlistSpan>
+            </WishListDivWrapper>
+          </WishlistContainer>
+        ) : null}
+        {isHover && (
+          <ViewSimilar onClick={() => handelClick(open)}>
+            <span class="myntraweb-sprite  first image-grid-similarColorsIcon sprites-similarProductsIcon"></span>
+            <span class="image-grid-iconText second">VIEW SIMILAR</span>
+          </ViewSimilar>
+        )}
+      </RLi>
+    </>
+  );
+};
+const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [wishlistProducts, setWishlistProducts] = useState(null);
+  const location = useLocation();
+  const category = location.pathname.split("/")[1];
+  const cat = category.split("-")[1];
+  console.log("category", category, cat);
+
+  const handelClick = (status) => {
+    if (!open) {
+      // document.body.classList.add("removeScroll");
+      document.body.style.overflow = "hidden";
+    } else {
+      // document.body.classList.remove("removeScroll");
+      document.body.style.overflow = "unset";
+    }
+    setOpen(!status);
+  };
+
+  const getWishlistProducts = async () => {
+    const res = await axios.get("http://localhost:8080/api/wishlist/");
+    console.log("result", res);
+    setWishlistProducts([
+      ...res?.data?.map((item) => {
+        return item.wishlistProduct._id;
+      }),
+    ]);
+  };
+
+  console.log("seWishik", wishlistProducts);
+
+  const getProducts = async ({ params, category }) => {
+    try {
+      const res = await axios.get(
+        cat
+          ? `http://localhost:8080/api/products?category=${cat}`
+          : "http://localhost:8080/api/products"
+      );
+
+      setProducts(res.data);
+      if (res) getWishlistProducts();
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log("open Status", open);
 
   return (
     <div>
       <Navbar />
-      <Main>
+      <Similar open={open} handelClick={handelClick} />
+      <Main open={open}>
         <RowBase>
           <Breadcrumbs>
             <BreadcrumbList>
@@ -500,52 +875,7 @@ const Products = () => {
                 <FilterDiv>
                   <FilterSpan>filters</FilterSpan>
                 </FilterDiv>
-                <CategoriesDiv>
-                  {/* <CategoriesSpan>Categories</CategoriesSpan> */}
-                  <Ul>
-                    <Li>
-                      <Label>
-                        <Input type="radio" name="gender" value="Tshirts" />
-                        Men
-                      </Label>
-                    </Li>
-                    <Li>
-                      <Label>
-                        <Input type="radio" name="gender" value="Tshirts" />
-                        Women
-                      </Label>
-                    </Li>
-                    <Li>
-                      <Label>
-                        <Input type="radio" name="gender" value="Tshirts" />
-                        Boy
-                      </Label>
-                    </Li>
-                    <Li>
-                      <Label>
-                        <Input type="radio" name="gender" value="Tshirts" />
-                        Girl
-                      </Label>
-                    </Li>
-                  </Ul>
-                </CategoriesDiv>
-                <BrandDiv>
-                  <BrandSpan>Brand</BrandSpan>
-                  <Ul>
-                    <Li>
-                      <Label class="common-customCheckbox vertical-filters-label">
-                        <Input type="checkbox" value="Tshirts" />
-                        Roadster
-                      </Label>
-                    </Li>
-                    <Li>
-                      <Label class="common-customCheckbox vertical-filters-label">
-                        <Input type="checkbox" value="Tshirts" />
-                        WRONG
-                      </Label>
-                    </Li>
-                  </Ul>
-                </BrandDiv>
+                <Checkbox products={products} getProducts={getProducts} />
                 <ColorDiv>
                   <ColorSpan>Color</ColorSpan>
                   <Ul>
@@ -572,84 +902,17 @@ const Products = () => {
             <RightSectionRowBase>
               <RSecttion>
                 <RUl>
-                  {products?.map((product) => (
-                    <RLi
-                      key={product.id}
-                      // onMouseOver={() => setHover(true)}
-                      // onMouseOut={() => setHover(false)}
-                      onMouseEnter={handleMouseEnter}
-                      onMouseLeave={handleMouseLeave}
-                    >
-                      <NavLink
-                        to={`/${product.Gender}/${product.brand.replaceAll(
-                          " ",
-                          "-"
-                        )}/${product.Desc.replaceAll(" ", "-")}`}
-                      >
-                        <ImageSliderContainer>
-                          <ProductSliderContainer>
-                            <Swiper
-                              onInit={onInit}
-                              spaceBetween={0}
-                              centeredSlides={true}
-                              // autoplay={{
-                              //   delay: 2500,
-                              //   // disableOnInteraction: false,
-                              // }}
-                              autoplay={false}
-                              // autoplayDisableOnInteraction={false}
-                              pagination={{
-                                clickable: true,
-                              }}
-                              loop={true}
-                              modules={[Autoplay, Pagination]}
-                              // autoplay={{ delay: 25000 }}
-                              // // speed={1300}
-                              // spaceBetween={50}
-                              // slidesPerView={1}
-                              // allowTouchMove={false}
-                              // pagination={{ clickable: true }}
-                            >
-                              {product.img.map((image) => (
-                                <SwiperSlide>
-                                  <Image
-                                    // style={{ height: "50%" }}
-                                    src={image}
-                                  />
-                                </SwiperSlide>
-                              ))}
-                            </Swiper>
-                          </ProductSliderContainer>
-                          {/* <ProductSliderContainer isHover={isHover}>
-                            {product.img.slice(0, 1).map((image) => (
-                              <Image src={image} alt="Product" />
-                            ))}
-                            <Image src={product.img} alt="Product" />
-                          </ProductSliderContainer> */}
-                        </ImageSliderContainer>
-                        <ProductMetaInfo>
-                          <ProductHeader3>{product.brand}</ProductHeader3>
-                          <ProductHeader4>{product.Desc}</ProductHeader4>
-                          <ProductPriceContainer>
-                            <span>
-                              <ProductDiscountedPrice>
-                                {`Rs. ${Math.floor(
-                                  product.OriginalPrice *
-                                    (product.discountPercentage / 100)
-                                )}`}
-                              </ProductDiscountedPrice>
-                              <ProductOriginalPrice>{`1999`}</ProductOriginalPrice>
-                            </span>
-                            <ProductDiscountPercentage>
-                              {`(${product.discountPercentage}%OFF)`}
-                            </ProductDiscountPercentage>
-                          </ProductPriceContainer>
-                        </ProductMetaInfo>
-                      </NavLink>
-                    </RLi>
+                  {products?.map((product, i) => (
+                    <ProductCarousel
+                      product={product}
+                      key={i}
+                      handelClick={handelClick}
+                      open={open}
+                      wishlistProducts={wishlistProducts}
+                    />
                   ))}
-                  <li></li>
-                  <li></li>
+                  <RLi></RLi>
+                  <RLi></RLi>
                 </RUl>
               </RSecttion>
             </RightSectionRowBase>

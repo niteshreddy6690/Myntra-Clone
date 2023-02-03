@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Badge } from "@mui/material";
 // import { height } from "@mui/system";
 
 export const NavbarContainer = styled.div`
   box-sizing: border-box;
   font-family: Whitney;
+  font-family: Assistant;
   max-width: 100%;
   height: 80px;
   display: block;
@@ -33,7 +35,7 @@ export const NavContainer = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-left: 1.8rem;
   margin-right: 1.8rem;
-  z-index: 10;
+  /* z-index: 10; */
   /* @media (min-width: 1536px) {
     display: grid;
   }
@@ -57,18 +59,18 @@ export const GridItemOne = styled.div`
   height: inherit;
   font-size: 14px;
   letter-spacing: 0.3px;
-  width: 75%;
+  /* width: 75%; */
 
   @media (min-width: 768px) {
     font-size: 14px;
   }
 `;
 export const LogoContainer = styled.div`
-  margin: 0 20px 0 0;
+  margin: 0 0px 0 0px;
 `;
 export const Img = styled.img`
   box-sizing: border-box;
-  width: ${({ width }) => (width ? width : "3.5rem")};
+  width: ${({ width }) => (width ? width : "3rem")};
   height: ${({ height }) => (height ? height : "auto")}; ;
 `;
 
@@ -76,35 +78,60 @@ export const NavbarLink = styled(Link)`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-  font-family: Whitney Semibold;
+  /* font-family: Whitney Semibold; */
+  font-family: Assistant;
   align-items: center;
   text-align: center;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 14px;
   height: 80px;
   color: #282c3f;
-  padding: 0 15px;
+  padding: 0 17px;
+  letter-spacing: 0.3px;
   text-decoration: none;
-  cursor: pointer;
-  border-bottom: ${({ active }) => (active ? "4px solid" : "4px solid")};
-  border-bottom-color: ${({ active, color }) => (active ? color : "#fff")};
+  border-bottom: ${({ $active }) => ($active ? "4px solid" : "4px solid")};
+  border-bottom-color: ${({ $active, color }) => ($active ? color : "#fff")};
 `;
 
+export const Overlay = styled.div`
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: ${({ open }) => (open ? "block" : "none")};
+  overflow: hidden;
+  height: 100%; */
+
+  position: fixed;
+  top: 80px;
+  left: 0;
+  z-index: -10;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: calc(100vh);
+  overflow-x: hidden;
+  transition: width 0.5s linear;
+`;
 export const StyledSubLinksContainer = styled.div`
+  z-index: -8;
   width: 60vw;
   height: 450px;
   background: #fff;
   position: absolute;
-  top: 75px;
+  top: 80px;
   left: 80px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  margin: 5px 0;
   box-shadow: 0 4px 12px 0 rgb(0 0 0 / 5%);
   column-gap: 10px;
   align-content: space-around;
   justify-content: space-between;
   align-items: flex-start;
+  transition: left 2s ease-out, width 2s ease-out;
 `;
 export const SubLinksGroup = styled(Link)`
   display: block;
@@ -119,13 +146,16 @@ export const SubLinksGroup = styled(Link)`
   overflow: hidden;
   line-height: 25px;
   font-weight: 600;
+  transition: all 6s linear;
 `;
 export const NavSubLinks = styled(Link)`
+  box-sizing: border-box;
   text-decoration: none;
   text-transform: none;
   color: #282c3f;
+  font-family: "Whitney Book", "sans-serif";
   line-height: 23px;
-  font-weight: 400;
+  font-weight: 500;
   display: block;
   font-size: 14px;
   margin: 2px 0;
@@ -133,6 +163,7 @@ export const NavSubLinks = styled(Link)`
   &:hover {
     color: #282c3f;
     font-weight: 600;
+    font-size: 15px;
   }
 `;
 export const Span = styled.span`
@@ -160,11 +191,12 @@ export const Span = styled.span`
 export const StdNavbarLink = styled(Link)`
   box-sizing: border-box;
   display: flex;
-  font-family: Whitney Semibold;
+  font-family: Whitney;
+  font-family: Assistant;
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-weight: 500;
+  font-weight: 700;
   height: 80px;
   color: #282c3f;
   padding: 0 15px;
@@ -180,10 +212,10 @@ export const StdContainer = styled.div`
   height: 454px;
   background-color: #fff;
   position: absolute;
-  top: 80px;
+  top: 81px;
   box-shadow: inset 0 0 8px rgb(0 0 0 / 10%);
   pointer-events: auto;
-  transition: all 0.3s ease-out;
+  transition: width 6s linear;
 
   .desktop-YourDailyInspiration {
     display: block;
@@ -202,7 +234,7 @@ export const StdContainer = styled.div`
     min-width: 164px;
     height: 40px;
     display: flex;
-    font-family: Whitney Semibold;
+    font-family: Whitney;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -277,22 +309,23 @@ export const SearchContainer = styled.div`
   margin: 20px 20px 20px 40px;
   position: relative;
   height: 40px;
-  width: 450px;
+  width: 70%;
   text-align: center;
   border-radius: 5px;
   background: ${({ isFocus }) => (isFocus ? "#fff" : "#f5f5f6")};
   line-height: 24px;
   font-size: 14px;
+  overflow: hidden;
 `;
 
 export const Input = styled.input`
   box-sizing: content-box;
-  font-family: Whitney;
+  font-family: Whitney Light;
   float: right;
   font-size: 14px;
   height: 40px;
-  width: 380px;
-  color: #696e79;
+  width: 90%;
+  color: #696e89;
   margin: 0%;
   padding: 0%;
   outline: 0;
@@ -485,3 +518,14 @@ export const SvgImageContainer = styled.div`
 `;
 
 export const SvgNavbarLink = styled(Link)``;
+
+export const BadgeNotification = styled(Badge)`
+  min-width: 18px;
+  line-height: 1;
+  padding: 0 6px;
+  height: 18px;
+  background-color: red;
+  color: #fff;
+  top: 0px;
+  right: -3px;
+`;

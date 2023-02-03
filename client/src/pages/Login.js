@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginImage from "../Assets/Images/login.webp";
 import { color } from "@mui/system";
+import axios from "axios";
 
 const LoginContainer = styled.div`
   box-sizing: border-box;
@@ -33,13 +34,6 @@ const LoginWrapper = styled.div`
   margin: 40px 0px;
   min-height: calc(100vh - 138px);
   transform: translate(-50%, 0);
-  /* top: 50%;
-  left: 50%;
-  
-  
-  ;
-  
- */
 `;
 
 const Img = styled.img`
@@ -56,7 +50,7 @@ const LoginContent = styled.div`
 const LoginWelcomeHeader = styled.div`
   text-align: start;
   font-size: 23px;
-  font-family: Whitney;
+  /* font-family: Whitney; */
   font-weight: 500;
   margin-bottom: 24px;
 `;
@@ -103,7 +97,8 @@ const Span = styled.span`
     color: ${({ isFocus }) => (isFocus ? "#282c3f" : "#94969f")};
   }
   .mobileNumberPlacholder {
-    display: ${({ isFocus }) => (isFocus ? "none" : "inline")};
+    display: ${({ isFocus, phoneNumber }) =>
+      isFocus || phoneNumber ? "none" : "inline"};
   }
 `;
 const MediaLinkDiv = styled.div`
@@ -128,6 +123,29 @@ const Button = styled.button`
 
 const Login = () => {
   const [isFocus, setFocus] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const navigate = useNavigate();
+
+  const handelLogin = async (e) => {
+    e.preventDefault();
+    console.log(phoneNumber);
+
+    localStorage.setItem("mobileNumber", phoneNumber);
+    try {
+      if (phoneNumber) {
+        const login = await axios.post(
+          "http://localhost:8080/api/auth/registermobile",
+          { phonenumber: phoneNumber }
+        );
+        console.log(login);
+        if (login.data.message == "success") {
+          navigate("/verifyotp");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <LoginContainer>
       <Navbar />
@@ -141,12 +159,19 @@ const Login = () => {
             <MobileContainer>
               <FormGroup>
                 <Input
-                  type="tel"
+                  type="text"
                   maxLength="10"
                   onFocus={() => setFocus(true)}
                   onBlur={() => setFocus(false)}
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  required
                 />
-                <Span className="Placeholder" isFocus={isFocus}>
+                <Span
+                  className="Placeholder"
+                  isFocus={isFocus}
+                  phoneNumber={phoneNumber}
+                >
                   +91
                   <span style={{ padding: "0px 10px" }} className="Placeholder">
                     |
@@ -167,7 +192,7 @@ const Login = () => {
                 <NavLink to="/termsofuse"> Terms of Use </NavLink>&
                 <NavLink to="/termsofuse">Privacy Policy</NavLink>
               </MediaLinkDiv>
-              <Button>Continue</Button>
+              <Button onClick={handelLogin}>Continue</Button>
               <MediaLinkDiv style={{ marginTop: "30px" }}>
                 Have trouble logging in?
                 <NavLink to="/termsofuse">Get help</NavLink>

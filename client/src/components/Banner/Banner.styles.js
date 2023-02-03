@@ -11,7 +11,6 @@ export const BannerContainer = styled.div`
   color: #fff;
   letter-spacing: 1px;
   cursor: pointer;
-
   .FreeShippingBanner-sidebar-content {
     -webkit-writing-mode: vertical-rl;
     -ms-writing-mode: tb-rl;
@@ -53,14 +52,12 @@ export const BannerContentContainer = styled.div`
   font-family: Whitney;
   color: #3e4152;
   cursor: default;
-
   .FreeShippingBanner-first-row {
     display: table;
     table-layout: auto;
     height: 52%;
     width: 100%;
   }
-
   .FreeShippingBanner-description {
     display: table-cell;
     vertical-align: middle;

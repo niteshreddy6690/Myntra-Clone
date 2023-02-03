@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   TopDiv,
   Div,
@@ -18,6 +18,7 @@ import {
   TaxInfo,
   TaxInfoSpan,
   SizeContainer,
+  SizeMessage,
   SelectSizeContainer,
   SelectSizeHeader,
   SelectSizeSpan,
@@ -27,14 +28,24 @@ import {
   SizeButton,
   SizeButtonText,
   NoSizeSpan,
+  AddAndWhish,
+  AddToBagButton,
+  WishListButton,
 } from "../Product/Product.styles";
-
+import { useLocation, useNavigate } from "react-router-dom";
+// Import Axios
+import axios from "axios";
+// import Icons from MaterialUI icons
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 //Import images
-import images1 from "../../Assets/Images/Men/MenA1.webp";
-import images2 from "../../Assets/Images/Men/MenA2.webp";
-import images3 from "../../Assets/Images/Men/MenA3.webp";
-import images4 from "../../Assets/Images/Men/MenA4.webp";
-import images5 from "../../Assets/Images/Men/MenA5.webp";
+import images1 from "../../Assets/Images/Men/MenD1.jpeg";
+import images2 from "../../Assets/Images/Men/MenD2.jpeg";
+import images3 from "../../Assets/Images/Men/MenD3.jpeg";
+import images4 from "../../Assets/Images/Men/MenD4.jpeg";
+import images5 from "../../Assets/Images/Men/MenD5.jpeg";
+import images6 from "../../Assets/Images/Men/MenD6.jpeg";
 
 // import imagesB1 from "../../Assets/Images/Men/MenB1.webp";
 // import imagesB2 from "../../Assets/Images/Men/MenB2.webp";
@@ -46,30 +57,43 @@ import images5 from "../../Assets/Images/Men/MenA5.webp";
 // import imagesC3 from "../../Assets/Images/Men/MenC3.webp";
 // import imagesC4 from "../../Assets/Images/Men/MenC4.jpeg";
 
-const products = [
-  {
-    id: "1",
-    brand: "HRX by Hrithik Roshan",
-    Gender: ["men"],
-    Desc: "Rapid Dry Training T-shirt",
-    img: [images1, images2, images3, images4, images5],
-    size: ["S", "L", "M"],
-    OriginalPrice: "1999",
-    discountPercentage: "60",
-    inStock: true,
-  },
-];
+// const products = [
+//   {
+//     id: "1",
+//     brand: "HRX by Hrithik Roshan",
+//     Gender: ["men"],
+//     Desc: "Rapid Dry Training T-shirt",
+//     img: [images2, images1, images3, images4, images5, images6],
+//     size: ["S", "L", "M"],
+//     OriginalPrice: "1999",
+//     discountPercentage: "60",
+//     inStock: true,
+//   },
+// ];
 const PreDefinedSize = ["S", "L", "M", "XL", "XXL"];
-const SizeComponent = ({ size, activeSizes }) => {
+const SizeComponent = ({
+  size,
+  activeSizes,
+  handelSelectSize,
+  selectedSize,
+  isNotSizeSelected,
+}) => {
   if (activeSizes.includes(size)) {
     return (
       <SelectSizeButtonContainer>
         <SelectSizeButtonContainer1>
-          <SelectSizeButtonWrapper>
-            <SizeButton>
+          {selectedSize === size ? (
+            <SizeButton
+              onClick={() => handelSelectSize(size)}
+              selectedSize={selectedSize}
+            >
               <SizeButtonText>{size}</SizeButtonText>
             </SizeButton>
-          </SelectSizeButtonWrapper>
+          ) : (
+            <SizeButton onClick={() => handelSelectSize(size)}>
+              <SizeButtonText>{size}</SizeButtonText>
+            </SizeButton>
+          )}
         </SelectSizeButtonContainer1>
       </SelectSizeButtonContainer>
     );
@@ -77,12 +101,10 @@ const SizeComponent = ({ size, activeSizes }) => {
     return (
       <SelectSizeButtonContainer>
         <SelectSizeButtonContainer1>
-          <SelectSizeButtonWrapper>
-            <SizeButton NoSize={true}>
-              <SizeButtonText>{size}</SizeButtonText>
-              <NoSizeSpan></NoSizeSpan>
-            </SizeButton>
-          </SelectSizeButtonWrapper>
+          <SizeButton NoSize={true}>
+            <SizeButtonText>{size}</SizeButtonText>
+            <NoSizeSpan></NoSizeSpan>
+          </SizeButton>
         </SelectSizeButtonContainer1>
       </SelectSizeButtonContainer>
     );
@@ -90,53 +112,183 @@ const SizeComponent = ({ size, activeSizes }) => {
 };
 
 const Product = () => {
+  const [product, setProduct] = useState({});
+  const [sizes, setSizes] = useState([]);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [isNotSizeSelected, setIsNotSizeSelected] = useState(false);
+  const [productInWishlist, setProductInWishlist] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const id = location.pathname.split("/")[4];
+
+  const handelSelectSize = (sizeValue) => {
+    setSelectedSize(sizeValue);
+    setIsNotSizeSelected(false);
+  };
+
+  console.log("slected size: ", selectedSize);
+
+  const handelAddToWishlist = async (id) => {
+    const res = await axios.post("http://localhost:8080/api/wishlist/", { id });
+    console.log("result", res);
+    setProductInWishlist(true);
+  };
+
+  const checkProductInWishlist = async (id) => {
+    const res = await axios.get(`http://localhost:8080/api/wishlist/${id}`);
+    setProductInWishlist(true);
+  };
+  useEffect(() => {
+    const getProductById = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/api/products/find/${id}/`
+        );
+        console.log("res", res);
+        if (res) {
+          checkProductInWishlist(res.data._id);
+        }
+        setProduct(res.data);
+        setSizes(res.data.size);
+
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getProductById();
+  }, []);
+
+  const addToCart = async (product) => {
+    // const {
+    //   _id,
+    //   brand,
+    //   description,
+    //   gender,
+    //   price,
+    //   categories,
+    //   images,
+    //   discountPercentage,
+    // } = product;
+    const { _id } = product;
+    if (selectedSize) {
+      console.log("Size Is Selected");
+      try {
+        const cartProduct = await axios.post(
+          `http://localhost:8080/api/carts/`,
+          {
+            productId: _id,
+            size: selectedSize,
+          }
+        );
+        console.log(cartProduct);
+        navigate("/checkout/cart");
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      console.log("size is not selected");
+      setIsNotSizeSelected(true);
+    }
+  };
   return (
     <TopDiv>
       <Main>
         <ImageContainer>
-          {products?.map((item) =>
-            item.img?.map((image) => (
-              <ImageContainer1>
-                <ImageContainer2>
-                  <Img src={image} />
-                  {/* <Img src="https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/10106341/2022/3/9/bb316320-1a5e-4c25-bde7-dcf432dcf8811646818525186-HRX-by-Hrithik-Roshan-Ultralyte-Men-Black-Running-T-shirt-72-7.jpg" /> */}
-                </ImageContainer2>
-              </ImageContainer1>
-            ))
-          )}
+          {product.images?.map((image, i) => (
+            <ImageContainer1 key={i}>
+              <ImageContainer2>
+                <Img
+                  src={image}
+                  // loading="lazy"
+                  // style={{ width: "550px", height: "720px" }}
+                />
+              </ImageContainer2>
+            </ImageContainer1>
+          ))}
         </ImageContainer>
         <DescriptionContainer>
-          {products.map((product) => (
-            <>
-              <TitleAndPriceContainer>
-                <HeaderTitle>{`${product.brand}`}</HeaderTitle>
-                <HeaderName>{`${product.Desc}`}</HeaderName>
-              </TitleAndPriceContainer>
-              <Div>
-                <DiscountedPriceContainer>
-                  <DiscountedPriceSpan>{` ₹${product.OriginalPrice}`}</DiscountedPriceSpan>
-                  <OriginalPriceSpan>{`MRP ₹${Math.floor(
-                    product.OriginalPrice * (product.discountPercentage / 100)
-                  )}`}</OriginalPriceSpan>
-                  <PercentageOffSpan>{`(${product.discountPercentage})%`}</PercentageOffSpan>
-                  <TaxInfo>
-                    <TaxInfoSpan>inclusive of all taxes</TaxInfoSpan>
-                  </TaxInfo>
-                </DiscountedPriceContainer>
-              </Div>
-              <SizeContainer>
-                <SelectSizeContainer>
-                  <SelectSizeHeader>Select Size </SelectSizeHeader>
-                  <SelectSizeSpan> {`Size chat>`}</SelectSizeSpan>
-                </SelectSizeContainer>
-                <SelectSizeButtonWrapper>
-                  {PreDefinedSize?.map((size) => (
-                    <SizeComponent size={size} activeSizes={product.size} />
-                  ))}
-                </SelectSizeButtonWrapper>
-              </SizeContainer>
-            </>
-          ))}
+          <>
+            <TitleAndPriceContainer>
+              <HeaderTitle>{`${product.brand}`}</HeaderTitle>
+              <HeaderName>{`${product.description}`}</HeaderName>
+            </TitleAndPriceContainer>
+            <Div>
+              <DiscountedPriceContainer>
+                <DiscountedPriceSpan>
+                  {`₹${Math.round(
+                    product.price -
+                      product.price * (product.discountPercentage / 100)
+                  )}`}
+                </DiscountedPriceSpan>
+                <OriginalPriceSpan>{`MRP ₹${product.price}`}</OriginalPriceSpan>
+                <PercentageOffSpan>{`(${product.discountPercentage}% OFF)`}</PercentageOffSpan>
+                <TaxInfo>
+                  <TaxInfoSpan>inclusive of all taxes</TaxInfoSpan>
+                </TaxInfo>
+              </DiscountedPriceContainer>
+            </Div>
+            <SizeContainer>
+              <SelectSizeContainer>
+                <SelectSizeHeader>Select Size </SelectSizeHeader>
+                <SelectSizeSpan> {`Size chat>`}</SelectSizeSpan>
+              </SelectSizeContainer>
+              <SizeMessage isNotSizeSelected={isNotSizeSelected}>
+                Please select a size
+              </SizeMessage>
+              <SelectSizeButtonWrapper isNotSizeSelected={isNotSizeSelected}>
+                {PreDefinedSize?.map((size) => (
+                  <SizeComponent
+                    size={size}
+                    activeSizes={sizes}
+                    handelSelectSize={handelSelectSize}
+                    selectedSize={selectedSize}
+                    isNotSizeSelected={isNotSizeSelected}
+                  />
+                ))}
+              </SelectSizeButtonWrapper>
+            </SizeContainer>
+            <AddAndWhish>
+              <AddToBagButton
+                onClick={() => {
+                  addToCart(product);
+                  // navigate("/checkout/cart");
+                }}
+              >
+                <ShoppingBagOutlinedIcon
+                  style={{ margin: "0px 10px 0px 0px" }}
+                />
+                Add To Bag
+              </AddToBagButton>
+
+              {productInWishlist ? (
+                <WishListButton
+                  onClick={() => handelAddToWishlist(product._id)}
+                  productInWishlist={productInWishlist}
+                >
+                  <FavoriteRoundedIcon
+                    style={{
+                      margin: "0px 10px 0px 0px",
+                      color: "#ff3e6c",
+                    }}
+                  />
+                  WishListed
+                </WishListButton>
+              ) : (
+                <WishListButton
+                  onClick={() => handelAddToWishlist(product._id)}
+                  productInWishlist={productInWishlist}
+                >
+                  <FavoriteBorderOutlinedIcon
+                    style={{
+                      margin: "0px 10px 0px 0px",
+                    }}
+                  />
+                  WishList
+                </WishListButton>
+              )}
+            </AddAndWhish>
+          </>
         </DescriptionContainer>
       </Main>
     </TopDiv>

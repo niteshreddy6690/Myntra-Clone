@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 export const TopDiv = styled.div`
   box-sizing: content-box;
@@ -64,8 +64,8 @@ export const Img = styled.img`
 `;
 export const DescriptionContainer = styled.div`
   text-align: start;
-  font-family: "Whitney Semibold";
-  font-size: 500;
+  font-family: "Whitney";
+  font-size: 600;
   @media (min-width: 980px) {
     min-height: 820px;
     width: 42%;
@@ -77,14 +77,12 @@ export const DescriptionContainer = styled.div`
     margin-top: 0;
   }
 `;
-
 export const TitleAndPriceContainer = styled.div`
   padding: 0 0 10px;
   @media (min-width: 600px) {
     margin-right: 0;
   }
 `;
-
 export const HeaderTitle = styled.h1`
   margin-top: 0;
   margin-bottom: 0;
@@ -98,12 +96,12 @@ export const HeaderTitle = styled.h1`
 export const HeaderName = styled.h1`
   margin-top: 0;
   margin-bottom: 0;
-  font-family: "Whitney Light", sans-serif;
+  font-family: "Whitney book", sans-serif;
   color: #535665;
   padding: 5px 20px 14px 0;
   font-size: 20px;
   opacity: 0.8;
-  font-weight: 400;
+  font-weight: 500;
 `;
 
 export const DiscountedPriceContainer = styled.p`
@@ -153,12 +151,27 @@ export const TaxInfoSpan = styled.span`
 `;
 
 // Size Section Styles
+const Shake = keyframes`
+ 0% { transform: translateX(0) }
+ 25% { transform: translateX(10px) }
+ 50% { transform: translateX(-10px) }
+ 75% { transform: translateX(10px) }
+ 100% { transform: translateX(0) }
+ `;
 
 export const SizeContainer = styled.div`
   margin: 10px 0 24px;
 `;
+
+export const SizeMessage = styled.span`
+  font-family: "Whitney";
+  color: #f16565;
+  font-size: 16px;
+  margin-top: 15px;
+  display: ${({ isNotSizeSelected }) => (isNotSizeSelected ? "block" : "none")};
+`;
 export const SelectSizeContainer = styled.div`
-  margin: 0 0 10px;
+  margin: 0 0 15px;
   position: relative;
   line-height: 1;
 `;
@@ -168,7 +181,7 @@ export const SelectSizeHeader = styled.header`
   display: inline-block;
   font-size: 16px;
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
 `;
 
 export const SelectSizeSpan = styled.span`
@@ -180,7 +193,7 @@ export const SelectSizeSpan = styled.span`
   padding: 0 0 5px;
   color: #ff3e6c;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   margin-top: 0;
   margin-left: 15px;
@@ -194,7 +207,14 @@ export const SelectSizeButtonWrapper = styled.div`
   position: relative;
   font-size: 13px;
   box-sizing: border-box;
+  animation: ${({ isNotSizeSelected }) =>
+    isNotSizeSelected
+      ? css`
+          ${Shake} .5s 1 ease-in-out;
+        `
+      : css`none`};
 `;
+
 export const SelectSizeButtonContainer = styled.div`
   margin: 10px 10px 10px 0;
 `;
@@ -203,27 +223,34 @@ export const SelectSizeButtonContainer1 = styled.div`
 `;
 export const SizeButton = styled.button`
   background-color: #fff;
-  border: 1px solid #bfc0c6;
+  border: ${({ selectedSize }) =>
+    selectedSize ? "1px solid #ff3e6c" : "1px solid #bfc0c6"};
   border-radius: 50px;
   padding: 0;
   min-width: 50px;
   height: 50px;
   text-align: center;
   cursor: ${({ NoSize }) => (NoSize ? "default" : "pointer")};
-  color: ${({ NoSize }) => (NoSize ? "#bfc0c6" : "#282c3f")};
+  color: ${({ NoSize, selectedSize }) =>
+    NoSize ? "#bfc0c6" : selectedSize ? "#ff3e6c" : "#282c3f"};
   flex: 0 0 auto;
   position: relative;
   &:hover {
     border: ${({ NoSize }) =>
       NoSize ? "1px solid #bfc0c6" : "1px solid #ff3e6c"};
   }
+  &:active {
+    border: ${({ NoSize }) =>
+      NoSize ? "1px solid #bfc0c6" : "1px solid #ff3e6c"};
+  }
 `;
+
 export const SizeButtonText = styled.p`
-  font-family: "Whitney Semibold";
+  font-family: "Whitney";
   margin: 0;
   font-size: 14px;
   padding: 0 8px;
-  font-weight: 500;
+  font-weight: 600;
 `;
 export const NoSizeSpan = styled.span`
   position: absolute;
@@ -233,4 +260,83 @@ export const NoSizeSpan = styled.span`
   height: 1px;
   background-color: #d5d6d9;
   transform: rotate(-45deg);
+`;
+
+export const AddAndWhish = styled.div`
+  display: flex;
+  width: 90%;
+  margin: 30px 10px 0 0;
+`;
+export const AddToBagButton = styled.button`
+  box-sizing: border-box;
+  border-radius: 0;
+  padding: 12px 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 108px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #ff3e6c;
+  border: 1px solid #ff3e6c;
+  color: #fff;
+  flex: 3;
+  text-align: center;
+  width: 100%;
+  margin-right: 3%;
+  text-transform: uppercase;
+  font-family: Whitney;
+  @media (min-width: 980px) {
+    text-align: center;
+    padding: 15px 0;
+  }
+  @media (min-width: 980px) {
+    margin-top: 0;
+    border-radius: 4px;
+  }
+  @media (min-width: 360px) {
+    min-width: 108px;
+  }
+  @media (min-width: 320px) {
+    min-width: 88px;
+  }
+`;
+
+export const WishListButton = styled.button`
+  border-radius: 3px;
+  outline: 0;
+  margin-top: 10px;
+  padding: 5px 30px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  min-height: 22px;
+  border-radius: 0;
+  padding: 12px 15px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 2;
+  border: 1px solid #d4d5d9;
+  background-color: ${({ productInWishlist }) =>
+    productInWishlist ? "#535766;" : "#fff"};
+  letter-spacing: 0.4px;
+  color: ${({ productInWishlist }) => (productInWishlist ? "#FFF" : "#282c3f")};
+  text-transform: uppercase;
+  font-family: "Whitney";
+  @media (min-width: 980px) {
+    text-align: center;
+    padding: 15px 0;
+  }
+  @media (min-width: 980px) {
+    margin-top: 0;
+    border-radius: 4px;
+  }
+  @media (min-width: 360px) {
+    min-width: 108px;
+  }
+  @media (min-width: 320px) {
+    min-width: 88px;
+  }
 `;
