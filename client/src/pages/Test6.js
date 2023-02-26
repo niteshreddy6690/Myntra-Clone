@@ -142,8 +142,19 @@ const rs1 = rs.reduce((res, item) => [...res, ...item], []);
 uniq = [...new Set(rs1)];
 console.log("uniq", uniq);
 
+console.log([
+  ...new Set(
+    products.map((item) => {
+      return item.brand;
+    })
+  ),
+]);
 
+// ingore this
 
-console.log([...new Set(products.map(item=>{
-    return item.brand
-}))])
+{
+  /* <div id="grad1">
+<img  width="640px"  height="500px" class="JvVyE zsQ53" src="https://images.unsplash.com/photo-1570380749637-7e570824d2df?auto=format&amp;fit=fill&amp;w=1600&amp;h=1200&amp;q=20" srcset="https://images.unsplash.com/photo-1570380749637-7e570824d2df?dpr=1&amp;auto=format&amp;fit=crop&amp;w=1600&amp;q=60 1x, https://images.unsplash.com/photo-1570380749637-7e570824d2df?dpr=2&amp;auto=format&amp;fit=crop&amp;w=1600&amp;q=60 2x">
+<div class="Ap7mS" style="background: radial-gradient(circle closest-corner at 453px 372px, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.9) 66%);"></div>
+</div> */
+}

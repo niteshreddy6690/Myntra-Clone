@@ -21,6 +21,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.Toastify__toast {
+  min-height: 50px !important;
+  /* transform: translateY(0px) !important; */
+  padding-left: 5px !important;
+  z-index: 10;
+  width: 200px;
+}
+.Toastify__close-button {
+  display: none;
+}
+.Toastify__toast-body {
+  margin: 0 !important;
+}
+.Toastify__toast-container--top-right {
+  bottom: 1em;
+  right: 1em;
+  transform: none;
+}
+/* .Toastify__toast-container {
+  transform: translateY(-153px);
+} */
 /* @font-face {
   font-family: "Whitney";
   font-style: normal;

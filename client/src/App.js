@@ -22,6 +22,9 @@ import AccountLink from "./pages/AccountLink";
 import CreateAccount from "./pages/CreateAccount";
 import Wishlist from "./pages/Wishlist";
 import Test5 from "./pages/Test5";
+import TempProduct from "./pages/TempProduct";
+import LazyComponent from "./components/LazyComponent";
+import Toast from "./pages/Toast";
 
 // import "./fonts/whitneybold.otf";
 import "./fonts/whitneybook.ttf";
@@ -42,9 +45,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/shop/:id" element={<Men />} />
-          <Route path="/:id/" element={<Products />} />
+          <Route path="/:id/" element={<TempProduct />} />
+          {/* <Route path="/:id/" element={<Products />} /> */}
+
           <Route path="/:id/:id/:id/:id/buy" element={<ProductPage />} />
-          <Route path="/test" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/accountlink" element={<AccountLink />} />
           <Route path="/createaccount" element={<CreateAccount />} />
           <Route path="/verifyotp" element={<VerifyOtp />} />
@@ -55,6 +60,7 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           {/* <Route path="/test" element={<Test3 />} />
           <Route path="/addimages" element={<Test5 />} /> */}
+          <Route path="/toast" element={<Toast />} />
           <Route path="/checkout/cart" element={<Cart />} />
         </Routes>
       </Router>

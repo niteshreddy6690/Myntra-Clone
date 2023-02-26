@@ -17,7 +17,6 @@ const Header = styled.div`
   font-size: 20px;
   font-family: "Whitney Semibold";
   margin: auto;
-  /* padding: 50px 0; */
 `;
 const ProductContainer = styled.div`
   padding: 0px;
@@ -150,6 +149,7 @@ const ShowSimilar = styled.div`
   font-weight: 500;
   letter-spacing: 0.2px;
 `;
+
 const Wishlist = () => {
   const [wishlistProducts, setWishlistProducts] = useState([]);
 

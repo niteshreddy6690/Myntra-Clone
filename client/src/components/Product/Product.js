@@ -39,13 +39,20 @@ import axios from "axios";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { useSelector, useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { addItemToBag } from "../../redux/features/cart/cartSlice";
+
 //Import images
-import images1 from "../../Assets/Images/Men/MenD1.jpeg";
-import images2 from "../../Assets/Images/Men/MenD2.jpeg";
-import images3 from "../../Assets/Images/Men/MenD3.jpeg";
-import images4 from "../../Assets/Images/Men/MenD4.jpeg";
-import images5 from "../../Assets/Images/Men/MenD5.jpeg";
-import images6 from "../../Assets/Images/Men/MenD6.jpeg";
+// import images1 from "../../Assets/Images/Men/MenD1.jpeg";
+// import images2 from "../../Assets/Images/Men/MenD2.jpeg";
+// import images3 from "../../Assets/Images/Men/MenD3.jpeg";
+// import images4 from "../../Assets/Images/Men/MenD4.jpeg";
+// import images5 from "../../Assets/Images/Men/MenD5.jpeg";
+// import images6 from "../../Assets/Images/Men/MenD6.jpeg";
 
 // import imagesB1 from "../../Assets/Images/Men/MenB1.webp";
 // import imagesB2 from "../../Assets/Images/Men/MenB2.webp";
@@ -120,6 +127,7 @@ const Product = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const id = location.pathname.split("/")[4];
+  const dispatch = useDispatch();
 
   const handelSelectSize = (sizeValue) => {
     setSelectedSize(sizeValue);
@@ -160,29 +168,26 @@ const Product = () => {
   }, []);
 
   const addToCart = async (product) => {
-    // const {
-    //   _id,
-    //   brand,
-    //   description,
-    //   gender,
-    //   price,
-    //   categories,
-    //   images,
-    //   discountPercentage,
-    // } = product;
     const { _id } = product;
     if (selectedSize) {
       console.log("Size Is Selected");
       try {
-        const cartProduct = await axios.post(
-          `http://localhost:8080/api/carts/`,
-          {
+        dispatch(
+          addItemToBag({
             productId: _id,
             size: selectedSize,
-          }
+            toast,
+          })
         );
-        console.log(cartProduct);
-        navigate("/checkout/cart");
+        // const cartProduct = await axios.post(
+        //   `http://localhost:8080/api/carts/`,
+        //   {
+        //     productId: _id,
+        //     size: selectedSize,
+        //   }
+        // );
+        // console.log(cartProduct);
+        // navigate("/checkout/cart");
       } catch (err) {
         console.log(err);
       }
@@ -192,106 +197,123 @@ const Product = () => {
     }
   };
   return (
-    <TopDiv>
-      <Main>
-        <ImageContainer>
-          {product.images?.map((image, i) => (
-            <ImageContainer1 key={i}>
-              <ImageContainer2>
-                <Img
-                  src={image}
-                  // loading="lazy"
-                  // style={{ width: "550px", height: "720px" }}
-                />
-              </ImageContainer2>
-            </ImageContainer1>
-          ))}
-        </ImageContainer>
-        <DescriptionContainer>
-          <>
-            <TitleAndPriceContainer>
-              <HeaderTitle>{`${product.brand}`}</HeaderTitle>
-              <HeaderName>{`${product.description}`}</HeaderName>
-            </TitleAndPriceContainer>
-            <Div>
-              <DiscountedPriceContainer>
-                <DiscountedPriceSpan>
-                  {`₹${Math.round(
-                    product.price -
-                      product.price * (product.discountPercentage / 100)
-                  )}`}
-                </DiscountedPriceSpan>
-                <OriginalPriceSpan>{`MRP ₹${product.price}`}</OriginalPriceSpan>
-                <PercentageOffSpan>{`(${product.discountPercentage}% OFF)`}</PercentageOffSpan>
-                <TaxInfo>
-                  <TaxInfoSpan>inclusive of all taxes</TaxInfoSpan>
-                </TaxInfo>
-              </DiscountedPriceContainer>
-            </Div>
-            <SizeContainer>
-              <SelectSizeContainer>
-                <SelectSizeHeader>Select Size </SelectSizeHeader>
-                <SelectSizeSpan> {`Size chat>`}</SelectSizeSpan>
-              </SelectSizeContainer>
-              <SizeMessage isNotSizeSelected={isNotSizeSelected}>
-                Please select a size
-              </SizeMessage>
-              <SelectSizeButtonWrapper isNotSizeSelected={isNotSizeSelected}>
-                {PreDefinedSize?.map((size) => (
-                  <SizeComponent
-                    size={size}
-                    activeSizes={sizes}
-                    handelSelectSize={handelSelectSize}
-                    selectedSize={selectedSize}
+    <>
+      <ToastContainer
+        style={{ position: "absolute", top: "90px", right: "-50px" }}
+        toastStyle={{
+          backgroundColor: "#171830",
+          width: "200px",
+          height: "20px",
+          color: "#fff",
+        }}
+      />
+      {product ? (
+        <TopDiv>
+          <Main>
+            <ImageContainer>
+              {product.images?.map((image, i) => (
+                <ImageContainer1 key={i}>
+                  <ImageContainer2>
+                    <Img
+                      src={image}
+                      // loading="lazy"
+                      // style={{ width: "550px", height: "720px" }}
+                    />
+                  </ImageContainer2>
+                </ImageContainer1>
+              ))}
+            </ImageContainer>
+            <DescriptionContainer>
+              <>
+                <TitleAndPriceContainer>
+                  <HeaderTitle>{`${product.brand}`}</HeaderTitle>
+                  <HeaderName>{`${product.description}`}</HeaderName>
+                </TitleAndPriceContainer>
+                <Div>
+                  <DiscountedPriceContainer>
+                    <DiscountedPriceSpan>
+                      {`₹${Math.round(
+                        product.price -
+                          product.price * (product.discountPercentage / 100)
+                      )}`}
+                    </DiscountedPriceSpan>
+                    <OriginalPriceSpan>{`MRP ₹${product.price}`}</OriginalPriceSpan>
+                    <PercentageOffSpan>{`(${product.discountPercentage}% OFF)`}</PercentageOffSpan>
+                    <TaxInfo>
+                      <TaxInfoSpan>inclusive of all taxes</TaxInfoSpan>
+                    </TaxInfo>
+                  </DiscountedPriceContainer>
+                </Div>
+                <SizeContainer>
+                  <SelectSizeContainer>
+                    <SelectSizeHeader>Select Size </SelectSizeHeader>
+                    <SelectSizeSpan> {`Size chat>`}</SelectSizeSpan>
+                  </SelectSizeContainer>
+                  <SizeMessage isNotSizeSelected={isNotSizeSelected}>
+                    Please select a size
+                  </SizeMessage>
+                  <SelectSizeButtonWrapper
                     isNotSizeSelected={isNotSizeSelected}
-                  />
-                ))}
-              </SelectSizeButtonWrapper>
-            </SizeContainer>
-            <AddAndWhish>
-              <AddToBagButton
-                onClick={() => {
-                  addToCart(product);
-                  // navigate("/checkout/cart");
-                }}
-              >
-                <ShoppingBagOutlinedIcon
-                  style={{ margin: "0px 10px 0px 0px" }}
-                />
-                Add To Bag
-              </AddToBagButton>
+                  >
+                    {PreDefinedSize?.map((size) => (
+                      <SizeComponent
+                        size={size}
+                        activeSizes={sizes}
+                        handelSelectSize={handelSelectSize}
+                        selectedSize={selectedSize}
+                        isNotSizeSelected={isNotSizeSelected}
+                      />
+                    ))}
+                  </SelectSizeButtonWrapper>
+                </SizeContainer>
+                <AddAndWhish>
+                  <AddToBagButton
+                    onClick={() => {
+                      addToCart(product);
+                      // navigate("/checkout/cart");
+                    }}
+                  >
+                    <ShoppingBagOutlinedIcon
+                      style={{ margin: "0px 10px 0px 0px" }}
+                    />
+                    Add To Bag
+                  </AddToBagButton>
 
-              {productInWishlist ? (
-                <WishListButton
-                  onClick={() => handelAddToWishlist(product._id)}
-                  productInWishlist={productInWishlist}
-                >
-                  <FavoriteRoundedIcon
-                    style={{
-                      margin: "0px 10px 0px 0px",
-                      color: "#ff3e6c",
-                    }}
-                  />
-                  WishListed
-                </WishListButton>
-              ) : (
-                <WishListButton
-                  onClick={() => handelAddToWishlist(product._id)}
-                  productInWishlist={productInWishlist}
-                >
-                  <FavoriteBorderOutlinedIcon
-                    style={{
-                      margin: "0px 10px 0px 0px",
-                    }}
-                  />
-                  WishList
-                </WishListButton>
-              )}
-            </AddAndWhish>
-          </>
-        </DescriptionContainer>
-      </Main>
-    </TopDiv>
+                  {productInWishlist ? (
+                    <WishListButton
+                      onClick={() => handelAddToWishlist(product._id)}
+                      productInWishlist={productInWishlist}
+                    >
+                      <FavoriteRoundedIcon
+                        style={{
+                          margin: "0px 10px 0px 0px",
+                          color: "#ff3e6c",
+                        }}
+                      />
+                      WishListed
+                    </WishListButton>
+                  ) : (
+                    <WishListButton
+                      onClick={() => handelAddToWishlist(product._id)}
+                      productInWishlist={productInWishlist}
+                    >
+                      <FavoriteBorderOutlinedIcon
+                        style={{
+                          margin: "0px 10px 0px 0px",
+                        }}
+                      />
+                      WishList
+                    </WishListButton>
+                  )}
+                </AddAndWhish>
+              </>
+            </DescriptionContainer>
+          </Main>
+        </TopDiv>
+      ) : (
+        <LoadingSpinner />
+      )}
+    </>
   );
 };
 

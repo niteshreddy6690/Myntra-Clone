@@ -12,7 +12,6 @@ const addItemToWishList = catchAsync(async (req, res) => {
   const containProductInWishlist = await WhishList.findOne({
     wishlistProduct: product._id,
   });
-
   if (containProductInWishlist) {
     throw new ApiError(httpStatus.FOUND, "Product is already in wishlist");
   }

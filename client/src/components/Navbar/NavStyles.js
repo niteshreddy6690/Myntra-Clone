@@ -315,6 +315,8 @@ export const SearchContainer = styled.div`
   background: ${({ isFocus }) => (isFocus ? "#fff" : "#f5f5f6")};
   line-height: 24px;
   font-size: 14px;
+  border: ${({ isFocus }) =>
+    isFocus ? "1px solid #f5f5f6" : "1px solid #fff"};
   overflow: hidden;
 `;
 
@@ -519,13 +521,28 @@ export const SvgImageContainer = styled.div`
 
 export const SvgNavbarLink = styled(Link)``;
 
-export const BadgeNotification = styled(Badge)`
-  min-width: 18px;
-  line-height: 1;
-  padding: 0 6px;
-  height: 18px;
-  background-color: red;
-  color: #fff;
-  top: 0px;
-  right: -3px;
-`;
+// export const BadgeNotification = styled(Badge)`
+//   min-width: 18px;
+//   line-height: 1;
+//   padding: 0 6px;
+//   height: 18px;
+//   background-color: "#ff3f6c";
+//   color: #fff;
+//   top: 0px;
+//   right: -3px;
+// `;
+
+export const BadgeNotification = styled(Badge)({
+  "& .MuiBadge-badge": {
+    fontFamily: "Assistant",
+    color: "#fff",
+    backgroundColor: "#f16565",
+    minWidth: "18px",
+    lineHeight: 1,
+    fontSize: "12px",
+    fontWeight: 700,
+    padding: "0px 6px",
+    height: "18px",
+    right: "-2px",
+  },
+});

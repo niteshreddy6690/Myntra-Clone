@@ -18,27 +18,74 @@ router.post("/", async (req, res) => {
 // GET Category Products
 // GET New Product
 router.get("/", async (req, res) => {
+  const { brand, gender, sort } = req.query;
   const qNew = req.query.new;
   const qCategory = req.query.category;
+
+  const queryObject = {};
   console.log("calling by category");
   console.log("qCategory :", qCategory);
+
+  if (brand) {
+    queryObject.brand = { $in: brand.split(",") };
+  }
+  if (gender) {
+    console.log("Gender", gender);
+    queryObject.gender = gender;
+  }
+  let apiData = Product.find(queryObject);
+  if (sort) {
+    const sortDic = {
+      recommended: "",
+      new: "-createdAt",
+      popularity: "popularity",
+      discount: "-discountPercentage",
+      price_desc: "-price",
+      price_asc: "price",
+    };
+
+    // let entries = Object.entries(sortDic);
+    // let data = entries.map(([key, val]) => {
+    //   if (key == sort) {
+    //     return val;
+    //   }
+    // });
+
+    let sortFix = sortDic[sort];
+    apiData = apiData.sort(sortFix);
+    // queryObject.sort = sortFix;
+    console.log("SortFix", sortFix);
+  }
+  let page = parseInt(req.query.p) - 1 || 0;
+  let limit = parseInt(req.query.limit) || 50;
+
+  apiData = apiData.skip(page * limit).limit(limit);
+  console.log("Query Object", queryObject);
   try {
     let products;
+
     // qCategory = qCategory.split(",");
 
-    if (qNew) {
-      products = await Product.find().sort({ createdAt: -1 }).limit(20);
-    } else if (qCategory) {
-      products = await Product.find({
-        categories: {
-          $in: [qCategory],
-        },
-      }).sort({ createdAt: -1 });
-    } else {
-      products = await Product.find();
-    }
-
-    res.status(200).json(products);
+    // if (qNew) {
+    //   products = await Product.find().sort({ createdAt: -1 }).limit(20);
+    // } else if (queryObject) {
+    //   // products = await Product.find({
+    //   //   categories: {
+    //   //     $in: [qCategory],
+    //   //   },
+    //   // }).sort({ createdAt: -1 });
+    //   console.log("calling filter");
+    //   products = await Product.find(queryObject);
+    // } else {
+    //   products = await Product.find();
+    // }
+    products = await apiData;
+    let totalProduct = await Product.find(queryObject);
+    // Product.find(queryObject);
+    // console.log(products);
+    res
+      .status(200)
+      .json({ products, totalPages: Math.ceil(totalProduct.length / 5) });
   } catch (err) {
     res.status(500).json(err);
   }

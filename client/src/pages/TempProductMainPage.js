@@ -16,175 +16,6 @@ import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 // import required modules
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 
-//Import images
-import images1 from "../Assets/Images/Men/Men1.webp";
-import images2 from "../Assets/Images/Men/Men2.webp";
-import images3 from "../Assets/Images/Men/Men3.webp";
-import images4 from "../Assets/Images/Men/Men4.webp";
-import images5 from "../Assets/Images/Men/Men5.webp";
-import images6 from "../Assets/Images/Men/Men6.webp";
-
-import imagesB1 from "../Assets/Images/Men/MenB1.webp";
-import imagesB2 from "../Assets/Images/Men/MenB2.webp";
-import imagesB3 from "../Assets/Images/Men/MenB3.webp";
-import imagesB4 from "../Assets/Images/Men/MenB4.webp";
-
-import imagesC1 from "../Assets/Images/Men/MenC1.webp";
-import imagesC2 from "../Assets/Images/Men/MenC2.webp";
-import imagesC3 from "../Assets/Images/Men/MenC3.webp";
-import imagesC4 from "../Assets/Images/Men/MenC4.jpeg";
-
-import imagesD1 from "../Assets/Images/Men/MenD1.jpeg";
-import imagesD2 from "../Assets/Images/Men/MenD2.jpeg";
-import imagesD3 from "../Assets/Images/Men/MenD3.jpeg";
-import imagesD4 from "../Assets/Images/Men/MenD4.jpeg";
-import imagesD5 from "../Assets/Images/Men/MenD5.jpeg";
-import imagesD6 from "../Assets/Images/Men/MenD6.jpeg";
-
-import imagesE1 from "../Assets/Images/Men/MenE1.webp";
-import imagesE2 from "../Assets/Images/Men/MenE2.webp";
-import imagesE3 from "../Assets/Images/Men/MenE3.webp";
-import imagesE4 from "../Assets/Images/Men/MenE4.webp";
-import imagesE5 from "../Assets/Images/Men/MenE5.webp";
-import imagesE6 from "../Assets/Images/Men/MenE6.webp";
-
-// SwiperCore.use([Pagination, Autoplay]);
-// const products = [
-//   {
-//     id: "1",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images1, images2, images3, images4, images5, images6],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "2",
-//     brand: "HRX by Hrithik Roshan",
-//     color: ["green", "limegreen"],
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [imagesB1, imagesB2, imagesB1, imagesB3, imagesB4],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "20",
-//     inStock: true,
-//   },
-//   {
-//     id: "3",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [imagesC1, imagesC2, imagesC3, imagesC1, imagesC4],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "30",
-//     inStock: true,
-//   },
-//   {
-//     id: "4",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [imagesD2, imagesD1, imagesD3, imagesD4, imagesD5, imagesD6],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "40",
-//     inStock: true,
-//   },
-//   {
-//     id: "5",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [imagesE1, imagesE2, imagesE3, imagesE4, imagesE5, imagesE6],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "6",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images1],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "7",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images1, images2, images1],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "50",
-//     inStock: true,
-//   },
-//   {
-//     id: "8",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images1],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "65",
-//     inStock: true,
-//   },
-//   {
-//     id: "9",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images1, images1, images1],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "10",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images1],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "65",
-//     inStock: true,
-//   },
-//   {
-//     id: "11",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images1],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "12",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images1],
-//     size: ["L", "M", "XL", "XS", "XXL"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-// ];
-
 const Main = styled.div`
   margin: 0 auto;
   max-width: 1600px;
@@ -595,13 +426,12 @@ const ProductHeader3 = styled.h3`
   font-weight: 500;
   line-height: 1;
   color: #282c3f;
-  /* margin-top: 5px; */
+  text-transform: capitalize;
   margin-bottom: 6px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   opacity: ${({ isHover }) => (isHover ? "0" : "1")};
-  /* display: ${({ isHover }) => (isHover ? "none" : "block")}; */
 `;
 const ProductHeader4 = styled.h4`
   color: #535766;
@@ -692,6 +522,7 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
 
   return (
     <>
+      {/* <Similar open={open} handelClick={handelClick} /> */}
       <RLi
         key={product.id}
         onMouseEnter={handleMouseEnter}
@@ -720,8 +551,8 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
           >
             <ImageSliderContainer>
               <ProductSliderContainer>
-                {product.images.map((image) => (
-                  <SwiperSlide>
+                {product.images.map((image, i) => (
+                  <SwiperSlide key={i}>
                     <Image src={image} loading="lazy" />
                   </SwiperSlide>
                 ))}
@@ -735,7 +566,7 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
               <ProductSizeContainer isHover={isHover}>
                 Size :
                 {product.size?.map((size, index) => (
-                  <span style={{ color: `#535665` }}>
+                  <span key={index} style={{ color: `#535665` }}>
                     {(index ? ", " : "") + ` ${size}`}
                   </span>
                 ))}
@@ -787,147 +618,92 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
         ) : null}
         {isHover && (
           <ViewSimilar onClick={() => handelClick(open)}>
-            <span class="myntraweb-sprite  first image-grid-similarColorsIcon sprites-similarProductsIcon"></span>
-            <span class="image-grid-iconText second">VIEW SIMILAR</span>
+            <span className="myntraweb-sprite  first image-grid-similarColorsIcon sprites-similarProductsIcon"></span>
+            <span className="image-grid-iconText second">VIEW SIMILAR</span>
           </ViewSimilar>
         )}
       </RLi>
     </>
   );
 };
-const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [wishlistProducts, setWishlistProducts] = useState(null);
-  const location = useLocation();
-  const category = location.pathname.split("/")[1];
-  const cat = category.split("-")[1];
+
+const TempProductMainPage = ({
+  products,
+  wishlistProducts,
+  handelClick,
+  open,
+}) => {
+  //   const [products, setProducts] = useState([]);
+  //   const [open, setOpen] = useState(false);
+  //   const [wishlistProducts, setWishlistProducts] = useState(null);
+  //   const location = useLocation();
+  //   const category = location.pathname.split("/")[1];
+  //   const cat = category.split("-")[1];
   let [searchParams, setSearchParams] = useSearchParams();
-  console.log("category", category, cat);
+  //   console.log("category", category, cat);
 
-  console.log("Location.........", location);
+  //   console.log("Location.........", location);
 
-  const handelClick = (status) => {
-    if (!open) {
-      // document.body.classList.add("removeScroll");
-      document.body.style.overflow = "hidden";
-    } else {
-      // document.body.classList.remove("removeScroll");
-      document.body.style.overflow = "unset";
-    }
-    setOpen(!status);
-  };
+  //   const handelClick = (status) => {
+  //     if (!open) {
+  //       // document.body.classList.add("removeScroll");
+  //       document.body.style.overflow = "hidden";
+  //     } else {
+  //       // document.body.classList.remove("removeScroll");
+  //       document.body.style.overflow = "unset";
+  //     }
+  //     setOpen(!status);
+  //   };
 
-  const getWishlistProducts = async () => {
-    const res = await axios.get("http://localhost:8080/api/wishlist/");
-    console.log("result", res);
-    setWishlistProducts([
-      ...res?.data?.map((item) => {
-        return item.wishlistProduct._id;
-      }),
-    ]);
-  };
+  //   const getWishlistProducts = async () => {
+  //     const res = await axios.get("http://localhost:8080/api/wishlist/");
+  //     console.log("result", res);
+  //     setWishlistProducts([
+  //       ...res?.data?.map((item) => {
+  //         return item.wishlistProduct._id;
+  //       }),
+  //     ]);
+  //   };
 
-  console.log("seWishik", wishlistProducts);
+  //   console.log("seWishik", wishlistProducts);
 
-  const getProducts = async ({ params, category }) => {
-    const searchString = location.search;
+  //   const getProducts = async ({ params, category }) => {
+  //     const searchString = location.search;
 
-    try {
-      const res = await axios.get(
-        cat
-          ? `http://localhost:8080/api/products?category=${cat}`
-          : "http://localhost:8080/api/products"
-        // `http://localhost:8080/api/products${searchString}`
-      );
+  //     try {
+  //       const res = await axios.get(
+  //         cat? `http://localhost:8080/api/products?category=${cat}`
+  //           : "http://localhost:8080/api/products"
+  //         // `http://localhost:8080/api/products${searchString}`
+  //       );
 
-      setProducts(res.data.products);
-      if (res) getWishlistProducts();
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //       setProducts(res.data.products);
+  //       if (res) getWishlistProducts();
+  //       console.log(res.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
 
   console.log("open Status", open);
 
   return (
     <div>
-      <Navbar />
-      <Similar open={open} handelClick={handelClick} />
-      <Main open={open}>
-        <RowBase>
-          <Breadcrumbs>
-            <BreadcrumbList>
-              <BreadcrumbListItem>Home</BreadcrumbListItem>
-              <BreadcrumbListItem>Clothing</BreadcrumbListItem>
-              <BreadcrumbListItem>men</BreadcrumbListItem>
-              <BreadcrumbListItem>Shirt</BreadcrumbListItem>
-            </BreadcrumbList>
-          </Breadcrumbs>
-        </RowBase>
-        <RowBase>
-          <TitleContainer>
-            <Header1 className="title">
-              Men T-shirt
-              <Span> - 79051 items</Span>
-            </Header1>
-          </TitleContainer>
-        </RowBase>
-        <RowBase>
-          <LeftSection>
-            <Section>
-              <LeftSectionDiv>
-                <FilterDiv>
-                  <FilterSpan>filters</FilterSpan>
-                </FilterDiv>
-                <Checkbox products={products} getProducts={getProducts} />
-                <ColorDiv>
-                  <ColorSpan>Color</ColorSpan>
-                  <Ul>
-                    <Li>
-                      <Label>
-                        <Input type="checkbox" value="Tshirts" />
-                        <ColorDisplay color={"green"}></ColorDisplay>
-                        Roadster
-                      </Label>
-                    </Li>
-                    <Li>
-                      <Label>
-                        <Input type="checkbox" value="Tshirts" />
-                        <ColorDisplay color={"limeGreen"}></ColorDisplay>
-                        WRONG
-                      </Label>
-                    </Li>
-                  </Ul>
-                </ColorDiv>
-              </LeftSectionDiv>
-            </Section>
-          </LeftSection>
-          <RightSection>
-            <RightSectionRowBase>
-              <RSecttion>
-                <RUl>
-                  {products?.map((product, i) => (
-                    <ProductCarousel
-                      product={product}
-                      key={i}
-                      handelClick={handelClick}
-                      open={open}
-                      wishlistProducts={wishlistProducts}
-                    />
-                  ))}
-                  <RLi></RLi>
-                  <RLi></RLi>
-                </RUl>
-              </RSecttion>
-            </RightSectionRowBase>
-          </RightSection>
-        </RowBase>
-      </Main>
-      <Banner />
+      <RUl>
+        {products?.map((product, i) => (
+          <ProductCarousel
+            product={product}
+            key={i}
+            handelClick={handelClick}
+            open={open}
+            wishlistProducts={wishlistProducts}
+          />
+        ))}
+        <RLi></RLi>
+        <RLi></RLi>
+      </RUl>
     </div>
   );
 };
 
-export default Products;
+export default TempProductMainPage;

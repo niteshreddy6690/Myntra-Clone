@@ -317,7 +317,7 @@ const Similar = ({ open, handelClick }) => {
             <div className="results-similarItemContainer">
               <Ul>
                 {products.map((product, i) => (
-                  <Li>
+                  <Li key={i}>
                     <NavLink to="/men/hrx-by-hrithik-roshan/ultralyte-men-black-running-t-shirt/6370afc44cb8b349e9de864e/buy">
                       <div className="image-Container">
                         <Image src={product.img[0]} />

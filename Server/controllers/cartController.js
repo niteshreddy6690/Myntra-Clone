@@ -18,7 +18,6 @@ exports.addItemToCart = async (req, res) => {
       const indexFound = cart.items.findIndex(
         (item) => item.productId.id == productId && item.size == size
       );
-
       console.log("indexFound", indexFound);
       //------this removes an item from the the cart if the quantity is set to zero,We can use this method to remove an item from the list  -------
       if (indexFound !== -1 && quantity <= 0) {
@@ -65,7 +64,7 @@ exports.addItemToCart = async (req, res) => {
         });
       }
       let data = await cart.save();
-      res.status(200).json(data);
+      res.status(200).json({ data, productDetails });
     }
     //------------ if there is no user with a cart...it creates a new cart and then adds the item to the cart that has been created------------
     else {

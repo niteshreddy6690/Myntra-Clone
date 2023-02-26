@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+  margin: 75px auto;
+`;
 
 export const CartContainer = styled.div`
   max-width: 980px;
@@ -250,4 +252,72 @@ export const SizeAndQuantityImage = styled.img`
   width: 60px;
   height: 80px;
   background: rgba(244, 255, 249);
+`;
+
+// Empty Cart Design
+
+export const EmptyBagWrapper = styled.div`
+  min-height: 420px;
+  padding-top: 100px;
+  .empty-bag-base-container {
+    min-height: 600px;
+    position: relative;
+    background-color: #fff;
+  }
+  .empty-bag-sub-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    height: 400px;
+    text-align: center;
+  }
+
+  .emptyCart-base-emptyBagImage {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  .emptyCart-base-emptyText {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .emptyCart-base-emptyDesc {
+    font-size: 14px;
+    color: #7e818c;
+  }
+  .emptyCart-base-addFromWishlist {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+  }
+  .emptyCart-base-addFromWishlist .emptyCart-base-wishlistButton {
+    background: #fff;
+    color: #ff3f6c;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid #ff3f6c;
+    display: inline-block;
+  }
+
+  .button-base-button {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px;
+    background: #ff3f6c;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+`;
+export const EmptyBagContainer = styled.div`
+  width: 650px;
+  margin: 24px auto;
 `;

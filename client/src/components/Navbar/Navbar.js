@@ -31,6 +31,9 @@ import StudioImg from "../../Assets/Images/sudio-nav-banner.png";
 import { Children } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { Badge } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 const NavItem = ({ to, color, name, children }) => {
   const [ishover, setHover] = useState(false);
   return (
@@ -54,6 +57,13 @@ const Navbar = () => {
   const [isFocus, setFocus] = useState(false);
   const [hover, setHover] = useState(false);
   const [stdHover, setStdHover] = useState(false);
+
+  const cart = useSelector((state) => state.cart.cartItems);
+  const noOfCartItems = cart?.cart?.items.reduce(
+    (accum, item) => accum + item.quantity,
+    0
+  );
+
   return (
     <NavbarContainer>
       <NavContainer>
@@ -76,11 +86,13 @@ const Navbar = () => {
                     <SubLinksGroup to={item?.to} key={i} color={link?.color}>
                       {item?.group}
                     </SubLinksGroup>
-                    {item?.links?.map((link, i) => (
-                      <NavSubLinks to={link?.to} key={i}>
-                        {link?.name}
-                      </NavSubLinks>
-                    ))}
+                    <>
+                      {item?.links?.map((link, i) => (
+                        <NavSubLinks to={link?.to} key={i}>
+                          {link?.name}
+                        </NavSubLinks>
+                      ))}
+                    </>
                   </div>
                 ))}
               </StyledSubLinksContainer>
@@ -110,10 +122,12 @@ const Navbar = () => {
                 height={"274px"}
                 style={{ margin: "27px 16px 0 15px" }}
               />
-              <a href="/studio" className="desktop-exploreStudioBtn">
-                <span className="StudioLabel">Explore Studio</span>
-                <IoIosArrowForward style={{ color: "#282c3f" }} />
-              </a>
+              <>
+                {/* <a href="/studio" className="desktop-exploreStudioBtn">
+                  <span className="StudioLabel">Explore Studio</span>
+                  <IoIosArrowForward style={{ color: "#282c3f" }} />
+                </a> */}
+              </>
             </StdContainer>
           </StdNavbarLink>
           {stdHover ? <Overlay /> : null}
@@ -122,7 +136,9 @@ const Navbar = () => {
         <GridItemTwo>
           <SearchContainer isFocus={isFocus}>
             <SearchButton>
-              <SearchIcon />
+              <SearchIcon
+                style={{ color: "#6c6c6c", transform: "scale(.8)" }}
+              />
             </SearchButton>
             <Input
               placeholder="Search for products, brands and more"
@@ -241,7 +257,7 @@ const Navbar = () => {
           </SvgNavbarLink>
           <SvgNavbarLink to="/checkout/cart">
             <SvgImageContainer>
-              <Badge badgeContent={0} color="primary">
+              <BadgeNotification badgeContent={noOfCartItems} color="primary">
                 <svg
                   stroke="currentColor"
                   fill="currentColor"
@@ -254,7 +270,7 @@ const Navbar = () => {
                 >
                   <path d="m8 1a2 2 0 0 1 2 2v2H6V3a2 2 0 0 1 2-2zm3 4V3a3 3 0 1 0-6 0v2H3.36a1.5 1.5 0 0 0-1.483 1.277L.85 13.13A2.5 2.5 0 0 0 3.322 16h9.355a2.5 2.5 0 0 0 2.473-2.87l-1.028-6.853A1.5 1.5 0 0 0 12.64 5H11zm-1 1v1.5a.5.5 0 0 0 1 0V6h1.639a.5.5 0 0 1 .494.426l1.028 6.851A1.5 1.5 0 0 1 12.678 15H3.322a1.5 1.5 0 0 1-1.483-1.723l1.028-6.851A.5.5 0 0 1 3.36 6H5v1.5a.5.5 0 1 0 1 0V6h4z"></path>
                 </svg>
-              </Badge>
+              </BadgeNotification>
               <span className="desktop-userTitle">Bag</span>
             </SvgImageContainer>
           </SvgNavbarLink>

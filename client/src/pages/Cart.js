@@ -4,11 +4,20 @@ import Navbar from "../components/Navbar/Navbar";
 import CartCmp from "../components/Cart/CartCmp";
 import { useSelector, useDispatch } from "react-redux";
 // import { useSelector, useDispatch } from "react-redux";
-import { fetchCartItems } from "../redux/featuers/cart/cartSlice";
+import {
+  fetchCartItems,
+  removeCartItem,
+} from "../redux/features/cart/cartSlice";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart);
-  const [cartItems, setCartItems] = useState([]);
+  const { isLoading, isError, cartItems, cartItem } = useSelector((state) => ({
+    ...state.cart,
+  }));
+  // const [cartItems, setCartItems] = useState([]);
   const [deleteProduct, SetDeleteProduct] = useState({});
   const [updatedSizes, SetUpdatedSize] = useState(null);
   const [disableSizeModal, setDisableSizeModal] = useState(false);
@@ -21,6 +30,7 @@ const Cart = () => {
 
   const dispatch = useDispatch();
   const handelDelete = async (productId) => {
+    dispatch(removeCartItem({ productId, toast }));
     try {
       const deletedProduct = await axios.post(
         "http://localhost:8080/api/carts/delete",
@@ -71,20 +81,15 @@ const Cart = () => {
     const getCart = async () => {
       try {
         dispatch(fetchCartItems());
-        const cartProducts = await axios.get(
-          "http://localhost:8080/api/carts/"
-        );
+
+        // const cartProducts = await axios.get(
+        //   "http://localhost:8080/api/carts/"
+        // );
 
         // console.log(cartProducts?.data?.cart?.items);
 
-        console.log("cartite", cartProducts?.data?.cart?.items);
-        setCartItems(cartProducts?.data?.cart?.items);
-
-        setPrices({
-          actualTotal: cartProducts?.data?.actualTotal,
-          totalMRP: cartProducts?.data?.totalMRP,
-          discountedMRP: cartProducts.data.discountedMRP,
-        });
+        console.log("cartite", cartItems);
+        // setCartItems(cartItems?.data?.cart?.items);
       } catch (error) {
         console.log(error);
       }
@@ -94,17 +99,40 @@ const Cart = () => {
     console.log("cart Products", cartItems);
   }, [deleteProduct, updatedSizes]);
 
+  useEffect(() => {
+    if (cartItem) {
+      setPrices({
+        actualTotal: cartItems?.actualTotal,
+        totalMRP: cartItems?.totalMRP,
+        discountedMRP: cartItems?.discountedMRP,
+      });
+    }
+  }, [cartItems]);
   return (
     <div>
       <Navbar />
-      <CartCmp
-        disableSizeModal={disableSizeModal}
-        products={cartItems}
-        prices={prices}
-        handelDelete={handelDelete}
-        handelUpdateSizeAndQuantity={handelUpdateSizeAndQuantity}
-        // handelSelectSize={handelSelectSize}
+      <ToastContainer
+        style={{ position: "absolute", top: "90px", right: "0px" }}
+        toastStyle={{
+          backgroundColor: "#171830",
+          width: "250px",
+          height: "20px",
+          color: "white",
+          zIndex: "100",
+        }}
       />
+
+      {isLoading ? (
+        <LoadingSpinner loading={isLoading} />
+      ) : (
+        <CartCmp
+          disableSizeModal={disableSizeModal}
+          products={cartItems}
+          prices={prices}
+          handelDelete={handelDelete}
+          handelUpdateSizeAndQuantity={handelUpdateSizeAndQuantity}
+        />
+      )}
     </div>
   );
 };

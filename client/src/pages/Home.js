@@ -7,6 +7,7 @@ import { sliders } from "../components/Slider/SliderData";
 
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import LazyComponent from "../components/LazyComponent";
 
 // Import Image ArrayOfObjects From ImportImages
 
