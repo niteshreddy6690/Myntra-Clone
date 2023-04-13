@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const Product = require("../models/Product");
-
 const productController = require("../controllers/productController");
-
 router.post("/", async (req, res) => {
   const newProduct = new Product(req.body);
   console.log(newProduct);
@@ -18,10 +16,12 @@ router.post("/", async (req, res) => {
 // GET Category Products
 // GET New Product
 router.get("/", async (req, res) => {
-  const { brand, gender, sort } = req.query;
+  console.log("get Product.........", req.query);
+  const { brand, gender, sort, colors, price, discount } = req.query;
   const qNew = req.query.new;
   const qCategory = req.query.category;
 
+  console.log("colors", colors);
   const queryObject = {};
   console.log("calling by category");
   console.log("qCategory :", qCategory);
@@ -33,12 +33,53 @@ router.get("/", async (req, res) => {
     console.log("Gender", gender);
     queryObject.gender = gender;
   }
+  if (colors) {
+    console.log("Gender", colors);
+    queryObject.color = { $in: colors.split(",") };
+  }
+
+  // console.log(
+  //   "Product",
+  //   await Product.find({
+  //     discountPercentage: { $gte: 50 },
+  //   })
+  // );
+
+  // data = "{price:{$gte:1699 ,$lte: 2999}}";
+
+  // obj = JSON.parse(data);
+
+  // console.log(obj);
+
+  if (price) {
+    let priceArray = price.split(",").map((p) => {
+      let pri = p.split("to");
+      return {
+        price: { $gte: Number(pri[0].trim()), $lte: Number(pri[1].trim()) },
+      };
+    });
+
+    tempObj = {
+      $or: priceArray.map((p) => {
+        return p;
+      }),
+    };
+
+    Object.assign(queryObject, tempObj);
+  }
+
+  if (discount) {
+    queryObject.discountPercentage = {
+      $gte: Number(discount.split("%")[0].trim()),
+    };
+  }
   let apiData = Product.find(queryObject);
+
   if (sort) {
     const sortDic = {
-      recommended: "",
-      new: "-createdAt",
-      popularity: "popularity",
+      recommended: "-createdAt",
+      new: "createdAt",
+      popularity: "rating",
       discount: "-discountPercentage",
       price_desc: "-price",
       price_asc: "price",
@@ -50,14 +91,26 @@ router.get("/", async (req, res) => {
     //     return val;
     //   }
     // });
-
+    // console.log(
+    //   "Product",
+    //   await Product.find({
+    //     // $or: [
+    //     //   { price: { $gte: 501, $lte: 1000 } },
+    //     //   { price: { $gte: 201, $lte: 1500 } },
+    //     // ],
+    //     $or: [
+    //       "{price:{$gte:1699 ,$lte: 2999}}",
+    //       "{price:{$gte:399 ,$lte: 1699}}",
+    //     ],
+    //   })
+    // );
     let sortFix = sortDic[sort];
     apiData = apiData.sort(sortFix);
     // queryObject.sort = sortFix;
     console.log("SortFix", sortFix);
   }
   let page = parseInt(req.query.p) - 1 || 0;
-  let limit = parseInt(req.query.limit) || 50;
+  let limit = parseInt(req.query.limit);
 
   apiData = apiData.skip(page * limit).limit(limit);
   console.log("Query Object", queryObject);
@@ -80,12 +133,15 @@ router.get("/", async (req, res) => {
     //   products = await Product.find();
     // }
     products = await apiData;
+    // console.log("apidata", products);
+    // const toalP = await Product.countDocuments({ categories: qCategory });
+    // console.log("toalP", toalP);
     let totalProduct = await Product.find(queryObject);
     // Product.find(queryObject);
     // console.log(products);
     res
       .status(200)
-      .json({ products, totalPages: Math.ceil(totalProduct.length / 5) });
+      .json({ products, totalPages: Math.ceil(totalProduct.length / 20) });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -107,20 +163,20 @@ router.get("/find/:id", productController.getProductId);
 
 router.get("/prod", async (req, res) => {
   try {
-    const page = parseInt(req.query.page) - 1 || 0;
-    const limit = parseInt(req.query.limit) || 5;
-    let brand = req.query.Brand || "";
-    let gender = req.query.Gender || "";
-    let sort = req.query.sort || "rating";
-    let genre = req.query.genre || "All";
+    // const page = parseInt(req.query.page) - 1 || 0;
+    // const limit = parseInt(req.query.limit) || 5;
+    // let brand = req.query.Brand || "";
+    // let gender = req.query.Gender || "";
+    // let sort = req.query.sort || "-createdAt";
+    // let genre = req.query.genre || "All";
 
-    brand = brand.split(",");
-    console.log(brand);
+    // brand = brand.split(",");
+    // console.log(brand);
     const product = await Product.find({
       categories: { $in: brand },
-    })
-      .skip(page * limit)
-      .limit(limit);
+    });
+    // .skip(page * limit)
+    // .limit(limit);
 
     // const total = await Product.countDocuments({
     //   categories: { $regex: search, $options: "i" },

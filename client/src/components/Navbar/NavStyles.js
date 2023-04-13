@@ -5,14 +5,13 @@ import { Badge } from "@mui/material";
 
 export const NavbarContainer = styled.div`
   box-sizing: border-box;
-  font-family: Whitney;
   font-family: Assistant;
   max-width: 100%;
   height: 80px;
   display: block;
   color: #000;
+  position: fixed;
   top: 0;
-  position: sticky;
   right: 0;
   left: 0;
   z-index: 10;
@@ -359,6 +358,35 @@ export const SearchButton = styled.button`
 //   height: 40px;
 //   margin: 20px 30px 0 10px;
 // `;
+export const SvgImageContainer1 = styled.div`
+  box-sizing: content-box;
+  margin: 0%;
+  width: 40px;
+  height: inherit;
+  position: relative;
+  top: 0;
+  padding: 0 10px;
+  margin: 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 5px solid transparent;
+  height: calc(80px - 5px);
+
+  .desktop-userTitle {
+    color: #000;
+    text-align: center;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    padding-top: 10px;
+    line-height: 6px;
+  }
+`;
 export const SvgImageContainer = styled.div`
   box-sizing: content-box;
   margin: 0%;
@@ -395,7 +423,6 @@ export const SvgImageContainer = styled.div`
   .profile-dropdown {
     box-sizing: border-box;
     width: 300px;
-    height: 450px;
     left: -115px;
     top: calc(85px - 5px);
     position: absolute;
@@ -429,15 +456,17 @@ export const SvgImageContainer = styled.div`
       text-overflow: ellipsis;
       line-height: 10px;
       height: 14px;
-      color: #515465;
+      color: #282c3f;
     }
     .desktop-infoTitle {
-      font-weight: 500;
+      font-weight: 700;
       height: 14px;
+      margin-bottom: 5px;
+      text-transform: capitalize;
     }
     .desktop-infoEmail {
       height: 14px;
-      color: #515465;
+      color: "#282c3f";
     }
 
     .desktop-getInLinks {
@@ -517,6 +546,28 @@ export const SvgImageContainer = styled.div`
     visibility: visible;
     opacity: 1;
   }
+
+  .desktop-accActions {
+    font-size: 16px;
+    padding: 10px px 0 0;
+    border-top: 1px solid #eaeaec;
+  }
+  .desktop-accInfoSection {
+    cursor: pointer;
+  }
+  .desktop-accInfoSection:hover {
+    font-weight: 700;
+  }
+  /* .desktop-infoTitle {
+    font-size: 14px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 10px;
+    color: #282c3f;
+    font-weight: 700;
+  } */
 `;
 
 export const SvgNavbarLink = styled(Link)``;

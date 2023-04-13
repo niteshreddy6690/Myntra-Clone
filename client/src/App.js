@@ -22,9 +22,15 @@ import AccountLink from "./pages/AccountLink";
 import CreateAccount from "./pages/CreateAccount";
 import Wishlist from "./pages/Wishlist";
 import Test5 from "./pages/Test5";
+import Test8 from "./pages/Test8";
 import TempProduct from "./pages/TempProduct";
 import LazyComponent from "./components/LazyComponent";
 import Toast from "./pages/Toast";
+import Category from "./pages/Category";
+import MyMainPage from "./pages/My/MyMainPage";
+import MyOrders from "./pages/My/MyOrders";
+import OverView from "./pages/My/OverView";
+import ProfileEdit from "./pages/My/ProfileEdit";
 
 // import "./fonts/whitneybold.otf";
 import "./fonts/whitneybook.ttf";
@@ -35,8 +41,12 @@ import "./fonts/whitneysemibold.ttf";
 import "./fonts/RishgularTryttf.ttf";
 import "./fonts/whitneymedium.woff";
 
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 // import "./fonts/MemphisRiver.otf";
-
+import LocalStorageService from "../src/api/localStorage";
+import { fetchUserById } from "../src/redux/features/user/userSlice";
+import { isFulfilled } from "@reduxjs/toolkit";
 function App() {
   return (
     <div className="App">
@@ -58,8 +68,16 @@ function App() {
           <Route path="/checkbox" element={<Checkbox />} />
           <Route path="/similar" element={<Similar />} />
           <Route path="/wishlist" element={<Wishlist />} />
-          {/* <Route path="/test" element={<Test3 />} />
-          <Route path="/addimages" element={<Test5 />} /> */}
+          <Route path="/category" element={<Category />} />
+          <Route path="/My/" element={<MyMainPage />}>
+            <Route path="orders" element={<MyOrders />} />
+            <Route path="dashboard" element={<OverView />} />
+            <Route path="profile/edit" element={<ProfileEdit />} />
+          </Route>
+
+          <Route path="/test" element={<Test3 />} />
+          <Route path="/addimages" element={<Test5 />} />
+          <Route path="/radio" element={<Test8 />} />
           <Route path="/toast" element={<Toast />} />
           <Route path="/checkout/cart" element={<Cart />} />
         </Routes>

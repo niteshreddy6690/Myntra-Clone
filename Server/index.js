@@ -5,13 +5,18 @@ const dotenv = require("dotenv");
 const productRoute = require("./routes/product");
 // const cartRoute = require("./routes/cart");
 const cartRoutes = require("./routes/cartRoutes");
-const authRoutes = require("./routes/userRouts");
+const authRoutes = require("./routes/authRouts");
 const addressRoutes = require("./routes/addressRoute");
 const wishlistRoutes = require("./routes/wishlistRouts");
+const reviewRoutes = require("./routes/reviewRoute");
+const protectedRoute = require("./routes/protected");
+const userRoutes = require("./routes/userRoute");
+const categoryRoutes = require("./routes/categoryRoute");
 const cors = require("cors");
 
 const app = express();
 const PORT = 8080;
+
 dotenv.config();
 
 mongoose
@@ -29,6 +34,11 @@ app.use("/api/carts", cartRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/review", reviewRoutes);
+app.use("/api/protected", protectedRoute);
+app.use("/api/user", userRoutes);
+app.use("/api/address", addressRoutes);
+app.use("/api/category", categoryRoutes);
 app.listen(process.env.PORT || 8080, () => {
   console.log("backend server listening on port " + PORT);
 });

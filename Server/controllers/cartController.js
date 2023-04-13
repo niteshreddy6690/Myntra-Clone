@@ -92,6 +92,7 @@ exports.addItemToCart = async (req, res) => {
 };
 
 exports.getCart = async (req, res) => {
+  console.log("request.user", req.user);
   console.log("Calling Get cart");
   try {
     let cart = await cartService.cart();

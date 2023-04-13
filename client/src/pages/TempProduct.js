@@ -7,14 +7,18 @@ import axios from "axios";
 import Similar from "../components/ViewSimilar/Similar";
 import TempProductMainPage from "./TempProductMainPage";
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
-
+// import { Chip } from "@mui/material";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 // check Box Section
 import { omit } from "lodash";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { request } from "../api/axios";
+import closeIconSvg from "../Assets/svg/CloseIcon.svg";
+import { height } from "@mui/system";
 
 const Main = styled.div`
-  margin: 75px auto 0;
   max-width: 1600px;
+  margin: 0 auto;
 `;
 
 const RowBase = styled.div`
@@ -192,17 +196,26 @@ const ColorDisplay = styled.span`
   display: inline-block;
   width: 15px;
   height: 15px;
-  background: ${({ color }) => (color ? color : "#ffffff")};
+  opacity: 0.8;
+  background: ${({ color }) => (color ? color : "none")};
   border-radius: 50%;
   margin-right: 10px;
 `;
+
+const RightSearchResults = styled.div`
+  /* margin-left: 20px; */
+`;
+
 const RightSection = styled.div`
   padding: 0px;
   flex: 1 1 0%;
+  /* margin-left: 20px; */
+  /* background-color: red; */
 `;
 const RSecttion = styled.div`
   max-height: 1972px;
-  width: 1150px;
+  width: 100%;
+
   /* overflow: hidden;
   overflow-y: scroll; */
   &::-webkit-scrollbar {
@@ -216,7 +229,7 @@ const RightSectionRowBase = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: stretch;
-  align-content: stretch;
+  /* align-content: stretch; */
   padding-top: 24px;
   padding-left: 15px;
   padding-right: 20px;
@@ -273,28 +286,40 @@ const Label1 = styled.label`
   font-family: Whitney Book;
 `;
 
+const SortByContainerWrapper = styled.div`
+  /* display: inline-block; */
+  float: right;
+  margin-right: 30px;
+  margin-bottom: 0;
+  margin-top: -7px;
+  position: relative;
+  top: 5px;
+`;
 const SortByContainer = styled.div`
   z-index: 2;
   font-family: "Assistant";
-  position: absolute;
-  top: -90px;
-  left: 1150px;
-  padding: 2px 14px;
+  /* position: relative;
+  top: 0px; */
+  /* left: 1150px; */
+  /* right: -2px; */
+  padding: 8px 14px;
   font-size: 14px;
   color: #282c3f;
   cursor: pointer;
-  /* position: relative; */
   width: 255px;
   box-sizing: border-box;
   border-radius: 2px;
   background-color: #fff;
   border: 1px solid #d4d5d9;
-
+  margin-top: 5px;
   span {
     text-transform: capitalize;
     font-weight: 700;
     color: #282c3f;
   }
+  /* .sortBy {
+    margin-top: 5px;
+  } */
   .sort-downArrow {
     /* margin-left: 5px;
     margin-top: 5px; */
@@ -310,8 +335,7 @@ const SortByContainer = styled.div`
     width: 255px;
     background-color: #fff;
     position: absolute;
-    top: 33px;
-    left: -1px;
+    top: 40px;
     margin: 0;
     padding: 16px 0;
     z-index: 2;
@@ -320,13 +344,13 @@ const SortByContainer = styled.div`
     border-top: none;
     box-shadow: 0 8px 10px 0 rgb(0 0 0 / 8%);
   }
-  :hover .sort-list {
+  &:hover .sort-list {
     box-sizing: border-box;
     width: 255px;
     background-color: #fff;
     position: absolute;
-    top: 33px;
-    left: -1px;
+    top: 40px;
+    left: 0px;
     margin: 0;
     padding: 16px 0;
     z-index: 2;
@@ -346,12 +370,102 @@ const SortByContainer = styled.div`
     padding: 10px 20px;
   }
 
+  .sort-list li:hover {
+    background-color: #f4f4f5;
+  }
   .sort-label input {
     visibility: hidden;
     display: none;
   }
 `;
 
+const ChipsContainer = styled.div`
+  position: relative;
+  list-style: none;
+  padding-top: 20px;
+
+  .filter-summary-filterList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    -webkit-box-align: baseline;
+    -ms-flex-align: baseline;
+    /* align-items: baseline; */
+    margin: 0;
+    padding-left: 17px !important;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  label {
+    text-align: center;
+  }
+  .filter-summary-filter {
+    position: relative;
+    background-color: #fff;
+    text-transform: capitalize;
+    color: #3e4152;
+    cursor: default;
+    font-size: 12px;
+    padding: 5px 26px 5px 10px;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    border-radius: 20px;
+    border: 1px solid #d4d5d9;
+    &:hover {
+      border: 1px solid #94969f;
+    }
+  }
+
+  .filter-summary-removeFilter {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 20px;
+    z-index: 1;
+    text-align: center;
+    cursor: pointer;
+  }
+  .filter-summary-filter input {
+    display: none;
+  }
+  .filter-summary-filterList li {
+    margin: 0 8px 6px 0;
+  }
+  .filter-summary-removeIcon {
+    vertical-align: middle;
+    opacity: 0.7;
+    -webkit-transform: scale(0.7);
+    transform: scale(0.7);
+  }
+`;
+
+const ColorDisplayInChips = styled.span`
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  opacity: 0.8;
+  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  background: ${({ color }) => (color ? color : "none")};
+`;
+const ClosedIcon = styled(CloseRoundedIcon)`
+  width: 15px;
+  height: 15px;
+  opacity: 0.8;
+  vertical-align: middle;
+  &:hover {
+    opacity: 1;
+  }
+`;
 const PaginationContainer = styled.div`
   text-align: center;
   border-top: 1px solid #edebef;
@@ -407,7 +521,7 @@ const paramsToObject = (entries) => {
   for (const [key, value] of entries) {
     result[key] = value;
   }
-  console.log("result", result);
+  // console.log("result", result);
   return result;
 };
 const useSearchQuery = () => {
@@ -435,7 +549,7 @@ const TempProduct = () => {
   //     (key) => ({ key: key, value: key })
   //   );
 
-  const pages = new Array(5).fill(null).map((i, v) => v + 1);
+  var pages;
   const sortObject = [
     {
       label: "Recommended",
@@ -474,6 +588,9 @@ const TempProduct = () => {
 
   const { params, setSearchParams } = useSearchQuery();
   const [Brand, setBrand] = useState([]);
+  const [Colors, setColor] = useState([]);
+  const [DiscountRange, setDiscountRange] = useState([]);
+  const [PriceRange, setPriceRange] = useState([]);
   const [Gender, setGender] = useState([]);
   const [SortValue, setSort] = useState("");
   const [PageNo, setPageNo] = useState(1);
@@ -484,9 +601,9 @@ const TempProduct = () => {
   });
   const [checkedValues, setCheckedValues] = useState([]);
   //   const location = useLocation();
-  console.log("params", params);
-  console.log("Brand", Brand);
-  console.log("Params", params);
+  // console.log("params", params);
+  // console.log("Brand", Brand);
+  // console.log("Params", params);
 
   ///
 
@@ -503,7 +620,7 @@ const TempProduct = () => {
       // downscroll code
       console.log("Scrolling Downward");
 
-      if (document.documentElement.scrollTop > 550) {
+      if (document.documentElement.scrollTop > 816) {
         let ele = document.querySelectorAll(".left-section");
         console.log(ele);
         ref.current.classList.add("condition-render-fixed-bottom");
@@ -514,7 +631,7 @@ const TempProduct = () => {
         });
       }
 
-      if (document.documentElement.scrollTop > 1500) {
+      if (document.documentElement.scrollTop > 4500) {
         ref.current.classList.add("condition-render-boundary-bottom");
       } else {
         ref.current.classList.remove("condition-render-boundary-bottom");
@@ -563,7 +680,7 @@ const TempProduct = () => {
   };
 
   const getWishlistProducts = async () => {
-    const res = await axios.get("http://localhost:8080/api/wishlist/");
+    const res = await request.get("wishlist/");
     console.log("result", res);
     setWishlistProducts([
       ...res?.data?.map((item) => {
@@ -574,21 +691,27 @@ const TempProduct = () => {
 
   const getProducts = async ({ params, category }) => {
     // const searchString = location.search;
-    console.log("calling Getproducts Function");
+    console.log("calling Getproducts Function", params);
     if (params) {
       var url = new URL("http://localhost:8080/api/products");
       if (params?.brands)
         url.searchParams.set("brand", params?.brands?.split(","));
-      if (params?.gender) url.searchParams.set("gender", params?.gender);
+
       if (params?.p) url.searchParams.set("p", params?.p);
       if (params.sort) url.searchParams.set("sort", params?.sort);
+      if (params.colors)
+        url.searchParams.set("colors", params?.colors?.split(","));
+      if (params.price)
+        url.searchParams.set("price", params?.price?.split(","));
     }
-
+    if (params?.discount) url.searchParams.set("discount", params?.discount);
     console.log("URL______: ", url);
     try {
       const res2 = await axios.get(
         `http://localhost:8080/api/products?category=${cat}`
       );
+
+      console.log("Res2", res2);
       const res = await axios.get(
         // cat ? `http://localhost:8080/api/products?category=${cat}`
         //   : "http://localhost:8080/api/products"
@@ -596,6 +719,7 @@ const TempProduct = () => {
         url ? `${url}` : `http://localhost:8080/api/products?category=${cat}`
       );
 
+      console.log("result??????????????????????", res);
       if (res2) {
         const brandData = [
           ...new Set(
@@ -605,10 +729,93 @@ const TempProduct = () => {
           ),
         ]?.map((key) => ({ key: key, value: key }));
 
+        const colors = [
+          ...new Set(
+            res2.data.products?.map((item) => {
+              return item?.color;
+            })
+          ),
+        ]
+          .filter(Boolean)
+          ?.map((key) => ({ key: key, value: key }))
+          .filter(Boolean);
+
+        const prices = [
+          ...new Set(
+            res2.data.products?.map((item) => {
+              return item?.price;
+            })
+          ),
+        ]
+          .filter(Boolean)
+          ?.map((key) => key)
+          .filter(Boolean);
+
+        const rangePrice = (data) => {
+          const noOfRanges = 3;
+          // step 1
+          const min = Math.min(...data);
+          console.log("min", min);
+          const max = Math.max(...data);
+          console.log("max", max);
+          // step 2
+          const avg = Math.ceil((max - min) / noOfRanges);
+          console.log("avg", avg);
+          // step 3
+          const ranges = [];
+          for (var i = 0; i < noOfRanges; i++) {
+            ranges[i] = { min: min + avg * i, max: min + avg * (i + 1) };
+            ranges[i]["numbers"] = [];
+          }
+
+          // step 4
+
+          data.forEach((number) => {
+            ranges.forEach((range, index) => {
+              if (number >= range.min && number < range.max) {
+                ranges[index]["numbers"].push(number);
+              }
+            });
+          });
+
+          return ranges;
+        };
+
+        const priceRanges = rangePrice(prices);
+
+        console.log(
+          "result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+          priceRanges
+        );
+        // pages = new Array(Math.ceil(res2.data.products.length / 20))
+        //   .fill(null)
+        //   .map((i, v) => v + 1);
+
+        const discountRange = [
+          ...new Set(
+            res2.data.products?.map((item) => {
+              return item?.discountPercentage;
+            })
+          ),
+        ]
+          .filter(Boolean)
+          ?.map((key) => {
+            if (key % 10 == 0) return key;
+          })
+          .sort()
+          .filter(Boolean);
+
         setBrand(brandData);
+        setColor(colors);
+        // setPrices(prices);
+        setPriceRange(priceRanges);
+        setDiscountRange(discountRange);
+
+        console.log("colors-------------: ", colors);
       }
-      setProducts(res.data.products);
+
       if (res) {
+        setProducts(res.data.products);
         getWishlistProducts();
         console.log("Products..............", [
           ...new Set(
@@ -630,17 +837,20 @@ const TempProduct = () => {
   /// Scroll on animation
 
   /// CheckBox
-
   const handelChange = (e) => {
     const value = e.target.value;
     const checked = e.target.checked;
+
+    console.log("checked", checked);
+    let _params = null;
     console.log("filterArray checked", checked);
     if (checked) {
       let previous = params?.brands?.length ? params?.brands?.split(",") : "";
       const brands = previous
         ? [...previous, value].toString()
         : [value].toString();
-      setSearchParams({ ...params, ...(brands && { brands }) });
+      _params = { ...params, ...(brands && { brands }) };
+      setSearchParams(_params);
     } else {
       const filterArray = params?.brands?.split(",").filter((e) => e !== value);
       console.log("brands ar", filterArray);
@@ -648,16 +858,19 @@ const TempProduct = () => {
         ? filterArray?.join(",")?.toString()
         : "";
       console.log("brands", brands);
+
       let _temp = { ...params, ...(brands && { brands }) };
+
+      console.log("uncheckecd brands", _params);
+      _params = brands ? _temp : omit(_temp, "brands");
       setSearchParams(brands ? _temp : omit(_temp, "brands"));
     }
 
     // console.log(`Value ${value} checked ${checked}`);
     // // setBrand(Brand.filter((e) => e !== value));
-
     // // -.compact
     // props?.getProducts({ params });
-    // getProducts({ params });
+    getProducts({ params: _params });
   };
 
   const handelChangeGender = (e) => {
@@ -666,9 +879,87 @@ const TempProduct = () => {
     const _params = { ...params, ...(value && { gender: value }) };
     setSearchParams(_params);
 
-    getProducts({ params });
+    getProducts({ params: _params });
   };
 
+  //handel color
+
+  const handelColor = (e) => {
+    const value = e.target.value;
+    const checked = e.target.checked;
+
+    console.log("checked", checked);
+    let _params = null;
+    console.log("filterArray checked", checked);
+    if (checked) {
+      let previous = params?.colors?.length ? params?.colors?.split(",") : "";
+      const colors = previous
+        ? [...previous, value].toString()
+        : [value].toString();
+      _params = { ...params, ...(colors && { colors }) };
+      setSearchParams(_params);
+    } else {
+      const filterArray = params?.colors?.split(",").filter((e) => e !== value);
+      console.log("brands ar", filterArray);
+      const colors = filterArray?.length
+        ? filterArray?.join(",")?.toString()
+        : "";
+      console.log("colors", colors);
+
+      let _temp = { ...params, ...(colors && { colors }) };
+
+      console.log("uncheckecd colors", _params);
+      _params = colors ? _temp : omit(_temp, "colors");
+      setSearchParams(colors ? _temp : omit(_temp, "colors"));
+    }
+
+    getProducts({ params: _params });
+  };
+
+  // Handel Price Range
+
+  const handelPriceRange = (e) => {
+    console.log("Value---@@@@---@@", e.target.value);
+    const value = e.target.value;
+    const checked = e.target.checked;
+
+    console.log("checked", checked);
+    let _params = null;
+    console.log("filterArray checked", checked);
+    if (checked) {
+      let previous = params?.price?.length ? params?.price?.split(",") : "";
+      const price = previous
+        ? [...previous, value].toString()
+        : [value].toString();
+      _params = { ...params, ...(price && { price }) };
+      setSearchParams(_params);
+    } else {
+      const filterArray = params?.price?.split(",").filter((e) => e !== value);
+      console.log("brands ar", filterArray);
+      const price = filterArray?.length
+        ? filterArray?.join(",")?.toString()
+        : "";
+      console.log("price", price);
+
+      let _temp = { ...params, ...(price && { price }) };
+
+      console.log("uncheckecd price", _params);
+      _params = price ? _temp : omit(_temp, "price");
+      setSearchParams(price ? _temp : omit(_temp, "price"));
+    }
+    getProducts({ params: _params });
+  };
+
+  // handel Discount
+
+  const handelChangeDiscount = (e) => {
+    const value = e.target.value;
+    console.log("value", e.target?.value);
+    const _params = { ...params, ...(value && { discount: value }) };
+    setSearchParams(_params);
+
+    getProducts({ params: _params });
+  };
   //
   const handelSort = (e) => {
     const value = e.target.value;
@@ -684,22 +975,32 @@ const TempProduct = () => {
     setSort(sortDic[value]);
     const _params = { ...params, ...(value && { sort: value }) };
     setSearchParams(_params);
-    getProducts({ params });
+    getProducts({ params: _params });
   };
 
   const handelPagination = (p) => {
+    let _params = null;
     if (p > 1) {
-      const _params = { ...params, ...(p > 1 && { p: p }) };
+      _params = { ...params, ...(p > 1 && { p: p }) };
       setSearchParams(_params);
     } else {
-      let _temp = { ...params, ...(p && { p }) };
-      setSearchParams(p > 1 ? _temp : omit(_temp, "p"));
+      _params = { ...params, ...(p && { p }) };
+      setSearchParams(p > 1 ? _params : omit(_params, "p"));
     }
-
     setPageNo(parseInt(p));
-    getProducts({ params });
+    console.log("handle page", _params);
+    getProducts({ params: _params });
   };
 
+  // if (products) {
+  //   pages = new Array(Math.ceil(products.length / 20))
+  //     .fill(null)
+  //     .map((i, v) => v + 1);
+  //   // alert(Math.ceil(products.length / 20));
+  //   console.log("products.length", products.length);
+  // }
+
+  console.log("Colors", Colors);
   return (
     <div>
       <Navbar />
@@ -738,9 +1039,175 @@ const TempProduct = () => {
                   <FilterSpan>filters</FilterSpan>
                 </FilterDiv>
                 <div>
-                  <div style={{ position: "relative" }}>
+                  <CategoriesDiv1>
+                    <Ul1>
+                      {GenderArrays?.map((gender, i) => (
+                        <Li1 key={i}>
+                          <Label1>
+                            <Input
+                              type="radio"
+                              name="gender"
+                              value={gender?.toLowerCase()}
+                              style={{
+                                accentColor: "#ff3f6c",
+                              }}
+                              onChange={handelChangeGender}
+                              checked={Boolean(
+                                params?.gender === gender?.toLowerCase()
+                              )}
+                            />
+                            {gender.toUpperCase()}
+                          </Label1>
+                        </Li1>
+                      ))}
+                    </Ul1>
+                  </CategoriesDiv1>
+                  <CategoriesDiv1>
+                    <span className="vertical-filters-header">Brand</span>
+                    <Ul>
+                      {Brand?.map((brand, i) => (
+                        <Li1 key={i}>
+                          <Label1>
+                            <Input1
+                              style={{
+                                accentColor: "#ff3f6c",
+                              }}
+                              type="checkbox"
+                              name="brand"
+                              value={brand?.key}
+                              onChange={handelChange}
+                              checked={Boolean(
+                                params?.brands?.split(",")?.includes(brand?.key)
+                              )}
+                            />
+                            {brand?.value?.toUpperCase()}
+                          </Label1>
+                        </Li1>
+                      ))}
+                    </Ul>
+                  </CategoriesDiv1>
+                </div>
+
+                {/* <Checkbox products={products} getProducts={getProducts} /> */}
+                <CategoriesDiv1>
+                  <ColorSpan>Price</ColorSpan>
+                  <Ul>
+                    {PriceRange?.length > 0 &&
+                      PriceRange?.map((price, i) => (
+                        <>
+                          {price && (
+                            <Li>
+                              <Label style={{ textTransform: "capitalize" }}>
+                                <Input1
+                                  type="checkbox"
+                                  value={`${price.min} to ${price.max}`}
+                                  style={{
+                                    accentColor: "#ff3f6c",
+                                  }}
+                                  onChange={handelPriceRange}
+                                  checked={Boolean(
+                                    params?.price
+                                      ?.split(",")
+                                      ?.includes(`${price.min} to ${price.max}`)
+                                  )}
+                                />
+
+                                {`Rs.${price.min} to Rs.${price.max} (${price.numbers.length})`}
+                              </Label>
+                            </Li>
+                          )}
+                        </>
+                      ))}
+                  </Ul>
+                </CategoriesDiv1>
+                <CategoriesDiv1>
+                  <ColorSpan>Color</ColorSpan>
+                  <Ul>
+                    {Colors?.length > 0 &&
+                      Colors?.map((color, i) => (
+                        <>
+                          {color && (
+                            <Li>
+                              <Label style={{ textTransform: "capitalize" }}>
+                                <Input1
+                                  type="checkbox"
+                                  value={color.key}
+                                  style={{
+                                    accentColor: "#ff3f6c",
+                                  }}
+                                  onChange={handelColor}
+                                  // checked={Boolean(
+                                  //   params?.colors?.indexOf(color.key?.key) > 1
+                                  // )}
+                                  checked={Boolean(
+                                    params?.colors
+                                      ?.split(",")
+                                      ?.includes(color?.key)
+                                  )}
+                                />
+                                <ColorDisplay color={color.key}></ColorDisplay>
+                                {color.key}
+                              </Label>
+                            </Li>
+                          )}
+                        </>
+                      ))}
+                  </Ul>
+                </CategoriesDiv1>
+                <CategoriesDiv1>
+                  <ColorSpan>DISCOUNT RANGE</ColorSpan>
+                  <Ul>
+                    {DiscountRange?.length > 0 &&
+                      DiscountRange?.map((discount, i) => (
+                        <>
+                          {discount && (
+                            <Li>
+                              <Label>
+                                <Input1
+                                  type="radio"
+                                  value={`${discount}% and above`}
+                                  name="discount"
+                                  style={{
+                                    accentColor: "#ff3f6c",
+                                  }}
+                                  onChange={handelChangeDiscount}
+                                  checked={Boolean(
+                                    params?.discount?.split("%")[0].trim() ===
+                                      discount?.toString()?.toLowerCase()
+                                  )}
+                                  // checked={Boolean(
+                                  //   params?.colors?.indexOf(color.key?.key) > 1
+                                  // )}
+                                  // checked={Boolean(
+                                  //   params?.colors
+                                  //     ?.split(",")
+                                  //     ?.includes(color?.key)
+                                  // )}
+                                />
+                                {`${discount}% and above`}
+                              </Label>
+                            </Li>
+                          )}
+                        </>
+                      ))}
+                  </Ul>
+                </CategoriesDiv1>
+              </LeftSectionDiv>
+            </Section>
+          </LeftSection>
+
+          <RightSection>
+            <RightSearchResults>
+              <RowBase>
+                <div
+                  style={{
+                    width: "100%",
+                    position: "relative",
+                  }}
+                >
+                  <SortByContainerWrapper>
                     <SortByContainer>
-                      <div>
+                      <div className="sortBy">
                         Sort by :
                         <span>{SortValue ? SortValue : "Recommended"}</span>
                         <span className="sort-downArrow">
@@ -802,267 +1269,150 @@ const TempProduct = () => {
                         ))}
                       </Ul1>
                     </SortByContainer>
-                  </div>
-
-                  <CategoriesDiv1>
-                    <span className="vertical-filters-header">Brand</span>
-                    <Ul>
-                      {Brand?.map((brand, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input1
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              type="checkbox"
-                              name="brand"
-                              value={brand?.key}
-                              onChange={handelChange}
-                              checked={Boolean(
-                                params?.brands?.includes(brand?.key)
-                              )}
-                            />
-                            {brand?.value?.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul>
-                  </CategoriesDiv1>
-                  <CategoriesDiv1>
-                    <span className="vertical-filters-header">Brand</span>
-                    <Ul>
-                      {Brand?.map((brand, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input1
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              type="checkbox"
-                              name="brand"
-                              value={brand?.key}
-                              onChange={handelChange}
-                              checked={Boolean(
-                                params?.brands?.includes(brand?.key)
-                              )}
-                            />
-                            {brand?.value?.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul>
-                  </CategoriesDiv1>
-                  <CategoriesDiv1>
-                    <span className="vertical-filters-header">Brand</span>
-                    <Ul>
-                      {Brand?.map((brand, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input1
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              type="checkbox"
-                              name="brand"
-                              value={brand?.key}
-                              onChange={handelChange}
-                              checked={Boolean(
-                                params?.brands?.includes(brand?.key)
-                              )}
-                            />
-                            {brand?.value?.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul>
-                  </CategoriesDiv1>
-                  <CategoriesDiv1>
-                    <span className="vertical-filters-header">Brand</span>
-                    <Ul>
-                      {Brand?.map((brand, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input1
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              type="checkbox"
-                              name="brand"
-                              value={brand?.key}
-                              onChange={handelChange}
-                              checked={Boolean(
-                                params?.brands?.includes(brand?.key)
-                              )}
-                            />
-                            {brand?.value?.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul>
-                  </CategoriesDiv1>
-                  <CategoriesDiv1>
-                    <span className="vertical-filters-header">Brand</span>
-                    <Ul>
-                      {Brand?.map((brand, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input1
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              type="checkbox"
-                              name="brand"
-                              value={brand?.key}
-                              onChange={handelChange}
-                              checked={Boolean(
-                                params?.brands?.includes(brand?.key)
-                              )}
-                            />
-                            {brand?.value?.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul>
-                  </CategoriesDiv1>
-                  <CategoriesDiv1>
-                    <span className="vertical-filters-header">Brand</span>
-                    <Ul>
-                      {Brand?.map((brand, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input1
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              type="checkbox"
-                              name="brand"
-                              value={brand?.key}
-                              onChange={handelChange}
-                              checked={Boolean(
-                                params?.brands?.includes(brand?.key)
-                              )}
-                            />
-                            {brand?.value?.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul>
-                  </CategoriesDiv1>
-                  <CategoriesDiv1>
-                    <span className="vertical-filters-header">Brand</span>
-                    <Ul>
-                      {Brand?.map((brand, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input1
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              type="checkbox"
-                              name="brand"
-                              value={brand?.key}
-                              onChange={handelChange}
-                              checked={Boolean(
-                                params?.brands?.includes(brand?.key)
-                              )}
-                            />
-                            {brand?.value?.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul>
-                  </CategoriesDiv1>
-
-                  <CategoriesDiv1>
-                    <Ul1>
-                      {GenderArrays?.map((gender, i) => (
-                        <Li1 key={i}>
-                          <Label1>
-                            <Input
-                              type="radio"
-                              name="gender"
-                              value={gender?.toLowerCase()}
-                              style={{
-                                accentColor: "#ff3f6c",
-                              }}
-                              onChange={handelChangeGender}
-                              checked={Boolean(
-                                params?.gender === gender?.toLowerCase()
-                              )}
-                            />
-                            {gender.toUpperCase()}
-                          </Label1>
-                        </Li1>
-                      ))}
-                    </Ul1>
-                  </CategoriesDiv1>
+                  </SortByContainerWrapper>
                 </div>
+                {/* <div>
+                  <Chip
+                    label="Deletable"
+                    variant="outlined"
+                    onDelete={handelChange}
+                  />
+                </div> */}
 
-                {/* <Checkbox products={products} getProducts={getProducts} /> */}
-                <ColorDiv>
-                  <ColorSpan>Color</ColorSpan>
-                  <Ul>
-                    <Li>
-                      <Label>
-                        <Input type="checkbox" value="Tshirts" />
-                        <ColorDisplay color={"green"}></ColorDisplay>
-                        Roadster
-                      </Label>
-                    </Li>
-                    <Li>
-                      <Label>
-                        <Input type="checkbox" value="Tshirts" />
-                        <ColorDisplay color={"limeGreen"}></ColorDisplay>
-                        WRONG
-                      </Label>
-                    </Li>
-                  </Ul>
-                </ColorDiv>
-              </LeftSectionDiv>
-            </Section>
-          </LeftSection>
-          <RightSection>
-            <RightSectionRowBase>
-              <RSecttion className="scroll-action">
-                <TempProductMainPage
-                  wishlistProducts={wishlistProducts}
-                  products={products}
-                  handelClick={handelClick}
-                  open={open}
-                />
-              </RSecttion>
-            </RightSectionRowBase>
-            <PaginationContainer>
-              {PageNo > 1 ? (
-                <PreviousButton
-                  onClick={() => handelPagination(parseInt(PageNo - 1))}
-                >
-                  Previous
-                </PreviousButton>
-              ) : null}
-              {pages?.map((item, i) => (
-                <button
-                  key={i.toString()}
-                  className="pageButtons"
-                  style={
-                    PageNo == item
-                      ? { backgroundColor: "black", color: "white" }
-                      : null
-                  }
-                  // href={`http://localhost:3000${location.pathname}${location.search}&p=${item}`}
-                  onClick={() => handelPagination(item)}
-                >
-                  {item}
-                </button>
-              ))}
-              {PageNo < 5 ? (
-                <NextButton
-                  onClick={() => handelPagination(parseInt(PageNo + 1))}
-                >
-                  Next
-                </NextButton>
-              ) : null}
-            </PaginationContainer>
+                <ChipsContainer className="filter-summary-selectedFilterContainer">
+                  <ul className="filter-summary-filterList">
+                    {params?.brands?.split(",").map((brand, i) => (
+                      <li key={i}>
+                        <div className="filter-summary-filter">
+                          {brand}
+                          <label className="filter-summary-removeFilter">
+                            <input
+                              type="checkbox"
+                              name="brand"
+                              value={brand}
+                              onChange={handelChange}
+                              checked={Boolean(
+                                params?.brands?.split(",")?.includes(brand)
+                              )}
+                            />
+                            <ClosedIcon
+                              style={{
+                                width: "15px",
+                                height: "15px",
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </li>
+                    ))}
+
+                    {params?.price?.split(",").map((price, i) => (
+                      <li key={i}>
+                        <div className="filter-summary-filter">
+                          <span
+                            style={{ textTransform: "capitalize" }}
+                          >{` Rs. ${price.split("to")[0]} to Rs.${
+                            price.split("to")[1]
+                          }`}</span>
+
+                          <label className="filter-summary-removeFilter">
+                            <input
+                              type="checkbox"
+                              name="brand"
+                              value={price}
+                              onChange={handelPriceRange}
+                              checked={Boolean(
+                                params?.price?.split(",")?.includes(price)
+                              )}
+                            />
+
+                            <ClosedIcon
+                              style={{
+                                width: "15px",
+                                height: "15px",
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </li>
+                    ))}
+
+                    {params?.colors?.split(",").map((color, i) => (
+                      <li key={i}>
+                        <div className="filter-summary-filter">
+                          <span>
+                            <ColorDisplayInChips
+                              color={color}
+                            ></ColorDisplayInChips>
+                            {color}
+                          </span>
+
+                          <label className="filter-summary-removeFilter">
+                            <input
+                              type="checkbox"
+                              name="brand"
+                              value={color}
+                              onChange={handelColor}
+                              checked={Boolean(
+                                params?.colors?.split(",")?.includes(color)
+                              )}
+                            />
+
+                            <ClosedIcon
+                              style={{
+                                width: "15px",
+                                height: "15px",
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </ChipsContainer>
+              </RowBase>
+              <RightSectionRowBase>
+                <RSecttion className="scroll-action">
+                  <TempProductMainPage
+                    wishlistProducts={wishlistProducts}
+                    products={products}
+                    handelClick={handelClick}
+                    open={open}
+                  />
+                </RSecttion>
+              </RightSectionRowBase>
+              <PaginationContainer>
+                {PageNo > 1 ? (
+                  <PreviousButton
+                    onClick={() => handelPagination(parseInt(PageNo - 1))}
+                  >
+                    Previous
+                  </PreviousButton>
+                ) : null}
+                {pages?.map((item, i) => (
+                  <button
+                    key={i.toString()}
+                    className="pageButtons"
+                    style={
+                      PageNo == item
+                        ? { backgroundColor: "black", color: "white" }
+                        : null
+                    }
+                    // href={`http://localhost:3000${location.pathname}${location.search}&p=${item}`}
+                    onClick={() => handelPagination(item)}
+                  >
+                    {item}
+                  </button>
+                ))}
+                {PageNo < 5 ? (
+                  <NextButton
+                    onClick={() => handelPagination(parseInt(PageNo + 1))}
+                  >
+                    Next
+                  </NextButton>
+                ) : null}
+              </PaginationContainer>
+            </RightSearchResults>
           </RightSection>
         </RowBase>
       </Main>

@@ -20,16 +20,16 @@ const addItemToWishList = catchAsync(async (req, res) => {
 });
 
 const getWishlist = catchAsync(async (req, res) => {
+  console.log("callinfg get Wishlist");
   const wishlistproducts = await WhishList.find().populate("wishlistProduct");
   res.status(httpStatus.OK).send(wishlistproducts);
 });
 
 const removeProductFromWishlist = catchAsync(async (req, res) => {
-  console.log("req.params.is", req.params.id);
-
+  console.log("req.params.id", req.params.id);
   const removedProduct = await WhishList.findByIdAndDelete({
     _id: req.params.id,
-  });
+  }).populate({ path: "wishlistProduct" });
   res.status(httpStatus.OK).send({ removedProduct });
 });
 

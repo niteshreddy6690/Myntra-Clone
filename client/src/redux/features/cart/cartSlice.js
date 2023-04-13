@@ -58,7 +58,7 @@ export const addItemToBag = createAsyncThunk(
   async ({ productId, size, toast }) => {
     try {
       const response = await api.addItemToCart({ productId, size });
-      console.log("Resposnse from add bag", response);
+      console.log("Added Item to bag", response);
       if (response)
         toast("Added to bag", {
           position: "top-right",

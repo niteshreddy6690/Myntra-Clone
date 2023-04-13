@@ -83,6 +83,46 @@ export const TitleAndPriceContainer = styled.div`
     margin-right: 0;
   }
 `;
+
+export const OverallRatingContainer = styled.div`
+  .index-overallRatingContainer {
+    width: auto;
+    border-bottom: 1px solid #d4d5d9;
+  }
+  .index-overallRating {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    /* height: 20px; */
+    padding: 5px;
+    border: 1px solid #eaeaec;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    color: #282c3f;
+  }
+  .index-overallRating:hover {
+    border: 1px solid #535766;
+  }
+
+  span {
+    margin-left: 5px;
+  }
+  .index-separator {
+    margin-top: -2px;
+    color: #d4d5d9;
+    width: 1px;
+  }
+  .index-overallRating .index-ratingsCount {
+    font-weight: 400;
+    color: #535766;
+    width: fit-content;
+  }
+`;
+
 export const HeaderTitle = styled.h1`
   margin-top: 0;
   margin-bottom: 0;
@@ -246,7 +286,6 @@ export const SizeButton = styled.button`
 `;
 
 export const SizeButtonText = styled.p`
-  font-family: "Whitney";
   margin: 0;
   font-size: 14px;
   padding: 0 8px;
@@ -286,7 +325,6 @@ export const AddToBagButton = styled.button`
   width: 100%;
   margin-right: 3%;
   text-transform: uppercase;
-  font-family: Whitney;
   @media (min-width: 980px) {
     text-align: center;
     padding: 15px 0;
@@ -324,7 +362,6 @@ export const WishListButton = styled.button`
   letter-spacing: 0.4px;
   color: ${({ productInWishlist }) => (productInWishlist ? "#FFF" : "#282c3f")};
   text-transform: uppercase;
-  font-family: "Whitney";
   @media (min-width: 980px) {
     text-align: center;
     padding: 15px 0;
@@ -338,5 +375,255 @@ export const WishListButton = styled.button`
   }
   @media (min-width: 320px) {
     min-width: 88px;
+  }
+`;
+
+export const ReviewContainer = styled.div`
+  margin-bottom: 15px;
+
+  .ugc-iconContainer {
+    margin: 0 5px;
+  }
+  .user-review-main {
+    position: relative;
+  }
+
+  .user-review-showRating {
+    padding-left: 35px;
+  }
+  .user-review-showRating {
+    padding-left: 35px;
+  }
+  .user-review-main .user-review-starWrapper {
+    position: absolute;
+    top: 3px;
+    left: 0;
+  }
+
+  /* .user-review-main
+    .user-review-starWrapper
+    .user-review-starRating .user-review-fourStars {
+    background-color: #14958f;
+  } */
+
+  .user-review-main
+    .user-review-starWrapper
+    .user-review-starRating[data-rating="1"] {
+    background-color: #f16565;
+  }
+
+  .user-review-main
+    .user-review-starWrapper
+    .user-review-starRating[data-rating="2"] {
+    background-color: #fcb301;
+  }
+
+  .user-review-main
+    .user-review-starWrapper
+    .user-review-starRating[data-rating="4"],
+  .user-review-main
+    .user-review-starWrapper
+    .user-review-starRating[data-rating="3"] {
+    background-color: #72bfbc;
+  }
+
+  .user-review-main
+    .user-review-starWrapper
+    .user-review-starRating[data-rating="5"] {
+    background-color: #14958f;
+  }
+
+  .user-review-main .user-review-starWrapper .user-review-starRating {
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    position: relative;
+    height: 14px;
+    width: 22px;
+    line-height: 14px;
+    display: block;
+    padding-left: 4px;
+    border-radius: 1px;
+    box-sizing: border-box;
+  }
+
+  .user-review-starIcon {
+    position: absolute;
+    top: 1px;
+    left: 10px;
+  }
+
+  .user-review-main .user-review-reviewTextWrapper {
+    font-size: 16px;
+    color: #282c3f;
+    line-height: 20px;
+  }
+  .user-review-footer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    color: #565a63;
+    font-size: 14px;
+    margin-top: 14px;
+  }
+
+  .user-review-showRating {
+    padding-left: 35px;
+  }
+  .user-review-footer .user-review-left span:first-child:after {
+    content: "|";
+    width: 15px;
+    display: inline-block;
+    text-align: center;
+  }
+`;
+export const UserReviewWrapper = styled.div`
+  border-bottom: 1px solid #eaeaec;
+  padding: 18px 0;
+  margin: 0;
+  position: relative;
+
+  .user-review-votes .user-review-thumb {
+    display: inline-block;
+    margin-left: 30px;
+  }
+  .user-review-thumbIcon {
+    margin: 0 8px;
+    cursor: pointer;
+    vertical-align: text-bottom;
+  }
+  .user-review-thumbsDown {
+    position: relative;
+    top: -3px;
+  }
+
+  .user-review-rotate180 {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+`;
+
+export const DetailedReviewContainer = styled.div`
+  font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica, Arial, sans-serif;
+  margin-top: 40px;
+  padding: 20px 0;
+  border-bottom: 1px solid #d4d5d9;
+  border-top: 1px solid #d4d5d9;
+
+  .review-header {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: 100%;
+    padding-bottom: 7px;
+    color: #282c3f;
+  }
+  .ugc-iconContainer {
+    margin: 0 5px;
+  }
+  .index-flexRow {
+    display: flex;
+    flex-direction: row;
+  }
+  .index-margin22 {
+    margin-top: 22px;
+  }
+  .index-flexColumn {
+    display: flex;
+    flex-direction: column;
+  }
+  .index-averageRating {
+    font-size: 48px;
+    color: #282c3f;
+  }
+  .index-countDesc {
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #282c3f;
+  }
+  .index-separator {
+    margin-left: 34px;
+    height: 96px;
+    border-left: 1.2px solid #eaeaec;
+  }
+  .index-detailedRatingContainer .index-flexRow {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .index-flexRow .index-averageRating .startIcon {
+    margin-left: 5px;
+  }
+  .index-rating {
+    display: flex;
+    font-size: 14px;
+    color: #a9abb3;
+    width: 30px;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .index-ratingBarContainer {
+    margin-left: 46px;
+    height: 18px;
+  }
+
+  .index-ratingBarContainer .index-rating {
+    display: flex;
+    font-size: 14px;
+    color: #a9abb3;
+  }
+  .index-ratingBarContainer progress {
+    border: none;
+    margin: auto 0;
+    width: 120px;
+    height: 4px;
+    background: #f5f5f6;
+  }
+  progress::-webkit-progress-value {
+    background: #f5f5f6;
+  }
+
+  progress {
+    vertical-align: baseline;
+  }
+
+  .index-ratingBarContainer progress[data-rating="4"]::-webkit-progress-value,
+  .index-ratingBarContainer progress[data-rating="5"]::-webkit-progress-value {
+    background: #14958f;
+  }
+  .index-ratingBarContainer .index-count {
+    font-size: 12px;
+    color: #282c3f;
+    margin-left: 9px;
+  }
+  .index-ratingBarContainer progress[data-rating="3"]::-webkit-progress-value {
+    background: #72bfbc;
+  }
+  .index-ratingBarContainer progress[data-rating="2"]::-webkit-progress-value {
+    background: #fcb301;
+  }
+  .index-ratingBarContainer progress[data-rating="1"]::-webkit-progress-value {
+    background: #f16565;
+  }
+
+  /* progress {
+    color: lightblue;
+  }
+
+  progress::-moz-progress-bar {
+    background: lightblue;
+  }
+
+  progress::-webkit-progress-value {
+    background: #14958f;
+  } */
+
+  progress::-webkit-progress-bar {
+    background: #f5f5f6;
   }
 `;

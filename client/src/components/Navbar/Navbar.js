@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   NavbarContainer,
   NavContainer,
@@ -16,6 +16,7 @@ import {
   NavSubLinks,
   GridItemThree,
   SvgImageContainer,
+  SvgImageContainer1,
   SvgNavbarLink,
   StdNavbarLink,
   StdContainer,
@@ -28,14 +29,20 @@ import SearchIcon from "@mui/icons-material/Search";
 import MyntraLogo from "../../Assets/Images/Myntra.png";
 import stdLogo from "../../Assets/Images/studio-logo-new.svg";
 import StudioImg from "../../Assets/Images/sudio-nav-banner.png";
-import { Children } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { Badge } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCartItems } from "../../redux/features/cart/cartSlice";
+import { isFulfilled } from "@reduxjs/toolkit";
+import { fetchUserById, logOutUser } from "../../redux/features/user/userSlice";
+import LocalStorageService from "../../api/localStorage";
+import jwt_decode from "jwt-decode";
+import { request } from "../../api/axios";
 
 const NavItem = ({ to, color, name, children }) => {
   const [ishover, setHover] = useState(false);
+
   return (
     <>
       <NavbarLink
@@ -57,12 +64,50 @@ const Navbar = () => {
   const [isFocus, setFocus] = useState(false);
   const [hover, setHover] = useState(false);
   const [stdHover, setStdHover] = useState(false);
-
+  const dispatch = useDispatch();
+  const refreshToken = LocalStorageService.getRefreshToken();
+  const { currentUser } = useSelector((state) => ({ ...state.user }));
+  console.log(" inside navbar currentUser", currentUser);
   const cart = useSelector((state) => state.cart.cartItems);
+
   const noOfCartItems = cart?.cart?.items.reduce(
     (accum, item) => accum + item.quantity,
     0
   );
+
+  const apiCall = async (decoded) => {
+    console.log("calling fetch user by id in app.js");
+    const action = dispatch(fetchUserById({ id: decoded.id }));
+    if (isFulfilled(action)) {
+      console.log("Action fullfilled", isFulfilled(action));
+    }
+    dispatch(fetchCartItems());
+  };
+  useEffect(() => {
+    const token = LocalStorageService.getAccessToken();
+
+    console.log("Token", token);
+    if (token) {
+      var decoded = jwt_decode(token);
+      if (decoded) {
+        console.log("calling get use by id in useffect");
+        apiCall(decoded);
+      }
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   dispatch(fetchCartItems());
+  // }, [dispatch]);
+
+  const handleLogout = async () => {
+    const action = dispatch(logOutUser({ refreshToken }));
+    localStorage.clear();
+    dispatch(fetchCartItems());
+
+    // const res = await request.post("/auth/logout", { refreshToken });
+    // if (res) localStorage.clear();
+  };
 
   return (
     <NavbarContainer>
@@ -80,22 +125,26 @@ const Navbar = () => {
               name={link?.name}
               key={i}
             >
-              <StyledSubLinksContainer>
-                {link?.subLinks?.map((item, i) => (
-                  <div key={i}>
-                    <SubLinksGroup to={item?.to} key={i} color={link?.color}>
-                      {item?.group}
-                    </SubLinksGroup>
-                    <>
-                      {item?.links?.map((link, i) => (
-                        <NavSubLinks to={link?.to} key={i}>
-                          {link?.name}
-                        </NavSubLinks>
-                      ))}
-                    </>
-                  </div>
-                ))}
-              </StyledSubLinksContainer>
+              <>
+                <StyledSubLinksContainer>
+                  {link?.subLinks?.map((item, i) => (
+                    <div key={i}>
+                      <SubLinksGroup to={item?.to} key={i} color={link?.color}>
+                        {item?.group}
+                      </SubLinksGroup>
+                      <>
+                        {item?.links?.map((link, i) => (
+                          <div key={i}>
+                            <NavSubLinks to={link?.to} key={i}>
+                              {link?.name}
+                            </NavSubLinks>
+                          </div>
+                        ))}
+                      </>
+                    </div>
+                  ))}
+                </StyledSubLinksContainer>
+              </>
             </NavItem>
           ))}
           <StdNavbarLink
@@ -166,19 +215,32 @@ const Navbar = () => {
             </svg>
             <span className="desktop-userTitle">Profile</span>
             <div className="profile-dropdown">
-              <div className="desktop-infoTitle">Welcome</div>
-              <span className="desktop-infoEmail">
-                To access account and manage orders
-              </span>
-              <div className="desktop-getUserInLinks desktop-getInLinks">
-                <a
-                  href="/login"
-                  data-track="login"
-                  className="desktop-linkButton"
-                >
-                  login / Signup
-                </a>
-              </div>
+              {currentUser ? (
+                <>
+                  <div className="desktop-infoTitle">
+                    Hello {currentUser?.name}
+                  </div>
+                  <div className="desktop-infoEmail">
+                    {currentUser?.phonenumber}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="desktop-infoTitle">Welcome</div>
+                  <span className="desktop-infoEmail">
+                    To access account and manage orders
+                  </span>
+                  <div className="desktop-getUserInLinks desktop-getInLinks">
+                    <a
+                      href="/login"
+                      data-track="login"
+                      className="desktop-linkButton"
+                    >
+                      login / Signup
+                    </a>
+                  </div>
+                </>
+              )}
               <div className="desktop-getInLinks">
                 <a href="/my/orders" className="desktop-info">
                   <div className="desktop-infoSection">Orders</div>
@@ -236,10 +298,30 @@ const Navbar = () => {
                   <div className="desktop-infoSection">Saved Address</div>
                 </a>
               </div>
+              {currentUser ? (
+                <div className="desktop-accActions">
+                  <a
+                    href="/my/profile/edit"
+                    data-track="edit_profile"
+                    className="desktop-info"
+                  >
+                    <div className="desktop-accInfoSection"> Edit Profile </div>
+                  </a>
+                  <div data-track="logout" className="desktop-info">
+                    <div
+                      className="desktop-accInfoSection"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </SvgImageContainer>
-          <SvgNavbarLink to="/wishlist">
-            <SvgImageContainer>
+
+          <SvgNavbarLink to={currentUser ? "/wishlist" : "/login"}>
+            <SvgImageContainer1>
               <svg
                 stroke="currentColor"
                 fill="currentColor"
@@ -253,10 +335,11 @@ const Navbar = () => {
                 <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path>
               </svg>
               <span className="desktop-userTitle">Wishlist</span>
-            </SvgImageContainer>
+            </SvgImageContainer1>
           </SvgNavbarLink>
+
           <SvgNavbarLink to="/checkout/cart">
-            <SvgImageContainer>
+            <SvgImageContainer1>
               <BadgeNotification badgeContent={noOfCartItems} color="primary">
                 <svg
                   stroke="currentColor"
@@ -272,7 +355,7 @@ const Navbar = () => {
                 </svg>
               </BadgeNotification>
               <span className="desktop-userTitle">Bag</span>
-            </SvgImageContainer>
+            </SvgImageContainer1>
           </SvgNavbarLink>
         </GridItemTwo>
       </NavContainer>

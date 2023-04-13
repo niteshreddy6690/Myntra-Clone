@@ -1,13 +1,18 @@
 const User = require("../models/User");
-
+const bcrypt = require("bcryptjs");
 const ApiError = require("../utils/ApiError");
+
 // exports.userById = async (user_Id) => {
 //   const user = await User.findOne({ _id: user_Id });
 //   return user;
 // };
 
+const getAllUsers = async () => {
+  return User.find().select({ password: 0 });
+};
+
 const getUserById = async (id) => {
-  return User.findById(id);
+  return User.findById(id).select({ password: 0 });
 };
 
 const getUserByPhoneNumber = async (phone) => {
@@ -19,8 +24,9 @@ const getUserByEmail = async (email) => {
 
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
+  const { email, password, name, gender, altPhone, hint } = updateBody;
+  const hashedPassword = await bcrypt.hash(password, 8);
 
-  const { email, password, name, gender, isExistingUser } = updateBody;
   if (!user) {
     throw new ApiError("404", "User not found");
   }
@@ -32,24 +38,46 @@ const updateUserById = async (userId, updateBody) => {
     }
   }
 
-  const DOB = new Date(updateBody.DOB);
-  console.log(DOB);
-  if (user.phonenumber) {
+  // const DOB = new Date(updateBody.DOB);
+  // console.log("dob", DOB);
+  if (user?.phonenumber) {
     Object.assign(user, {
       email,
-      password,
+      password: hashedPassword,
       name,
       gender,
-      DOB,
+      altPhone,
+      hint,
       isExistingUser: true,
     });
     await user.save();
     return user;
   }
 };
+const updateUser = async (phonenumber, updateBody) => {
+  const { email, password, name, gender, altPhone, hint } = updateBody;
+  const hashedPassword = await bcrypt.hash(password, 8);
+  return User.findOneAndUpdate(
+    { phonenumber },
+    {
+      email,
+      password,
+      password: hashedPassword,
+      name,
+      gender,
+      altPhone,
+      hint,
+      isExistingUser: true,
+    },
+    { new: true }
+  );
+};
+
 module.exports = {
   getUserById,
   updateUserById,
+  updateUser,
   getUserByPhoneNumber,
   getUserByEmail,
+  getAllUsers,
 };

@@ -6,12 +6,23 @@ import LoginImage from "../Assets/Images/login.webp";
 import { color } from "@mui/system";
 import axios from "axios";
 
+const FixedBackground = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  background: red;
+  background: linear-gradient(to bottom right, #feedf6, #fcf0e2);
+`;
 const LoginContainer = styled.div`
   box-sizing: border-box;
   position: relative;
   width: 100vw;
-  min-height: 100vh;
-  background: linear-gradient(to bottom right, #feedf6, #fcf0e2);
+  /* min-height: 100vh; */
+  /* background: linear-gradient(to bottom right, #feedf6, #fcf0e2); */
   line-height: 1.42857143;
   color: #424553;
 `;
@@ -29,11 +40,15 @@ const LoginWrapper = styled.div`
   position: relative;
   width: 400px;
   background-color: #fff;
-  top: 50%;
-  left: 50%;
-  margin: 40px 0px;
-  min-height: calc(100vh - 138px);
-  transform: translate(-50%, 0);
+  /* top: 50%;
+  left: 50%; */
+  margin: 28px auto;
+  min-height: calc(100vh - 50px);
+  /* transform: translate(-50%, 0); */
+
+  @media (min-width: 800px) {
+    min-height: calc(100vh - 136px);
+  }
 `;
 
 const Img = styled.img`
@@ -129,7 +144,6 @@ const Login = () => {
   const handelLogin = async (e) => {
     e.preventDefault();
     console.log(phoneNumber);
-
     localStorage.setItem("mobileNumber", phoneNumber);
     try {
       if (phoneNumber) {
@@ -138,70 +152,82 @@ const Login = () => {
           { phonenumber: phoneNumber }
         );
         console.log(login);
-        if (login.data.message == "success") {
+
+        if (login) {
           navigate("/verifyotp");
         }
+        // if (!login.data?.user?.isExistingUser) {
+        //   navigate("/createaccount");
+        // } else {
+        //   navigate("/verifyotp");
+        // }
       }
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <LoginContainer>
-      <Navbar />
-      <LoginWrapper>
-        <Img src={LoginImage} alt="login Image" />
-        <LoginContent>
-          <LoginWelcomeHeader>
-            Login <LoginSpan> or </LoginSpan> Signup
-          </LoginWelcomeHeader>
-          <Form>
-            <MobileContainer>
-              <FormGroup>
-                <Input
-                  type="text"
-                  maxLength="10"
-                  onFocus={() => setFocus(true)}
-                  onBlur={() => setFocus(false)}
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  required
-                />
-                <Span
-                  className="Placeholder"
-                  isFocus={isFocus}
-                  phoneNumber={phoneNumber}
-                >
-                  +91
-                  <span style={{ padding: "0px 10px" }} className="Placeholder">
-                    |
-                  </span>
-                  <span className="mobileNumberPlacholder">
-                    Mobile Number
+    <>
+      <FixedBackground />
+      <LoginContainer>
+        <Navbar />
+        <LoginWrapper>
+          <Img src={LoginImage} alt="login Image" />
+          <LoginContent>
+            <LoginWelcomeHeader>
+              Login <LoginSpan> or </LoginSpan> Signup
+            </LoginWelcomeHeader>
+            <Form>
+              <MobileContainer>
+                <FormGroup>
+                  <Input
+                    type="text"
+                    maxLength="10"
+                    onFocus={() => setFocus(true)}
+                    onBlur={() => setFocus(false)}
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    required
+                  />
+                  <Span
+                    className="Placeholder"
+                    isFocus={isFocus}
+                    phoneNumber={phoneNumber}
+                  >
+                    +91
                     <span
-                      style={{ color: "rgb(255, 87, 34)" }}
-                      className="mobileNumberPlacholder"
+                      style={{ padding: "0px 10px" }}
+                      className="Placeholder"
                     >
-                      *
+                      |
                     </span>
-                  </span>
-                </Span>
-              </FormGroup>
-              <MediaLinkDiv>
-                By continuing, I agree to the
-                <NavLink to="/termsofuse"> Terms of Use </NavLink>&
-                <NavLink to="/termsofuse">Privacy Policy</NavLink>
-              </MediaLinkDiv>
-              <Button onClick={handelLogin}>Continue</Button>
-              <MediaLinkDiv style={{ marginTop: "30px" }}>
-                Have trouble logging in?
-                <NavLink to="/termsofuse">Get help</NavLink>
-              </MediaLinkDiv>
-            </MobileContainer>
-          </Form>
-        </LoginContent>
-      </LoginWrapper>
-    </LoginContainer>
+                    <span className="mobileNumberPlacholder">
+                      Mobile Number
+                      <span
+                        style={{ color: "rgb(255, 87, 34)" }}
+                        className="mobileNumberPlacholder"
+                      >
+                        *
+                      </span>
+                    </span>
+                  </Span>
+                </FormGroup>
+                <MediaLinkDiv>
+                  By continuing, I agree to the
+                  <NavLink to="/termsofuse"> Terms of Use </NavLink>&
+                  <NavLink to="/termsofuse">Privacy Policy</NavLink>
+                </MediaLinkDiv>
+                <Button onClick={handelLogin}>Continue</Button>
+                <MediaLinkDiv style={{ marginTop: "30px" }}>
+                  Have trouble logging in?
+                  <NavLink to="/termsofuse">Get help</NavLink>
+                </MediaLinkDiv>
+              </MobileContainer>
+            </Form>
+          </LoginContent>
+        </LoginWrapper>
+      </LoginContainer>
+    </>
   );
 };
 

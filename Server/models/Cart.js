@@ -20,7 +20,6 @@ let ItemSchema = new Schema(
   }
 );
 
-
 const CartSchema = new Schema(
   {
     items: [ItemSchema],

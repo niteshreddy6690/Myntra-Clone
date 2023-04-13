@@ -29,6 +29,7 @@ const Cart = () => {
   });
 
   const dispatch = useDispatch();
+
   const handelDelete = async (productId) => {
     dispatch(removeCartItem({ productId, toast }));
     try {

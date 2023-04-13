@@ -2,16 +2,27 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-
+import {
+  fetchWishListItems,
+  removeWishListItems,
+  removeWishListItemWithOutNotify,
+} from "../redux/features/wishlist/wishlistSlice";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+import { useSelector, useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { isFulfilled } from "@reduxjs/toolkit";
+import { Link } from "react-router-dom";
+import { request } from "../api/axios";
 const Layout = styled.div`
-  padding: 0px 45px;
+  /* padding: 0px 45px; */
 `;
 
 const Container = styled.div`
-  padding: 0 28px;
+  padding: 0 40px;
   max-width: 1400px;
   min-width: 780px;
-  margin: 60px auto 0;
+  /* margin: 60px auto 0; */
 `;
 const Header = styled.div`
   font-size: 20px;
@@ -133,7 +144,6 @@ const ActionDiv = styled.div`
   padding-top: 12px;
   cursor: pointer;
 `;
-
 const MoveToBag = styled.div`
   color: #ff3e6c;
   font-family: Whitney Semibold;
@@ -141,7 +151,6 @@ const MoveToBag = styled.div`
   font-weight: 500;
   letter-spacing: 0.2px;
 `;
-
 const ShowSimilar = styled.div`
   color: #ff3e6c;
   font-family: Whitney Semibold;
@@ -151,84 +160,138 @@ const ShowSimilar = styled.div`
 `;
 
 const Wishlist = () => {
+  const { isLoading, isError, wishListItems } = useSelector((state) => ({
+    ...state.wishlist,
+  }));
   const [wishlistProducts, setWishlistProducts] = useState([]);
+  const dispatch = useDispatch();
 
   const CallApi = async () => {
-    const res = await axios.get("http://localhost:8080/api/wishlist/");
-    console.log("result", res);
-    setWishlistProducts(res.data);
+    const action = await dispatch(fetchWishListItems());
+    console.log("res", action);
+    if (isFulfilled(action)) {
+      console.log("isFullfilled", isFulfilled(action));
+      setWishlistProducts(action.payload);
+    }
+
+    // const res = await axios.get("http://localhost:8080/api/wishlist/");
+    // console.log("result", res);
   };
   const handelDelete = async (id) => {
     console.log("deleteId", id);
-    const res = await axios.delete(`http://localhost:8080/api/wishlist/${id}`);
-    console.log("remove", res);
-    if (res) {
+    const action = await dispatch(removeWishListItems({ id, toast }));
+    //axios.delete(
+    //   `http://localhost:8080/api/wishlist/${id}`
+    // );
+
+    if (isFulfilled(action)) {
+      console.log("isFullfilled", isFulfilled(action));
+      // setWishlistProducts(action.payload);
+      CallApi();
+    }
+
+    // console.log("remove", res);
+    // if (res) {
+    //   CallApi();
+    // }
+  };
+  const handleDeleteWithoutNotify = async (id) => {
+    const action = await dispatch(removeWishListItemWithOutNotify({ id }));
+    if (isFulfilled(action)) {
+      console.log("isFullfilled", isFulfilled(action));
+      // setWishlistProducts(action.payload);
       CallApi();
     }
   };
   const handelMoveToBag = async (pid, id) => {
-    const cartProduct = await axios.post(`http://localhost:8080/api/carts/`, {
+    const cartProduct = await request.post(`carts/`, {
       productId: pid,
       size: "M",
     });
     if (cartProduct) {
-      handelDelete(id);
+      handleDeleteWithoutNotify(id);
     }
   };
 
+  // useEffect(() => {
+  //   if (wishListItems) setWishlistProducts(wishListItems);
+  // }, [wishListItems]);
   useEffect(() => {
     CallApi();
   }, []);
 
   return (
     <Layout>
-      <Container>
-        <Header>{`My Wishlist ${wishlistProducts.length} items`}</Header>
-        <ProductContainer>
-          <Ul>
-            {wishlistProducts.map((item) => (
-              <Li>
-                <div
-                  class="itemcard-removeIcon"
-                  onClick={() => {
-                    handelDelete(item._id);
-                  }}
-                >
-                  <CloseRoundedIcon className="sprites-remove itemcard-removeMark" />
-                </div>
-                <ImageCard src={item?.wishlistProduct?.images[0]} />
-                <ProductInfo>
-                  <ProductTitle>
-                    {`${item.wishlistProduct.brand} ${item.wishlistProduct.description}`}
-                  </ProductTitle>
-                  <div className="itemdetails-itemPricing">
-                    <span className="itemdetails-boldFont">{`Rs. ${Math.floor(
-                      item.wishlistProduct.price -
-                        item.wishlistProduct.price *
-                          (item.wishlistProduct.discountPercentage / 100)
-                    )}`}</span>
-                    <span className="itemdetails-strike">{`Rs.${item.wishlistProduct.price}`}</span>
-                    <span className="itemdetails-discountPercent">{`(${item.wishlistProduct.discountPercentage}%OFF)`}</span>
+      <ToastContainer
+        style={{ position: "absolute", top: "10px", right: "0px" }}
+        toastStyle={{
+          backgroundColor: "#171830",
+          width: "250px",
+          height: "20px",
+          color: "white",
+          zIndex: "100",
+        }}
+      />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Container>
+          <Header>{`My Wishlist ${wishlistProducts.length} items`}</Header>
+          <ProductContainer>
+            <Ul>
+              {wishlistProducts.map((item, i) => (
+                <Li key={i}>
+                  <div
+                    className="itemcard-removeIcon"
+                    onClick={() => {
+                      handelDelete(item._id);
+                    }}
+                  >
+                    <CloseRoundedIcon className="sprites-remove itemcard-removeMark" />
                   </div>
-                </ProductInfo>
-                <ActionDiv>
-                  {item.wishlistProduct.inStock ? (
-                    <MoveToBag
-                      onClick={() =>
-                        handelMoveToBag(item.wishlistProduct._id, item._id)
-                      }
-                    >
-                      Move To Bag
-                    </MoveToBag>
-                  ) : (
-                    <ShowSimilar>Show Similar</ShowSimilar>
-                  )}
-                </ActionDiv>
-              </Li>
-            ))}
-          </Ul>
-        </ProductContainer>
-      </Container>
+                  <Link
+                    target="_blank"
+                    to={`/${item?.wishlistProduct?.gender.toLowerCase()}/${item?.wishlistProduct?.brand
+                      .replaceAll(" ", "-")
+                      .toLowerCase()}/${item?.wishlistProduct?.description
+                      .replaceAll(" ", "-")
+                      .toLowerCase()}/${item?.wishlistProduct?._id}/buy`}
+                  >
+                    <ImageCard src={item?.wishlistProduct?.images[0]} />
+                  </Link>
+                  <ProductInfo>
+                    <ProductTitle>
+                      {`${item.wishlistProduct.brand} ${item.wishlistProduct.description}`}
+                    </ProductTitle>
+                    <div className="itemdetails-itemPricing">
+                      <span className="itemdetails-boldFont">{`Rs. ${Math.floor(
+                        item.wishlistProduct.price -
+                          item.wishlistProduct.price *
+                            (item.wishlistProduct.discountPercentage / 100)
+                      )}`}</span>
+                      <span className="itemdetails-strike">{`Rs.${item.wishlistProduct.price}`}</span>
+                      <span className="itemdetails-discountPercent">{`(${item.wishlistProduct.discountPercentage}%OFF)`}</span>
+                    </div>
+                  </ProductInfo>
+                  <ActionDiv>
+                    {item.wishlistProduct.inStock ? (
+                      <MoveToBag
+                        onClick={() =>
+                          handelMoveToBag(item.wishlistProduct._id, item._id)
+                        }
+                      >
+                        Move To Bag
+                      </MoveToBag>
+                    ) : (
+                      <ShowSimilar>Show Similar</ShowSimilar>
+                    )}
+                  </ActionDiv>
+                </Li>
+              ))}
+            </Ul>
+          </ProductContainer>
+        </Container>
+      )}
     </Layout>
   );
 };

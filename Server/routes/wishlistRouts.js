@@ -5,10 +5,16 @@ const {
   removeProductFromWishlist,
   findProductInWishlist,
 } = require("../controllers/wishlistController");
+const {
+  verifyToken,
+  verifyTokenAndAdmin,
+  verifyTokenAndAuthorization,
+  authorize,
+} = require("../utils/verifyToken");
 
-router.post("/", addItemToWishList);
-router.get("/", getWishlist);
-router.delete("/:id", removeProductFromWishlist);
-router.get("/:id", findProductInWishlist);
+router.post("/", authorize(), addItemToWishList);
+router.get("/", authorize(), getWishlist);
+router.delete("/:id", authorize(), removeProductFromWishlist);
+router.get("/:id", authorize(), findProductInWishlist);
 
 module.exports = router;

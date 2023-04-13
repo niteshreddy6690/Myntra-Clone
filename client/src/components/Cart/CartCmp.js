@@ -18,7 +18,7 @@ import {
   EmptyBagWrapper,
   EmptyBagContainer,
 } from "./Cart.styles";
-import format from "indian-number-format";
+// import format from "indian-number-format";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 

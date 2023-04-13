@@ -22,17 +22,17 @@ const addressSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    min: 10,
+    min: 2,
     max: 100,
   },
-  address: {
+  streetAddress: {
     type: String,
     required: true,
     trim: true,
-    min: 10,
+    min: 2,
     max: 100,
   },
-  cityDistrictTown: {
+  city: {
     type: String,
     required: true,
     trim: true,
@@ -43,11 +43,8 @@ const addressSchema = new mongoose.Schema({
   },
   landmark: {
     type: String,
-    min: 10,
+    min: 2,
     max: 100,
-  },
-  alternatePhone: {
-    type: String,
   },
   addressType: {
     type: String,
@@ -64,9 +61,8 @@ const addressSchema = new mongoose.Schema({
 
 const userAddressSchema = new mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: "User",
     },
     address: [addressSchema],

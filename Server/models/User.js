@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 // const validator = require("validator");
 const jwtToken = require("jsonwebtoken");
+const { roles } = require("../utils/Constants");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -9,11 +10,7 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       require: [true, "Error: Enter Phone Number ir Required"],
     },
-    verify: {
-      type: String,
-      required: true,
-      default: "unverified",
-    },
+
     email: {
       type: String,
     },
@@ -29,9 +26,21 @@ const UserSchema = new mongoose.Schema(
     DOB: {
       type: Date,
     },
+    altPhone: { type: Number },
+    hint: { type: String },
+    role: {
+      type: String,
+      default: roles.user,
+      enum: [roles.admin, roles.user],
+    },
     isExistingUser: {
       type: Boolean,
       default: false,
+    },
+    verify: {
+      type: String,
+      required: true,
+      default: "unverified",
     },
   },
   { timestamps: true }

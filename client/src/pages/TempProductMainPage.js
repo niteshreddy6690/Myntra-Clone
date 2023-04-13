@@ -10,6 +10,7 @@ import Checkbox from "./Checkbox";
 import { Swiper, SwiperSlide } from "swiper/react";
 import FavoriteIcon from "@mui/icons-material/FavoriteBorderTwoTone";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import { request } from "../api/axios";
 
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
@@ -187,8 +188,8 @@ const RightSectionRowBase = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-  align-items: stretch;
-  align-content: stretch;
+  /* align-items: stretch;
+  align-content: stretch; */
   padding-top: 24px;
   padding-left: 15px;
   padding-right: 20px;
@@ -198,8 +199,8 @@ const RUl = styled.ul`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: stretch;
-  align-content: stretch;
+  /* align-items: stretch;
+  align-content: stretch; */
   margin: 0 -10px 0 3px;
   width: 100%;
   justify-content: space-between;
@@ -209,6 +210,7 @@ const RUl = styled.ul`
 
 const RLi = styled.li`
   width: 210px;
+  height: 360px;
   position: relative;
   text-align: left;
   vertical-align: top;
@@ -235,6 +237,7 @@ const ImageSliderContainer = styled.div`
   position: relative;
   width: 210px;
   height: 280px;
+  /* background-color: white; */
 `;
 const ProductSliderContainer = styled.div`
   position: absolute;
@@ -254,19 +257,19 @@ const SwiperCarousel = styled(Swiper)`
   }
 
   .swiper-pagination {
-    z-index: 2;
+    z-index: 3;
     position: absolute;
-    top: 280px;
+    top: 275px;
     height: 20px;
+    padding-bottom: 20px;
     left: 0;
     text-align: center;
     background-color: #fff;
     transform: ${({ isHover }) =>
-      isHover ? "translateY(-20px)" : "translateY(0px)"};
-    transition: transform 0.2s;
+      isHover ? "translateY(-20px)" : "translateY(10px)"};
+    transition: transform 0.2s ease-in-out;
   }
-  &:hover {
-  }
+
   .swiper-pagination-bullet {
     background: #d4d5d9;
     width: 5px;
@@ -283,8 +286,10 @@ const SwiperCarousel = styled(Swiper)`
   }
 `;
 const Image = styled.img`
-  width: 100%;
-  height: 100%;
+  background-color: #f5f5f5;
+
+  width: 210px;
+  height: 280px;
 `;
 
 const ViewSimilar = styled.div`
@@ -358,10 +363,10 @@ const WishlistContainer = styled.div`
   position: absolute;
   z-index: 5;
   left: 0;
-  top: 280px;
+  top: 275px;
   background: #fff;
   width: 100%;
-  height: 40px;
+  height: 30px;
   padding: 0px 10px;
   box-sizing: border-box;
   cursor: default;
@@ -372,7 +377,7 @@ const WishListDivWrapper = styled.div`
   align-items: center;
   padding: 6px 0px;
   margin: 5px 0px 0px 0px;
-  font-size: 14px;
+  font-size: 12px;
   border: 1px solid #d4d5d9;
   border-radius: 2px;
   color: ${({ isWishlist }) => (isWishlist ? "#FFF" : "#282c3f")};
@@ -388,12 +393,47 @@ const WishListDivWrapper = styled.div`
 const WishlistSpan = styled.span`
   text-align: center;
   text-transform: uppercase;
-  font-family: "Whitney Semibold";
-  font-weight: 500;
+  font-family: "Assistant";
+  font-weight: 700;
   margin-left: 5px;
   letter-spacing: 0.3px;
   font-size: 12px;
   z-index: 1000;
+`;
+
+const RatingContainer = styled.div`
+  font-family: "Assistant";
+  z-index: 2;
+  position: absolute;
+  left: 10px;
+  top: 255px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  border-radius: 2px;
+  padding: 0 0 0 4px;
+  background-color: hsla(0, 0%, 100%, 0.8);
+  /* .user-review-starIcon {
+    background-color: #72bfbc;
+  } */
+  span {
+    margin-right: 4px;
+  }
+  .product-ratingsCount {
+    display: flex;
+    padding-right: 4px;
+  }
+  .startIcon {
+    margin: 2px 5px 0 0;
+  }
+  .product-separator {
+    font-size: 10px;
+    margin: 1px 5px 0 -2px;
+  }
 `;
 const ProductMetaInfo = styled.div`
   position: relative;
@@ -426,6 +466,7 @@ const ProductHeader3 = styled.h3`
   font-weight: 500;
   line-height: 1;
   color: #282c3f;
+  margin-top: 0;
   text-transform: capitalize;
   margin-bottom: 6px;
   overflow: hidden;
@@ -446,6 +487,7 @@ const ProductHeader4 = styled.h4`
   font-weight: 400;
   display: ${({ isHover }) => (isHover ? "none" : "block")};
 `;
+
 const ProductPriceContainer = styled.div`
   font-family: Whitney;
   font-size: 16px;
@@ -487,7 +529,9 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
   };
 
   const handelAddToWishlist = async (id) => {
-    const res = await axios.post("http://localhost:8080/api/wishlist/", { id });
+    const res = await request.post("http://localhost:8080/api/wishlist/", {
+      id,
+    });
     if (res) setWishlist(true);
   };
 
@@ -558,6 +602,32 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
                 ))}
               </ProductSliderContainer>
             </ImageSliderContainer>
+
+            {product?.productRating > 0 && (
+              <RatingContainer>
+                <span>{product?.productRating}</span>
+                <span className="startIcon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                  >
+                    <path
+                      fill="#14958f"
+                      fill-rule="evenodd"
+                      d="M6 9.644l2.867 1.821c.464.296.743.093.623-.45L8.724 7.56l2.581-2.657c.384-.395.25-.716-.306-.716H7.686L6.374.93c-.206-.513-.542-.512-.748 0L4.314 4.187H1.001c-.553 0-.687.324-.306.716L3.276 7.56l-.766 3.455c-.12.544.165.742.623.45L6 9.645z"
+                    ></path>
+                  </svg>
+                </span>
+                {product?.noOfRatings > 0 && (
+                  <div class="product-ratingsCount">
+                    <div class="product-separator">|</div>
+                    {product?.noOfRatings}
+                  </div>
+                )}
+              </RatingContainer>
+            )}
             <ProductMetaInfo>
               <ProductHeader3 isHover={isHover}>{product.brand}</ProductHeader3>
               <ProductHeader4 isHover={isHover}>
