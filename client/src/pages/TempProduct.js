@@ -6,6 +6,7 @@ import Banner from "../components/Banner/Banner";
 import axios from "axios";
 import Similar from "../components/ViewSimilar/Similar";
 import TempProductMainPage from "./TempProductMainPage";
+import Footer from "./Footer";
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 // import { Chip } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -93,18 +94,14 @@ const Span = styled.span`
   margin: 0;
 `;
 const LeftSection = styled.div`
-  min-width: 235px;
-  max-width: 235px;
+  min-width: 252px;
+  max-width: 252px;
   flex-grow: 0 !important;
   align-self: flex-start;
   flex-wrap: wrap;
   flex-direction: column;
   flex: 1;
   font-family: Whitney Semibold;
-
-  .condition-render-boundary-top {
-    position: static;
-  }
 
   .condition-render-fixed-top {
     width: 252px;
@@ -115,13 +112,17 @@ const LeftSection = styled.div`
     margin-top: 10px;
   }
 
+  .condition-render-boundary-top {
+    position: static;
+  }
+
   .condition-render-fixed-bottom {
     width: 252px;
     min-width: 252px;
     z-index: 4;
     position: fixed;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    /* margin-bottom: 10px;
+    margin-top: 10px; */
   }
   .condition-render-boundary-bottom {
     position: relative;
@@ -207,13 +208,13 @@ const RightSearchResults = styled.div`
 `;
 
 const RightSection = styled.div`
-  padding: 0px;
+  padding-left: 0px;
   flex: 1 1 0%;
+  overflow: none;
   /* margin-left: 20px; */
   /* background-color: red; */
 `;
 const RSecttion = styled.div`
-  max-height: 1972px;
   width: 100%;
 
   /* overflow: hidden;
@@ -244,7 +245,7 @@ const CategoriesDiv1 = styled.div`
   padding: 20px 0 15px 25px;
   border-right: 1px solid #edebef;
   .vertical-filters-header {
-    font-weight: 500;
+    font-weight: 700;
     text-transform: uppercase;
     font-size: 14px;
     margin: 0 0 18px;
@@ -612,48 +613,132 @@ const TempProduct = () => {
   console.log("Location.........", location);
   var lastScrollTop = 0;
   const handleScroll = () => {
-    console.log("PageYoffSet ", window.pageYOffset);
-    console.log("ScrollTop ", document.documentElement.scrollTop);
+    let rightSectionElement = document.getElementById("rightSection");
+    // console.log(
+    //   "rightSectionElement.offsetHeight",
+    //   rightSectionElement.offsetHeight
+    // );
+    let leftSectionElement = document.getElementById("leftSection");
 
+    // console.log(
+    //   "leftSectionElement.offsetHeight",
+    //   leftSectionElement.offsetHeight
+    // );
+    // console.log("element.offsetWidth", rightSectionElement.offsetWidth);
+    // console.log("PageYoffSet ", window.pageYOffset);
+    // console.log("window.innerWidth ", window.innerWidth);
+    // console.log("window.innerHeight", window.innerHeight);
+    // console.log("ScrollTop ", document.documentElement.scrollTop);
     var st = window.pageYOffset || document.documentElement.scrollTop;
-    if (st > lastScrollTop) {
-      // downscroll code
-      console.log("Scrolling Downward");
 
-      if (document.documentElement.scrollTop > 816) {
-        let ele = document.querySelectorAll(".left-section");
-        console.log(ele);
-        ref.current.classList.add("condition-render-fixed-bottom");
-        ref.current.classList.remove("condition-render-boundary-top");
-        setScrollingX({
-          top: "auto",
-          bottom: "0px",
-        });
-      }
+    if (
+      window.innerWidth >= 750 &&
+      rightSectionElement.offsetHeight >= leftSectionElement.offsetHeight
+    ) {
+      let leftHeightPlusConst = leftSectionElement.offsetHeight + 70;
+      let scrollPlusWindowHeight = window.pageYOffset + window.innerHeight;
+      if (st > lastScrollTop) {
+        console.log("Scrolling Downward");
+        //   // Scrolling Downward"
 
-      if (document.documentElement.scrollTop > 4500) {
-        ref.current.classList.add("condition-render-boundary-bottom");
-      } else {
-        ref.current.classList.remove("condition-render-boundary-bottom");
+        if (scrollPlusWindowHeight >= leftHeightPlusConst) {
+          ref.current.classList.add("condition-render-fixed-bottom");
+          ref.current.classList.remove("condition-render-boundary-top");
+          ref.current.classList.remove("condition-render-hung");
+          setScrollingX({
+            top: "auto",
+            bottom: "0px",
+          });
+
+          if (
+            window.pageYOffset >=
+            Number(rightSectionElement.offsetHeight) -
+              (Number(window.innerHeight) + 100)
+          ) {
+            // console.log(
+            //   "action Trigerred",
+            //   Number(rightSectionElement.offsetWidth) -
+            //     Number(window.innerHeight)
+            // );
+            ref.current.classList.add("condition-render-boundary-bottom");
+            ref.current.classList.remove("condition-render-fixed-bottom");
+            // setScrollingX({
+            //   top: "10000px",
+            //   bottom: "auto",
+            // });
+          } else {
+            ref.current.classList.remove("condition-render-boundary-bottom");
+          }
+        }
+        lastScrollTop = st;
+      } else if (st < lastScrollTop) {
+        //Scrolling upward
+        console.log("Scrolling upward");
+        if (
+          document.documentElement.scrollTop + window.innerHeight <=
+          rightSectionElement.offsetHeight
+        ) {
+          console.log("Scrolling upward___111");
+          ref.current.classList.remove("condition-render-boundary-bottom");
+          ref.current.classList.add("condition-render-fixed-top");
+        }
+        if (
+          rightSectionElement.offsetHeight >= leftSectionElement.offsetHeight &&
+          document.documentElement.scrollTop < 250
+        ) {
+          ref.current.classList.add("condition-render-hung");
+          ref.current.classList.remove("condition-render-fixed-top");
+        }
+        // setScrollingX({
+        //   top: `${document.documentElement.scrollTop}px`,
+        //   bottom: "auto",
+        // });
+        // if (document.documentElement.scrollTop < 800) {
+        //   console.log("---------trdt---------------");
+        //   ref.current.classList.add("condition-render-boundary-top");
+        // }
+        lastScrollTop = st;
       }
-      lastScrollTop = st;
-    } else if (st < lastScrollTop) {
-      // upscroll code
-      console.log("Scrolling upward");
-      setScrollingX({
-        top: window.scrollY,
-        bottom: "auto",
-      });
-      if (document.documentElement.scrollTop < 200) {
-        ref.current.classList.remove("condition-render-hung");
-        // ref.current.classList.remove("condition-render-fixed-top");
-      } else {
-        ref.current.classList.remove("condition-render-fixed-bottom");
-        ref.current.classList.add("condition-render-hung");
-        // ref.current.classList.add("condition-render-fixed-top");
-      }
-      lastScrollTop = st;
     }
+
+    // if (st > lastScrollTop) {
+    //   // downscroll code
+    //   console.log("Scrolling Downward");
+
+    //   if (document.documentElement.scrollTop > 816) {
+    //     let ele = document.querySelectorAll(".left-section");
+    //     console.log(ele);
+    //     ref.current.classList.add("condition-render-fixed-bottom");
+    //     ref.current.classList.remove("condition-render-boundary-top");
+    //     setScrollingX({
+    //       top: "auto",
+    //       bottom: "0px",
+    //     });
+    //   }
+
+    //   if (document.documentElement.scrollTop > 4500) {
+    //     ref.current.classList.add("condition-render-boundary-bottom");
+    //   } else {
+    //     ref.current.classList.remove("condition-render-boundary-bottom");
+    //   }
+    //   lastScrollTop = st;
+    // } else if (st < lastScrollTop) {
+    //   // upscroll code
+    //   console.log("Scrolling upward");
+    //   setScrollingX({
+    //     top: window.scrollY,
+    //     bottom: "auto",
+    //   });
+    //   if (document.documentElement.scrollTop < 200) {
+    //     ref.current.classList.remove("condition-render-hung");
+    //     // ref.current.classList.remove("condition-render-fixed-top");
+    //   } else {
+    //     ref.current.classList.remove("condition-render-fixed-bottom");
+    //     ref.current.classList.add("condition-render-hung");
+    //     // ref.current.classList.add("condition-render-fixed-top");
+    //   }
+    //   lastScrollTop = st;
+    // }
   };
 
   useEffect(() => {
@@ -690,13 +775,13 @@ const TempProduct = () => {
   };
 
   const getProducts = async ({ params, category }) => {
+    document.documentElement.scrollTop = 0;
     // const searchString = location.search;
     console.log("calling Getproducts Function", params);
     if (params) {
       var url = new URL("http://localhost:8080/api/products");
       if (params?.brands)
         url.searchParams.set("brand", params?.brands?.split(","));
-
       if (params?.p) url.searchParams.set("p", params?.p);
       if (params.sort) url.searchParams.set("sort", params?.sort);
       if (params.colors)
@@ -704,6 +789,7 @@ const TempProduct = () => {
       if (params.price)
         url.searchParams.set("price", params?.price?.split(","));
     }
+    if (params?.gender) url.searchParams.set("gender", params?.gender);
     if (params?.discount) url.searchParams.set("discount", params?.discount);
     console.log("URL______: ", url);
     try {
@@ -953,6 +1039,8 @@ const TempProduct = () => {
   // handel Discount
 
   const handelChangeDiscount = (e) => {
+    console.log("handle discount");
+    console.log("e.target.checked", e.target.checked);
     const value = e.target.value;
     console.log("value", e.target?.value);
     const _params = { ...params, ...(value && { discount: value }) };
@@ -1025,7 +1113,7 @@ const TempProduct = () => {
           </TitleContainer>
         </RowBase>
         <RowBase>
-          <LeftSection>
+          <LeftSection id="leftSection">
             <Section>
               <LeftSectionDiv
                 className="left-section condition-render-boundary-top"
@@ -1090,7 +1178,7 @@ const TempProduct = () => {
 
                 {/* <Checkbox products={products} getProducts={getProducts} /> */}
                 <CategoriesDiv1>
-                  <ColorSpan>Price</ColorSpan>
+                  <span className="vertical-filters-header">Price</span>
                   <Ul>
                     {PriceRange?.length > 0 &&
                       PriceRange?.map((price, i) => (
@@ -1121,7 +1209,7 @@ const TempProduct = () => {
                   </Ul>
                 </CategoriesDiv1>
                 <CategoriesDiv1>
-                  <ColorSpan>Color</ColorSpan>
+                  <span className="vertical-filters-header">Color</span>
                   <Ul>
                     {Colors?.length > 0 &&
                       Colors?.map((color, i) => (
@@ -1155,7 +1243,9 @@ const TempProduct = () => {
                   </Ul>
                 </CategoriesDiv1>
                 <CategoriesDiv1>
-                  <ColorSpan>DISCOUNT RANGE</ColorSpan>
+                  <span className="vertical-filters-header">
+                    DISCOUNT RANGE
+                  </span>
                   <Ul>
                     {DiscountRange?.length > 0 &&
                       DiscountRange?.map((discount, i) => (
@@ -1197,7 +1287,7 @@ const TempProduct = () => {
           </LeftSection>
 
           <RightSection>
-            <RightSearchResults>
+            <RightSearchResults id="rightSection">
               <RowBase>
                 <div
                   style={{
@@ -1368,6 +1458,31 @@ const TempProduct = () => {
                         </div>
                       </li>
                     ))}
+
+                    {/* {params?.discount?.split(",").map((disc, i) => (
+                      <li key={i}>
+                        <div className="filter-summary-filter">
+                          {disc}
+                          <label className="filter-summary-removeFilter">
+                            <input
+                              type="radio"
+                              name="discount"
+                              value={disc}
+                              onChange={handelChangeDiscount}
+                              checked={Boolean(
+                                params?.discount?.split(",")?.includes(disc)
+                              )}
+                            />
+                            <ClosedIcon
+                              style={{
+                                width: "15px",
+                                height: "15px",
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </li>
+                    ))} */}
                   </ul>
                 </ChipsContainer>
               </RowBase>
@@ -1417,6 +1532,7 @@ const TempProduct = () => {
         </RowBase>
       </Main>
       <Banner />
+      <Footer />
     </div>
   );
 };

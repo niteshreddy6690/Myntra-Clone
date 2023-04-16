@@ -22,6 +22,7 @@ let ItemSchema = new Schema(
 
 const CartSchema = new Schema(
   {
+    // user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     items: [ItemSchema],
   },
   {

@@ -23,6 +23,7 @@
     "mongoose": "^6.7.2",
     "nodemon": "^2.0.20",
     "otp-generator": "^4.0.0",
+    "razorpay": "^2.8.6",
     "slugify": "^1.6.5"
   }
 }

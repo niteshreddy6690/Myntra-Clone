@@ -31,6 +31,7 @@ import MyMainPage from "./pages/My/MyMainPage";
 import MyOrders from "./pages/My/MyOrders";
 import OverView from "./pages/My/OverView";
 import ProfileEdit from "./pages/My/ProfileEdit";
+import Checkout from "./pages/Checkout";
 
 // import "./fonts/whitneybold.otf";
 import "./fonts/whitneybook.ttf";
@@ -80,6 +81,7 @@ function App() {
           <Route path="/radio" element={<Test8 />} />
           <Route path="/toast" element={<Toast />} />
           <Route path="/checkout/cart" element={<Cart />} />
+          <Route path="/checkout/payment" element={<Checkout />} />
         </Routes>
       </Router>
     </div>

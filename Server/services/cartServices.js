@@ -1,7 +1,7 @@
 const Cart = require("../models/Cart");
 const ApiError = require("../utils/ApiError");
 
-exports.cart = async () => {
+exports.cart = async (user) => {
   try {
     const carts = await Cart.find().populate({
       path: "items.productId",
