@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import moment from "moment";
+import { request } from "../../api/axios";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 const ProfileEditCard = styled.div`
   background-color: white;
   text-align: justify;
@@ -142,6 +147,30 @@ const ProfileEditEntries = styled.div`
     left: 12px;
     background-color: #fff;
   }
+  .dob:not([value=""]) ~ .placeholderAlternative {
+    transition: 0.2s;
+    color: #282c3f;
+    padding: 0 2px;
+    top: -8px;
+    left: 12px;
+    background-color: #fff;
+  }
+  .location:not([value=""]) ~ .placeholderAlternative {
+    transition: 0.2s;
+    color: #282c3f;
+    padding: 0 2px;
+    top: -8px;
+    left: 12px;
+    background-color: #fff;
+  }
+  .hint:not([value=""]) ~ .placeholderAlternative {
+    transition: 0.2s;
+    color: #282c3f;
+    padding: 0 2px;
+    top: -8px;
+    left: 12px;
+    background-color: #fff;
+  }
   .placeholderAlternative {
     color: #94969f;
     top: 14px;
@@ -172,8 +201,12 @@ const ProfileEditEntries = styled.div`
     width: 100%;
     height: 100%;
     text-align: center;
-    vertical-align: center;
-    padding: 7px 0px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    /* vertical-align: center; */
+    /* padding: 5px 0px; */
   }
   .profile-genderSelection input {
     outline: 0;
@@ -246,6 +279,12 @@ const ProfileEditEntries = styled.div`
       margin-bottom: 32px;
     }
   }
+
+  .subcomponents-selected {
+    position: relative;
+    top: 2px;
+  }
+
   .subcomponents-btn.subcomponents-primary {
     background-color: #ff3f6c;
     color: #ffffff;
@@ -271,32 +310,113 @@ const ProfileEditEntries = styled.div`
     -ms-user-select: none;
     user-select: none;
   }
+  .profileEdit-disabled {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+`;
+const Paragraph = styled.p`
+  margin: 5px 0px;
+  font-size: 10px;
+  color: #ff5722;
 `;
 const ProfileEdit = () => {
-  const initialState = {
-    email: "",
-    password: "",
-    gender: "",
-    name: "",
-    altPhone: "",
-    hint: "",
-    dob: "",
-    location: "",
-  };
-  const [formData, setFormData] = useState(initialState);
+  const { currentUser, isLoading } = useSelector((state) => ({
+    ...state.user,
+  }));
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm({ mode: "all" });
+    setValue,
+    reset,
+    getValues,
+    watch,
+  } = useForm({
+    mode: "all",
+    defaultValues: {
+      name: currentUser?.name,
+      email: currentUser?.email,
+      altPhone: currentUser?.altPhone,
+      hint: currentUser?.hint,
+      location: currentUser?.location,
+      gender: currentUser?.gender,
+      dob: moment(currentUser?.dob).format("YYYY-MM-DD"),
+    },
+  });
 
-  const { currentUser } = useSelector((state) => ({ ...state.user }));
-  console.log("formData", formData);
+  // const { currentUser } = useSelector((state) => ({
+  //   ...state.user,
+  // }));
+  // const initialState = {
+  //   email: "",
+  //   gender: "",
+  //   name: "",
+  //   altPhone: "",
+  //   hint: "",
+  //   dob: "",
+  //   location: "",
+  // };
+  const [formData, setFormData] = useState({});
+
   const handelChange = (e) => {
-    e.preventDefault();
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    e.persist();
+    setFormData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+    // setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const onSubmit = async (data) => {
+    console.log("data", data);
+    const updateUser = await request.put("/user", data);
+    console.log("updateUser", updateUser);
+  };
+
+  const handleSubmiting = async (data) => {
+    console.log("data", data);
+    // e.preventDefault();
+    const updateUser = await request.put("/user", data);
+    console.log("updateUser", updateUser);
+  };
+
+  // useEffect(() => {
+  //   console.log("currentUser", currentUser);
+  //   currentUser &&
+  //     setFormData({
+  //       name: currentUser?.name,
+  //       email: currentUser?.email,
+  //       altPhone: currentUser?.altPhone,
+  //       hint: currentUser?.hint,
+  //       location: currentUser?.location,
+  //       gender: currentUser?.gender,
+  //       dob: currentUser?.dob,
+  //     });
+  // }, [currentUser]);
+
+  useEffect(() => {
+    currentUser &&
+      reset({
+        name: currentUser?.name,
+        email: currentUser?.email,
+        altPhone: currentUser?.altPhone,
+        hint: currentUser?.hint,
+        location: currentUser?.location,
+        gender: currentUser?.gender,
+        dob: moment(currentUser?.dob).format("YYYY-MM-DD"),
+      });
+  }, [currentUser]);
+
+  // console.log(
+  //   "moment(formData?.dob).format",
+  //   moment("1998-06-29T00:00:00.000Z").format("DD/MM/YYYY")
+  // );
+
+  const currentGender = watch("gender");
+  const currentUserAltPhoneNo = watch("altPhone");
+
+  if (isLoading) return <LoadingSpinner loading={isLoading} />;
   return (
     <ProfileEditCard>
       <div className="profileEdit-infoLabel">Edit Profile</div>
@@ -324,9 +444,9 @@ const ProfileEdit = () => {
               <g
                 id="Icon_Verified"
                 stroke="none"
-                stroke-width="1"
+                strokeWidth="1"
                 fill="none"
-                fill-rule="evenodd"
+                fillRule="evenodd"
               >
                 <g id="Group-2">
                   <rect
@@ -339,7 +459,7 @@ const ProfileEdit = () => {
                   <g
                     id="Group"
                     transform="translate(4.000000, 4.000000)"
-                    fill-rule="nonzero"
+                    fillRule="nonzero"
                   >
                     <path
                       d="M15.4098644,7.16362903 C15.0413176,6.7950822 14.9031125,6.08102272 15.0873859,5.597305 C15.2946935,5.11358729 15.0643517,4.53773286 14.5575998,4.33042527 C14.0738821,4.12311768 13.6592669,3.52422907 13.6592669,2.994443 C13.6592669,2.46465693 13.2216176,2.02700757 12.6918315,2.02700757 C12.1620454,2.02700757 11.5631568,1.63542656 11.3558492,1.12867467 C11.1485416,0.644956955 10.5957214,0.391581008 10.0889695,0.598888601 C9.60525179,0.806196194 8.89119231,0.667991132 8.52264548,0.276410124 C8.15409864,-0.0921367078 7.53217587,-0.0921367078 7.16362903,0.276410124 C6.7950822,0.644956955 6.08102272,0.783162017 5.597305,0.598888601 C5.11358729,0.391581008 4.53773286,0.621922778 4.33042527,1.12867467 C4.12311768,1.61239239 3.52422907,2.02700757 2.994443,2.02700757 C2.46465693,2.02700757 2.02700757,2.46465693 2.02700757,2.994443 C2.02700757,3.52422907 1.63542656,4.12311768 1.12867467,4.33042527 C0.644956955,4.53773286 0.391581008,5.09055311 0.598888601,5.597305 C0.806196194,6.08102272 0.667991132,6.7950822 0.276410124,7.16362903 C-0.0921367078,7.53217587 -0.0921367078,8.15409864 0.276410124,8.52264548 C0.644956955,8.89119231 0.783162017,9.60525179 0.598888601,10.0889695 C0.391581008,10.5726872 0.621922778,11.1485416 1.12867467,11.3558492 C1.61239239,11.5631568 2.02700757,12.1620454 2.02700757,12.6918315 C2.02700757,13.2216176 2.46465693,13.6592669 2.994443,13.6592669 C3.52422907,13.6592669 4.12311768,14.0508479 4.33042527,14.5575998 C4.53773286,15.0413176 5.09055311,15.2946935 5.597305,15.0873859 C6.08102272,14.8800783 6.7950822,15.0182834 7.16362903,15.4098644 C7.53217587,15.7784112 8.15409864,15.7784112 8.52264548,15.4098644 C8.89119231,15.0413176 9.60525179,14.9031125 10.0889695,15.0873859 C10.5726872,15.2946935 11.1485416,15.0643517 11.3558492,14.5575998 C11.5631568,14.0738821 12.1620454,13.6592669 12.6918315,13.6592669 C13.2216176,13.6592669 13.6592669,13.2216176 13.6592669,12.6918315 C13.6592669,12.1620454 14.0508479,11.5631568 14.5575998,11.3558492 C15.0413176,11.1485416 15.2946935,10.5957214 15.0873859,10.0889695 C14.8800783,9.60525179 15.0182834,8.89119231 15.4098644,8.52264548 C15.7784112,8.15409864 15.7784112,7.55521004 15.4098644,7.16362903 Z"
@@ -363,18 +483,18 @@ const ProfileEdit = () => {
           </button>
         </div>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <ProfileEditEntries>
           <div className="profileEdit-formElement">
             <div className="textInput-form-group">
               <input
                 type="text"
-                autocomplete="new-password"
-                value={formData.name}
+                // value={formData?.name || ""}
                 name="name"
                 className="textInput-form-control full-name"
                 placeholder=""
-                onChange={handelChange}
+                // onChange={handelChange}
+                {...register("name", { required: "Please enter your name" })}
               />
               <span className="placeholderAlternative ">Full Name</span>
             </div>
@@ -383,14 +503,22 @@ const ProfileEdit = () => {
             <div className="textInput-form-group">
               <input
                 type="text"
-                autocomplete="new-password"
-                value={formData.email}
+                // autoComplete="new-password"
+                // value={formData?.email || ""}
                 name="email"
                 className="textInput-form-control email"
                 placeholder=""
-                onChange={handelChange}
+                // onChange={handelChange}
+                {...register("email", {
+                  pattern: {
+                    value:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: "Please enter valid email id",
+                  },
+                })}
               />
               <span className="placeholderAlternative">Email</span>
+              <Paragraph>{errors?.email?.message}</Paragraph>
             </div>
           </div>
           <div className="profileEdit-formElement">
@@ -401,34 +529,39 @@ const ProfileEdit = () => {
                   value="male"
                   id="genderMen"
                   name="gender"
-                  checked={Boolean(formData?.gender == "male")}
-                  onChange={handelChange}
+                  {...register("gender", {
+                    // onChange: () => setValue("gender", "male"),
+                  })}
+                  //  checked={Boolean(formData?.gender == "male")}
+                  // checked={Boolean(getValues("gender") == "male")}
                 />
-                <span class="subcomponents-selected">
-                  <svg
-                    width="24px"
-                    height="24px"
-                    viewBox="0 0 24 24"
-                    version="1.1"
-                  >
-                    <title>icons/controls/check/active</title>
-                    <g
-                      id="icons/controls/check/active"
-                      stroke="none"
-                      stroke-width="1"
-                      fill="none"
-                      fill-rule="evenodd"
-                    >
-                      <path
-                        d="M16.7746405,8.22735801 C16.478929,7.91934842 16.0050049,7.92494859 15.716079,8.24015841 L10.3732719,14.0147382 C10.3368437,14.0543394 10.2772014,14.0547394 10.240416,14.0155382 L8.27793445,11.9086726 C7.98579433,11.5966629 7.51151306,11.5962629 7.21937294,11.9078726 C6.92687569,12.2194823 6.92687569,12.723498 7.21937294,13.0351077 L9.78399176,15.7767931 C9.92434758,15.9263977 10.1147029,16 10.3132725,16 L10.3175582,16 C10.5175563,16 10.7089831,15.9227976 10.8486246,15.7699928 L16.7867832,9.35379308 C17.0757091,9.03858326 17.070352,8.5353676 16.7746405,8.22735801"
-                        id="Fill-1"
-                        fill="#FF3F6C"
-                      ></path>
-                    </g>
-                  </svg>
+                <label htmlFor="genderMen">
+                  {Boolean(currentGender == "male") ? (
+                    <span className="subcomponents-selected">
+                      <svg
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        version="1.1"
+                      >
+                        <g
+                          id="icons/controls/check/active"
+                          stroke="none"
+                          strokeWidth="1"
+                          fill="none"
+                          fillRule="evenodd"
+                        >
+                          <path
+                            d="M16.7746405,8.22735801 C16.478929,7.91934842 16.0050049,7.92494859 15.716079,8.24015841 L10.3732719,14.0147382 C10.3368437,14.0543394 10.2772014,14.0547394 10.240416,14.0155382 L8.27793445,11.9086726 C7.98579433,11.5966629 7.51151306,11.5962629 7.21937294,11.9078726 C6.92687569,12.2194823 6.92687569,12.723498 7.21937294,13.0351077 L9.78399176,15.7767931 C9.92434758,15.9263977 10.1147029,16 10.3132725,16 L10.3175582,16 C10.5175563,16 10.7089831,15.9227976 10.8486246,15.7699928 L16.7867832,9.35379308 C17.0757091,9.03858326 17.070352,8.5353676 16.7746405,8.22735801"
+                            id="Fill-1"
+                            fill="#FF3F6C"
+                          ></path>
+                        </g>
+                      </svg>
+                    </span>
+                  ) : null}
                   Male
-                </span>
-                <label htmlFor="genderMen">Male</label>
+                </label>
               </div>
               <div className="profile-gender">
                 <input
@@ -436,27 +569,69 @@ const ProfileEdit = () => {
                   id="genderFemale"
                   value="female"
                   name="gender"
-                  checked={Boolean(formData?.gender == "female")}
-                  onChange={handelChange}
+                  {...register("gender", {
+                    // onChange: () => setValue("gender", "female"),
+                  })}
+                  // checked={Boolean(getValues("gender") == "female")}
+                  // checked={Boolean(formData?.gender == "female")}
+                  // onChange={handelChange}
+                  //onChange={() => setValue("gender", "female")}
                 />
-                <label htmlFor="genderFemale">Female</label>
+                <label htmlFor="genderFemale">
+                  {Boolean(currentGender == "female") ? (
+                    <span className="subcomponents-selected">
+                      <svg
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        version="1.1"
+                      >
+                        <g
+                          id="icons/controls/check/active"
+                          stroke="none"
+                          strokeWidth="1"
+                          fill="none"
+                          fillRule="evenodd"
+                        >
+                          <path
+                            d="M16.7746405,8.22735801 C16.478929,7.91934842 16.0050049,7.92494859 15.716079,8.24015841 L10.3732719,14.0147382 C10.3368437,14.0543394 10.2772014,14.0547394 10.240416,14.0155382 L8.27793445,11.9086726 C7.98579433,11.5966629 7.51151306,11.5962629 7.21937294,11.9078726 C6.92687569,12.2194823 6.92687569,12.723498 7.21937294,13.0351077 L9.78399176,15.7767931 C9.92434758,15.9263977 10.1147029,16 10.3132725,16 L10.3175582,16 C10.5175563,16 10.7089831,15.9227976 10.8486246,15.7699928 L16.7867832,9.35379308 C17.0757091,9.03858326 17.070352,8.5353676 16.7746405,8.22735801"
+                            id="Fill-1"
+                            fill="#FF3F6C"
+                          ></path>
+                        </g>
+                      </svg>
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                  Female
+                </label>
               </div>
             </div>
           </div>
           <div className="profileEdit-formElement">
             <div className="textInput-form-group">
               <input
-                type="tel"
-                autocomplete="new-password"
-                value={formData.dob}
+                type="date"
+                autoComplete="off"
+                // value={moment(formData?.dob).format("YYYY-MM-DD") || ""}
                 name="dob"
-                className="textInput-form-control alt-phone"
-                placeholder=""
-                onChange={handelChange}
+                className="textInput-form-control "
+                // onChange={handelChange}
+
+                // onChange={(e) => {
+                //   const formattedDate = moment(formData?.dob).format(
+                //     "YYYY-MM-DD"
+                //   );
+                //   e.target.value = formattedDate;
+                // }}
+                {...register("dob", {
+                  valueAsDate: true,
+                })}
               />
-              <span className="placeholderAlternative ">
+              {/* <span className="placeholderAlternative ">
                 Birthday (dd/mm/yyy)
-              </span>
+              </span> */}
             </div>
           </div>
 
@@ -464,14 +639,15 @@ const ProfileEdit = () => {
             <div className="textInput-form-group">
               <input
                 type="text"
-                autocomplete="new-password"
-                value={formData.location}
+                // autoComplete="new-password"
+                // value={formData?.location || ""}
                 className="textInput-form-control location"
                 placeholder=""
                 name="location"
-                onChange={handelChange}
+                // onChange={handelChange}
+                {...register("location")}
               />
-              <span className="placeholderAlternative ">location</span>
+              <span className="placeholderAlternative">location</span>
             </div>
           </div>
 
@@ -488,13 +664,14 @@ const ProfileEdit = () => {
             </p>
             <div className="textInput-form-group ">
               <input
-                type="tel"
-                autocomplete="new-password"
-                value={formData.altPhone}
-                name="altPhone"
                 className="textInput-form-control phoneNumber"
+                type="tel"
+                // value={formData?.altPhone || ""}
+                name="altPhone"
                 placeholder=""
                 maxLength="10"
+                {...register("altPhone")}
+                // onChange={handelChange}
               />
               <span className="mobileNumber">
                 +91
@@ -510,27 +687,40 @@ const ProfileEdit = () => {
                 <span className="mobileNumberPlacholder">Mobile Number</span>
               </span>
             </div>
-            <div className="profileEdit-disabled">
+            <div
+              className={
+                String(currentUserAltPhoneNo)?.match(/\d/g)?.length == 10
+                  ? ""
+                  : "profileEdit-disabled"
+              }
+            >
               <div className="textInput-form-group ">
                 <input
                   type="text"
-                  autocomplete="new-password"
-                  value={formData.hint}
+                  autoComplete="off"
+                  // value={formData?.hint || ""}
                   name="hint"
-                  className="textInput-form-control"
+                  className="textInput-form-control hint"
                   placeholder=""
+                  {...register("hint")}
+                  // onChange={handelChange}
                 />
                 <span className="placeholderAlternative">Hint name</span>
               </div>
             </div>
           </div>
           <div className="profileEdit-buttonSaveDetails">
-            <button className="subcomponents-btn subcomponents-primary">
+            <button
+              className="subcomponents-btn subcomponents-primary"
+              type="submit"
+              // onClick={handleSubmiting}
+            >
               Save Details
             </button>
           </div>
         </ProfileEditEntries>
       </form>
+      <DevTool control={control} />
     </ProfileEditCard>
   );
 };

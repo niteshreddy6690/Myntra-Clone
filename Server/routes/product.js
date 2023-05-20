@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Product = require("../models/Product");
+const Category = require("../models/Category");
 const productController = require("../controllers/productController");
 router.post("/", async (req, res) => {
   const newProduct = new Product(req.body);
@@ -15,22 +16,76 @@ router.post("/", async (req, res) => {
 //GET All Products
 // GET Category Products
 // GET New Product
-router.get("/", async (req, res) => {
+router.get("/:combineCategory", async (req, res) => {
   console.log("get Product.........", req.query);
+
   const { brand, gender, sort, colors, price, discount } = req.query;
+  const { combineCategory } = req.params;
+  console.log("cat", req.params.combineCategory);
   const qNew = req.query.new;
   const qCategory = req.query.category;
-
-  console.log("colors", colors);
   const queryObject = {};
-  console.log("calling by category");
-  console.log("qCategory :", qCategory);
+
+  // console.log("qCategory :", qCategory);
+
+  if (combineCategory) {
+    console.log("calling by combineCategory");
+    const index = combineCategory.indexOf("-");
+    const firstPart =
+      index !== -1 ? combineCategory?.slice(0, index) : combineCategory;
+    const secondPart =
+      index !== -1 ? combineCategory?.slice(index + 1).replace(/-/g, " ") : "";
+    console.log(firstPart); // "I like"
+    console.log(secondPart);
+    const combinedArray = [];
+    console.log("secondPart", secondPart);
+    combinedArray.push(firstPart);
+    if (secondPart) combinedArray.push(secondPart);
+    console.log(combinedArray);
+
+    const keywords = ["men", "tshirt"];
+
+    // const result = await Category.find({
+    //   categoryPath: { $in: keywords.map((keyword) => ({ $regex: keyword })) },
+    // });
+
+    const regexKeywords = combinedArray.map(
+      (keyword) => new RegExp(keyword, "i")
+    );
+    console.log("regexKeywords", regexKeywords);
+
+    // const result = await Category.find({
+    //   categoryPath: { $all: regexKeywords },
+    // });
+    // console.log("result", result);
+    const result1 = await Category.findOne({
+      $and: [
+        { categoryPath: { $all: regexKeywords } },
+        { name: regexKeywords[1] },
+      ],
+    });
+
+    console.log("result1", result1);
+
+    console.log(await Category.find({ categoryPath: "tshirt" }));
+
+    console.log(
+      await Category.find({ categoryPath: { $regex: keywords.join(".*") } })
+    );
+    queryObject.categories = result1?._id;
+  }
+
+  // if (!queryObject.categories) {
+  //   queryObject.categories = {};
+  // }
+
+  // // Assign the value to categoryPath
+  // queryObject.categories.categoryPath = "hvjhbjhbhv";
 
   if (brand) {
     queryObject.brand = { $in: brand.split(",") };
   }
   if (gender) {
-    console.log("Gender", gender);
     queryObject.gender = gender;
   }
   if (colors) {
@@ -73,13 +128,14 @@ router.get("/", async (req, res) => {
       $gte: Number(discount.split("%")[0].trim()),
     };
   }
-  let apiData = Product.find(queryObject);
+  console.log("queryObject", queryObject);
+  let apiData = Product.find(queryObject).populate("categories");
 
   if (sort) {
     const sortDic = {
       recommended: "-createdAt",
       new: "createdAt",
-      popularity: "rating",
+      popularity: "-noOfRatings",
       discount: "-discountPercentage",
       price_desc: "-price",
       price_asc: "price",
@@ -205,4 +261,25 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ err: err });
   }
+});
+
+// router.get("/abc", async (req, res) => {
+//   const abc = await Product.find({
+//     "categories.categoryPath": "men/topwear/tshirt",
+//   }).populate("categories");
+//   console.log(abc);
+//   res.send(abc);
+// });
+
+router.get("/search/autosuggest", async (req, res) => {
+  const { q } = req.query;
+  const searchBrand = await Product.find({
+    $or: [{ brand: { $regex: q } }],
+  });
+  const searchCategory = await Category.find({
+    $or: [{ name: { $regex: q } }],
+  });
+  res
+    .status(200)
+    .json({ searchBrand: searchBrand, searchCategory: searchCategory });
 });

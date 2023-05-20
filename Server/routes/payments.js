@@ -42,7 +42,12 @@ router.post("/verify", async (req, res) => {
       .digest("hex");
 
     if (razorpay_signature === expectedSign) {
-      return res.status(200).json({ message: "Payment verified successfully" });
+      // let info = { paymentId: razorpay_payment_id };
+
+      return res.status(200).json({
+        paymentId: razorpay_payment_id,
+        message: "Payment verified successfully",
+      });
     } else {
       return res.status(400).json({ message: "Invalid signature sent!" });
     }

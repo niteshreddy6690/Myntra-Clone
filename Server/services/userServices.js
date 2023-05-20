@@ -24,19 +24,23 @@ const getUserByEmail = async (email) => {
 
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
-  const { email, password, name, gender, altPhone, hint } = updateBody;
-  const hashedPassword = await bcrypt.hash(password, 8);
+  let hashedPassword = "";
+  const { email, password, name, gender, dob, altPhone, hint, location } =
+    updateBody;
+  if (password) {
+    hashedPassword = await bcrypt.hash(password, 8);
+  }
 
   if (!user) {
     throw new ApiError("404", "User not found");
   }
-  if (email) {
-    const userEmail = await getUserByEmail(email);
+  // if (email) {
+  //   const userEmail = await getUserByEmail(email);
 
-    if (userEmail) {
-      throw new ApiError(400, "User Email is Already Exists");
-    }
-  }
+  //   if (userEmail) {
+  //     throw new ApiError(400, "User Email is Already Exists");
+  //   }
+  // }
 
   // const DOB = new Date(updateBody.DOB);
   // console.log("dob", DOB);
@@ -47,7 +51,9 @@ const updateUserById = async (userId, updateBody) => {
       name,
       gender,
       altPhone,
+      dob: dob,
       hint,
+      location,
       isExistingUser: true,
     });
     await user.save();

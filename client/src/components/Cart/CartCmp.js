@@ -118,7 +118,7 @@ const CartCmp = ({
   console.log("Products.. in cartcmp", products);
   return (
     <>
-      {products.cart?.items.length > 0 ? (
+      {products && products.cart?.items.length > 0 ? (
         <Wrapper>
           <CartContainer>
             <LeftSection>
@@ -239,9 +239,9 @@ const CartCmp = ({
                 </div>
               </PriceContainer>
               <div>
-                <PlaceOrderButton>
-                  <div>PLACE ORDER</div>
-                </PlaceOrderButton>
+                <NavLink to={"/checkout/payment"} style={{ color: "white" }}>
+                  <PlaceOrderButton>PLACE ORDER</PlaceOrderButton>
+                </NavLink>
               </div>
             </RightSection>
           </CartContainer>

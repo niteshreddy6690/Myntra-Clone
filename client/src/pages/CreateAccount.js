@@ -629,7 +629,6 @@ const CreateAccount = () => {
                     </span>
                   </span>
                 </div>
-                <i className="bar"></i>
               </div>
               <div className="textInputInfo">
                 This will help recover your account if needed

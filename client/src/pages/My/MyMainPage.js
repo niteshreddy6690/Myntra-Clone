@@ -6,12 +6,17 @@ import { useLocation } from "react-router-dom";
 import MyOrders from "./MyOrders";
 import OverView from "./OverView";
 import ProfileEdit from "./ProfileEdit";
-
+import MyAddress from "./MyAddress";
 const MainContainerWrapper = styled.div`
   font-family: "Assistant";
 
+  @media (min-width: 780px) {
+    margin: 30px 5%;
+    min-height: 650px;
+    background-color: white;
+  }
   /* margin: 0 auto; */
-  margin-top: 30px;
+  /* margin-top: 30px; */
   /* display: flex;
   justify-content: center; */
 `;
@@ -193,6 +198,7 @@ const MyMainPage = () => {
             {location.pathname == "/my/orders" ? <MyOrders /> : null}
             {location.pathname == "/my/dashboard" ? <OverView /> : null}
             {location.pathname == "/my/profile/edit" ? <ProfileEdit /> : null}
+            {location.pathname == "/my/address" ? <MyAddress /> : null}
           </PageComponents>
         </MainContainer>
       </MainContainerWrapper>

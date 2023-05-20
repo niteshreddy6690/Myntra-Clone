@@ -6,25 +6,25 @@ import ChevronRightTwoToneIcon from "@mui/icons-material/ChevronRightTwoTone";
 import ArrowDropDownTwoToneIcon from "@mui/icons-material/ArrowDropDownTwoTone";
 import ArrowRightTwoToneIcon from "@mui/icons-material/ArrowRightTwoTone";
 const MainContainer = styled.div`
-  .d-tree-container {
+  box-sizing: border-box;
+  height .d-tree-container {
     list-style: none;
   }
   ul {
     list-style: none;
-    /* margin-block-start: 0px;
+    margin-block-start: 0px;
     margin-block-end: 16px;
-    margin-inline-start: 15px;
+    margin-inline-start: 0px;
     margin-inline-end: 0px;
-    padding-inline-start: 40px; */
+    padding-inline-start: 15px;
   }
   li {
-    /* background-color: green;
-    width: 200px; */
+    margin: 5px;
   }
   .modify {
     vertical-align: middle;
-    height: 30px;
-    /* width: 150px; */
+    height: 25px;
+    align-items: center;
     display: flex;
   }
 `;

@@ -10,5 +10,7 @@ const addressController = require("../Controllers/addressController");
 
 router.post("/add", authorize(), addressController.addAddress);
 router.put("/edit", authorize(), addressController.editAddress);
+router.get("/", authorize(), addressController.getAddress);
+router.put("/", authorize(), addressController.deleteAddress);
 
 module.exports = router;

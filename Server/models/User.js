@@ -10,7 +10,6 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       require: [true, "Error: Enter Phone Number ir Required"],
     },
-
     email: {
       type: String,
     },
@@ -23,7 +22,7 @@ const UserSchema = new mongoose.Schema(
     gender: {
       type: String,
     },
-    DOB: {
+    dob: {
       type: Date,
     },
     altPhone: { type: Number },
@@ -41,6 +40,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "unverified",
+    },
+    location: {
+      type: String,
     },
   },
   { timestamps: true }

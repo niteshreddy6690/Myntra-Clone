@@ -13,7 +13,7 @@ const {
   authorize,
 } = require("../utils/verifyToken");
 
-router.get("/:id", getUser);
-router.get("/", getUsers);
-router.put("/:id", updateUser);
+router.get("/:id", authorize(), getUser);
+router.get("/", authorize(), getUsers);
+router.put("/", authorize(), updateUser);
 module.exports = router;

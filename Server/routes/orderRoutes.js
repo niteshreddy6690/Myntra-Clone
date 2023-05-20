@@ -1,9 +1,19 @@
 const router = require("express").Router();
 const Order = require("../models/Order");
-const orderController = require("../controllers/orderController");
+const { createOrder, getOrders } = require("../controllers/orderController");
+const {
+  verifyToken,
+  verifyTokenAndAdmin,
+  verifyTokenAndAuthorization,
+  authorize,
+} = require("../utils/verifyToken");
 
-router.post("/addOrder", addOrder);
-router.get("/getOrders", getOrders);
-router.post("/getOrder", getOrder);
+// router.post("/addOrder", authorize(), orderController.addOrder);
+// router.get("/getOrders", authorize(), orderController.getOrders);
+
+//
+
+router.post("/addOrder", authorize(), createOrder);
+router.get("/getOrders", authorize(), getOrders);
 
 module.exports = router;

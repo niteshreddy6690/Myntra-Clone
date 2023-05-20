@@ -21,8 +21,8 @@ export const LeftSection = styled.div`
   width: 62%;
   border-right: 1px solid #eaeaec;
   max-height: 100vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  /* overflow-y: scroll;
+  overflow-x: hidden; */
   ::-webkit-scrollbar {
     display: none;
   }
@@ -51,13 +51,11 @@ export const CartItemContainer = styled.div`
     margin-bottom: 12px;
   }
   .productBrand {
-    font-family: Whitney Semibold;
-    font-weight: 500;
+    font-weight: 700;
     margin-bottom: 6px;
   }
   .productDescription {
-    font-family: "Whitney Light", sans-serif;
-    color: #535665;
+    font-family: "Assistant", sans-serif;
     line-height: 16px;
   }
   .productPrice {
@@ -166,12 +164,11 @@ export const PriceContainer = styled.div`
 `;
 export const PlaceOrderButton = styled.button`
   width: 100%;
-  font-family: "Whitney Semibold";
   background-color: #ff3f6c;
   color: #ffffff;
   letter-spacing: 1px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   border-radius: 2px;
   border-width: 0px;
   padding: 10px 16px;

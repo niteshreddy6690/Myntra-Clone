@@ -13,7 +13,7 @@ const reviewSchema = new mongoose.Schema(
       max: 5.0,
       default: 5.0,
     },
-    comment: { type: String, required: true },
+    comment: { type: String },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

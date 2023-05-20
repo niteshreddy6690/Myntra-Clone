@@ -298,7 +298,7 @@ const ViewSimilar = styled.div`
   position: absolute;
   z-index: 5;
   top: 215px;
-  right: 10px;
+  right: 14px;
   overflow: hidden;
   cursor: pointer;
   border: 1px solid #dadade;
@@ -325,19 +325,20 @@ const ViewSimilar = styled.div`
   }
   .image-grid-similarColorsIcon {
     vertical-align: middle;
+    text-align: center;
   }
   .image-grid-iconText {
     font-weight: 500;
     color: #ff517b;
     vertical-align: middle;
     visibility: hidden;
-    margin-left: 10px;
+    margin-left: 5px;
     font-size: 14px;
   }
   .second {
     font-size: 12px;
     margin-top: 0 !important;
-    margin-left: 6px !important;
+    margin-left: 5px !important;
   }
   &:hover {
     border-radius: 42px;
@@ -347,8 +348,7 @@ const ViewSimilar = styled.div`
     transition: width 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 
     .image-grid-iconText {
-      font-family: Whitney Semibold;
-      font-weight: 500;
+      font-weight: 700;
       color: #ff517b;
       vertical-align: middle;
       visibility: visible;
@@ -686,12 +686,12 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
             </WishListDivWrapper>
           </WishlistContainer>
         ) : null}
-        {isHover && (
+        {
           <ViewSimilar onClick={() => handelClick(open)}>
             <span className="myntraweb-sprite  first image-grid-similarColorsIcon sprites-similarProductsIcon"></span>
             <span className="image-grid-iconText second">VIEW SIMILAR</span>
           </ViewSimilar>
-        )}
+        }
       </RLi>
     </>
   );

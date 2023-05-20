@@ -190,7 +190,7 @@ const Product = () => {
         const productId = id;
         console.log("productId", productId);
         const review = await axios.get(
-          `http://localhost:8080/api/review/${productId}`
+          `http://localhost:8080/api/review/product/${productId}`
         );
         console.log("reviews", review);
         if (review) SetReviews(review.data);
@@ -607,91 +607,95 @@ const Product = () => {
 
                 <ReviewContainer>
                   {reviews?.allReviews?.slice(0, 15).map((review) => (
-                    <UserReviewWrapper>
-                      <div className="user-review-main user-review-showRating">
-                        <div className="user-review-starWrapper">
-                          <span
-                            data-rating={review.rating}
-                            className="user-review-starRating"
-                          >
-                            {review.rating}
-                            <span className="user-review-starIcon">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="10"
-                                height="10"
-                                viewBox="0 0 12 12"
+                    <>
+                      {review.comment ? (
+                        <UserReviewWrapper>
+                          <div className="user-review-main user-review-showRating">
+                            <div className="user-review-starWrapper">
+                              <span
+                                data-rating={review.rating}
+                                className="user-review-starRating"
                               >
-                                <path
-                                  fill="#FFF"
-                                  fill-rule="evenodd"
-                                  d="M6 9.644l2.867 1.821c.464.296.743.093.623-.45L8.724 7.56l2.581-2.657c.384-.395.25-.716-.306-.716H7.686L6.374.93c-.206-.513-.542-.512-.748 0L4.314 4.187H1.001c-.553 0-.687.324-.306.716L3.276 7.56l-.766 3.455c-.12.544.165.742.623.45L6 9.645z"
-                                ></path>
-                              </svg>
-                            </span>
-                          </span>
-                        </div>
-                        <div className="user-review-reviewTextWrapper">
-                          {review.comment}
-                        </div>
-                      </div>
-                      <div className="user-review-footer user-review-showRating">
-                        <div className="user-review-left">
-                          <span>{review?.user?.name}</span>
-                          <span>
-                            <Moment format="D MMM yyyy">
-                              {review?.updatedAt}
-                            </Moment>
-                          </span>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <div className="user-review-thumb">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="15"
-                              height="14"
-                              viewBox="0 0 15 14"
-                              className="user-review-thumbIcon user-review-thumbsDown user-review-rotate180"
-                            >
-                              <g fill="none" fillRule="evenodd">
-                                <path d="M-5-8h24v24H-5z"></path>
-                                <path
-                                  fill="#535766"
-                                  fillRule="nonzero"
-                                  d="M1.032.383H2.9c.307 0 .593.127.769.34C4.04.276 4.612 0 5.27 0h6.391c1.405 0 2.306.723 2.481 1.955L15 7.184v.127c0 1.106-.922 2.02-2.086 2.02H9.663v2.252c0 .957-.285 1.637-.856 2.04-.9.638-2.13.277-2.174.256l-.264-.085V11.01c0-1.998-2.394-2.678-2.482-2.7l-.197-.042a1.022 1.022 0 01-.813.382H1.01A.992.992 0 010 7.673V1.382a1.029 1.029 0 011.032-1zM7.162 11v2.246c.327.042.873.085 1.265-.212.37-.254.545-.742.545-1.462V8.606h3.948c.741 0 1.33-.593 1.33-1.293v-.042l-.85-5.19v-.022c-.11-.89-.698-1.335-1.723-1.335H5.33C4.59.724 4 1.317 4 2.017v5.55l.174.043c.11.042 2.988.848 2.988 3.39zM.75 7.693c0 .147.135.273.293.273h1.914c.158 0 .293-.126.293-.273V1.48c0-.147-.135-.273-.293-.273H1.043c-.158 0-.293.126-.293.273v6.213z"
-                                ></path>
-                              </g>
-                            </svg>
-                            {review?.like?.length}
+                                {review.rating}
+                                <span className="user-review-starIcon">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="10"
+                                    height="10"
+                                    viewBox="0 0 12 12"
+                                  >
+                                    <path
+                                      fill="#FFF"
+                                      fill-rule="evenodd"
+                                      d="M6 9.644l2.867 1.821c.464.296.743.093.623-.45L8.724 7.56l2.581-2.657c.384-.395.25-.716-.306-.716H7.686L6.374.93c-.206-.513-.542-.512-.748 0L4.314 4.187H1.001c-.553 0-.687.324-.306.716L3.276 7.56l-.766 3.455c-.12.544.165.742.623.45L6 9.645z"
+                                    ></path>
+                                  </svg>
+                                </span>
+                              </span>
+                            </div>
+                            <div className="user-review-reviewTextWrapper">
+                              {review.comment}
+                            </div>
                           </div>
-                          <div className="user-review-thumb">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="15"
-                              height="14"
-                              viewBox="0 0 15 14"
-                              className="user-review-thumbIcon"
+                          <div className="user-review-footer user-review-showRating">
+                            <div className="user-review-left">
+                              <span>{review?.user?.name}</span>
+                              <span>
+                                <Moment format="D MMM yyyy">
+                                  {review?.updatedAt}
+                                </Moment>
+                              </span>
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
                             >
-                              <g fill="none" fillRule="evenodd">
-                                <path d="M-5-8h24v24H-5z"></path>
-                                <path
-                                  fill="#535766"
-                                  fillRule="nonzero"
-                                  d="M1.032.383H2.9c.307 0 .593.127.769.34C4.04.276 4.612 0 5.27 0h6.391c1.405 0 2.306.723 2.481 1.955L15 7.184v.127c0 1.106-.922 2.02-2.086 2.02H9.663v2.252c0 .957-.285 1.637-.856 2.04-.9.638-2.13.277-2.174.256l-.264-.085V11.01c0-1.998-2.394-2.678-2.482-2.7l-.197-.042a1.022 1.022 0 01-.813.382H1.01A.992.992 0 010 7.673V1.382a1.029 1.029 0 011.032-1zM7.162 11v2.246c.327.042.873.085 1.265-.212.37-.254.545-.742.545-1.462V8.606h3.948c.741 0 1.33-.593 1.33-1.293v-.042l-.85-5.19v-.022c-.11-.89-.698-1.335-1.723-1.335H5.33C4.59.724 4 1.317 4 2.017v5.55l.174.043c.11.042 2.988.848 2.988 3.39zM.75 7.693c0 .147.135.273.293.273h1.914c.158 0 .293-.126.293-.273V1.48c0-.147-.135-.273-.293-.273H1.043c-.158 0-.293.126-.293.273v6.213z"
-                                ></path>
-                              </g>
-                            </svg>
-                            {review?.unlike?.length}
+                              <div className="user-review-thumb">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="15"
+                                  height="14"
+                                  viewBox="0 0 15 14"
+                                  className="user-review-thumbIcon user-review-thumbsDown user-review-rotate180"
+                                >
+                                  <g fill="none" fillRule="evenodd">
+                                    <path d="M-5-8h24v24H-5z"></path>
+                                    <path
+                                      fill="#535766"
+                                      fillRule="nonzero"
+                                      d="M1.032.383H2.9c.307 0 .593.127.769.34C4.04.276 4.612 0 5.27 0h6.391c1.405 0 2.306.723 2.481 1.955L15 7.184v.127c0 1.106-.922 2.02-2.086 2.02H9.663v2.252c0 .957-.285 1.637-.856 2.04-.9.638-2.13.277-2.174.256l-.264-.085V11.01c0-1.998-2.394-2.678-2.482-2.7l-.197-.042a1.022 1.022 0 01-.813.382H1.01A.992.992 0 010 7.673V1.382a1.029 1.029 0 011.032-1zM7.162 11v2.246c.327.042.873.085 1.265-.212.37-.254.545-.742.545-1.462V8.606h3.948c.741 0 1.33-.593 1.33-1.293v-.042l-.85-5.19v-.022c-.11-.89-.698-1.335-1.723-1.335H5.33C4.59.724 4 1.317 4 2.017v5.55l.174.043c.11.042 2.988.848 2.988 3.39zM.75 7.693c0 .147.135.273.293.273h1.914c.158 0 .293-.126.293-.273V1.48c0-.147-.135-.273-.293-.273H1.043c-.158 0-.293.126-.293.273v6.213z"
+                                    ></path>
+                                  </g>
+                                </svg>
+                                {review?.like?.length}
+                              </div>
+                              <div className="user-review-thumb">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="15"
+                                  height="14"
+                                  viewBox="0 0 15 14"
+                                  className="user-review-thumbIcon"
+                                >
+                                  <g fill="none" fillRule="evenodd">
+                                    <path d="M-5-8h24v24H-5z"></path>
+                                    <path
+                                      fill="#535766"
+                                      fillRule="nonzero"
+                                      d="M1.032.383H2.9c.307 0 .593.127.769.34C4.04.276 4.612 0 5.27 0h6.391c1.405 0 2.306.723 2.481 1.955L15 7.184v.127c0 1.106-.922 2.02-2.086 2.02H9.663v2.252c0 .957-.285 1.637-.856 2.04-.9.638-2.13.277-2.174.256l-.264-.085V11.01c0-1.998-2.394-2.678-2.482-2.7l-.197-.042a1.022 1.022 0 01-.813.382H1.01A.992.992 0 010 7.673V1.382a1.029 1.029 0 011.032-1zM7.162 11v2.246c.327.042.873.085 1.265-.212.37-.254.545-.742.545-1.462V8.606h3.948c.741 0 1.33-.593 1.33-1.293v-.042l-.85-5.19v-.022c-.11-.89-.698-1.335-1.723-1.335H5.33C4.59.724 4 1.317 4 2.017v5.55l.174.043c.11.042 2.988.848 2.988 3.39zM.75 7.693c0 .147.135.273.293.273h1.914c.158 0 .293-.126.293-.273V1.48c0-.147-.135-.273-.293-.273H1.043c-.158 0-.293.126-.293.273v6.213z"
+                                    ></path>
+                                  </g>
+                                </svg>
+                                {review?.unlike?.length}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </UserReviewWrapper>
+                        </UserReviewWrapper>
+                      ) : null}
+                    </>
                   ))}
                 </ReviewContainer>
               </>

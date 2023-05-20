@@ -22,6 +22,14 @@ export const fetchUserById = createAsyncThunk(
   }
 );
 
+export const updateUserById = createAsyncThunk(
+  "user/userById",
+  async ({ id, data }) => {
+    try {
+    } catch (error) {}
+  }
+);
+
 export const logOutUser = createAsyncThunk(
   "user/logOutUser",
   async ({ refreshToken }) => {

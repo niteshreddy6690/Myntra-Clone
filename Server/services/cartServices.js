@@ -3,7 +3,7 @@ const ApiError = require("../utils/ApiError");
 
 exports.cart = async (user) => {
   try {
-    const carts = await Cart.find().populate({
+    const carts = await Cart.find({ user: user, status: "active" }).populate({
       path: "items.productId",
       select: { __v: 0, createdAt: 0, updatedAt: 0 },
     });
@@ -20,4 +20,10 @@ exports.addItem = async (payload) => {
   } catch (err) {
     throw new ApiError("500", "Something Went Wrong");
   }
+};
+
+exports.deleteCart = async (id) => {
+  try {
+    const deletedCart = await Cart.findByIdAndDelete(id);
+  } catch (err) {}
 };

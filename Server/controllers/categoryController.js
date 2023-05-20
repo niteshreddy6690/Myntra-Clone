@@ -46,7 +46,7 @@ const createCategory = catchAsync(async (req, res) => {
 const getAllCategory = catchAsync(async (req, res) => {
   let { parentId } = req.params;
   const categories = await Category.find({});
-  if (!categories) return [];
+  if (!categories) return res.json("No cart Found");
   //   const allCategories = nestedCategories(categories);
   res.status(200).send(nestedCategories(categories, parentId.trim()));
 });
@@ -70,6 +70,7 @@ function nestedCategories(categories, parentId = null) {
       name: cate.name,
       slug: cate.slug,
       parentId: cate.parentId,
+      categoryPath: cate?.categoryPath,
       children: nestedCategories(categories, cate._id),
     });
   }

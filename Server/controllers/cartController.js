@@ -2,9 +2,11 @@ const cartService = require("../services/cartServices");
 const Product = require("../models/Product");
 
 exports.addItemToCart = async (req, res) => {
+  const userId = req.user.id;
   const { productId, size, quantity = 1, gId } = req.body;
+
   try {
-    let cart = await cartService.cart();
+    let cart = await cartService.cart(userId);
     let productDetails = await Product.findById(productId);
     if (!productDetails) {
       return res.status(500).json({
@@ -69,6 +71,7 @@ exports.addItemToCart = async (req, res) => {
     //------------ if there is no user with a cart...it creates a new cart and then adds the item to the cart that has been created------------
     else {
       const cartData = {
+        user: userId,
         items: [
           {
             productId: productId,
@@ -94,8 +97,9 @@ exports.addItemToCart = async (req, res) => {
 exports.getCart = async (req, res) => {
   console.log("request.user", req.user);
   console.log("Calling Get cart");
+  const userId = req.user.id;
   try {
-    let cart = await cartService.cart();
+    let cart = await cartService.cart(userId);
     if (!cart) {
       return res.status(400).json({
         type: "Invalid",
@@ -141,6 +145,7 @@ exports.emptyCart = async (req, res) => {
       mgs: "Cart Has been emptied",
       data: data,
     });
+    z;
   } catch (err) {
     console.log(err);
     res.status(400).json({
@@ -152,9 +157,10 @@ exports.emptyCart = async (req, res) => {
 };
 
 exports.deleteItemInCart = async (req, res) => {
+  const userId = req.user.id;
   const { productId } = req.body;
   // const userId = "63859800151a7545682f4c9d";
-  let cart = await cartService.cart();
+  let cart = await cartService.cart(userId);
   //   let cart = await Cart.findOne({ userId });
   try {
     // let itemIndex = cart.products.findIndex((p) => p.productId == productId);
@@ -164,6 +170,10 @@ exports.deleteItemInCart = async (req, res) => {
       deletedProduct = cart.items[itemIndex];
       cart.items.splice(itemIndex, 1);
       cart = await cart.save();
+      if (cart.items.length > 0) {
+        let deletedCart = await cartService.cart(cart.id);
+        console.log("deletedCart", deletedCart);
+      }
     } else {
       console.log("no product found");
     }
@@ -178,7 +188,8 @@ exports.deleteItemInCart = async (req, res) => {
 exports.updateCartItemSizeAndQuantity = async (req, res) => {
   console.log("calling updateCartItemSizeAndQuantity");
   const { productId, selectedSize, productGId } = req.body;
-  var cart = await cartService.cart();
+  const userId = req.user.id;
+  var cart = await cartService.cart(userId);
   try {
     if (cart) {
       const indexFound = cart.items.findIndex(

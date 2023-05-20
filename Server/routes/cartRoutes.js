@@ -9,10 +9,14 @@ const {
   verifyTokenAndAuthorization,
   authorize,
 } = require("../utils/verifyToken");
-router.post("/", cartController.addItemToCart);
+router.post("/", authorize(), cartController.addItemToCart);
 router.get("/", authorize(), cartController.getCart);
-router.delete("/empty-cart", cartController.emptyCart);
-router.post("/delete", cartController.deleteItemInCart);
-router.post("/update", cartController.updateCartItemSizeAndQuantity);
+router.delete("/empty-cart", authorize(), cartController.emptyCart);
+router.post("/delete", authorize(), cartController.deleteItemInCart);
+router.post(
+  "/update",
+  authorize(),
+  cartController.updateCartItemSizeAndQuantity
+);
 
 module.exports = router;

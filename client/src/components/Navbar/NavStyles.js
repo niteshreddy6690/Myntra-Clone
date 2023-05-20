@@ -31,7 +31,9 @@ export const NavContainer = styled.div`
   box-sizing: border-box;
   height: inherit;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* grid-template-columns: 1fr 1fr 1fr; */
   margin-left: 1.8rem;
   margin-right: 1.8rem;
   /* z-index: 10; */
@@ -70,7 +72,7 @@ export const LogoContainer = styled.div`
 export const Img = styled.img`
   box-sizing: border-box;
   width: ${({ width }) => (width ? width : "3rem")};
-  height: ${({ height }) => (height ? height : "auto")}; ;
+  height: ${({ height }) => (height ? height : "auto")};
 `;
 
 export const NavbarLink = styled(Link)`
@@ -176,7 +178,6 @@ export const Span = styled.span`
   width: 23px;
   height: 12px;
   margin: 0 0 5px -10px;
-  font-family: Whitney Semibold;
   font-size: 10px;
   font-weight: 500;
   font-stretch: normal;
@@ -265,9 +266,6 @@ export const StdImg = styled.img`
   border-style: none;
 `;
 export const GridItemTwo = styled.div`
-  box-sizing: border-box;
-  font-family: Whitney;
-  float: right;
   font-weight: 500;
   display: flex;
   justify-content: flex-end;
@@ -300,15 +298,35 @@ export const GridItemTwo = styled.div`
     color: #282c3f;
   }
 `;
-
+export const SearchWrapper = styled.div`
+  display: block;
+  position: relative;
+  float: right;
+  width: 500px;
+  margin-left: 200px;
+  @media (max-width: 1079px) {
+    width: 100px;
+  }
+  @media (max-width: 1199px) {
+    width: 200px;
+  }
+  @media (max-width: 1250px) {
+    width: 280px;
+  }
+  @media (max-width: 1366px) {
+    width: 320px;
+    margin-right: 8px;
+  }
+  /* background: red; */
+`;
 export const SearchContainer = styled.div`
   border: 0.1px solid lightGray;
   display: block;
   align-items: center;
-  margin: 20px 20px 20px 40px;
+  margin: 20px 20px 20px 0px;
   position: relative;
   height: 40px;
-  width: 70%;
+  width: 90%;
   text-align: center;
   border-radius: 5px;
   background: ${({ isFocus }) => (isFocus ? "#fff" : "#f5f5f6")};
@@ -319,19 +337,48 @@ export const SearchContainer = styled.div`
   overflow: hidden;
 `;
 
+export const SearchDropDown = styled.div`
+  width: 100%;
+  position: absolute;
+  text-transform: capitalize;
+  color: #696e79;
+  top: 60px;
+  left: 0px;
+  display: ${({ isFocus }) => (isFocus ? "block" : "none")};
+  text-align: start;
+  background-color: #fff;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+  .CategorySection {
+    font-family: "Assistant" san-serif;
+    background: #eaeaec;
+    font-weight: 700;
+    font-size: 14px;
+    opacity: 1;
+  }
+
+  /* div:nth-child(odd) {
+    background: #eeeeee;
+  }
+  div:nth-child(even) {
+    background: #fff;
+  } */
+`;
 export const Input = styled.input`
   box-sizing: content-box;
-  font-family: Whitney Light;
-  float: right;
+  float: left;
   font-size: 14px;
   height: 40px;
-  width: 90%;
-  color: #696e89;
+  width: calc(100% - 40px);
+  line-height: 24px;
+  color: #696e79;
+  background: red;
   margin: 0%;
+
   padding: 0%;
   outline: 0;
   border: none;
-  border-radius: 5px;
+  border-radius: 0 4px 4px 0;
+  border-left: 0;
   background: #f5f5f6;
   &:focus {
     background: #fff;

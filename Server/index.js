@@ -13,6 +13,7 @@ const protectedRoute = require("./routes/protected");
 const userRoutes = require("./routes/userRoute");
 const categoryRoutes = require("./routes/categoryRoute");
 const payment = require("./routes/payments.js");
+const ordersRoutes = require("./routes/orderRoutes");
 const cors = require("cors");
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api/protected", protectedRoute);
 app.use("/api/user", userRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/order", ordersRoutes);
 app.use("/api/payment", payment);
 app.listen(process.env.PORT || 8080, () => {
   console.log("backend server listening on port " + PORT);

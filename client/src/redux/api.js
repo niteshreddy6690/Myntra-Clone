@@ -29,3 +29,14 @@ export const getUserById = ({ id }) => request.get(`user/${id}`);
 
 export const logOutUser = ({ refreshToken }) =>
   request.post(`auth/logout`, { refreshToken });
+
+// Address API's
+
+export const getUserAddress = () => request.get(`address/`);
+
+export const addNewAddress = ({ addAddress }) =>
+  request.post("address/add", addAddress);
+
+// Order API Calls
+
+export const getOrder = () => request.get("/order/getOrders");

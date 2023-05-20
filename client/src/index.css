@@ -1,3 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica, Arial, sans-serif;
+  scroll-behavior: smooth;
+
+  /* color-scheme: dark; */
+}
+
 body {
   margin: 0;
   font-family: Assistant, "Whitney", -apple-system, BlinkMacSystemFont,
@@ -6,8 +17,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-top: 80px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  /* color: #2d2e32; */
 }
-
+:not(input):not(textarea):not(button) {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
 * {
   /* -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box; */
@@ -16,15 +36,22 @@ body {
   -webkit-text-size-adjust: none; */
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Helvetica, Arial, sans-serif;
-  scroll-behavior: smooth;
-  /* color-scheme: dark; */
+/* input[type="date"]::-webkit-datetime-edit-text {
+  -webkit-appearance: none;
+  display: none;
 }
+input[type="date"]::-webkit-datetime-edit-month-field {
+  -webkit-appearance: none;
+  display: none;
+}
+input[type="date"]::-webkit-datetime-edit-day-field {
+  -webkit-appearance: none;
+  display: none;
+}
+input[type="date"]::-webkit-datetime-edit-year-field {
+  -webkit-appearance: none;
+  display: none;
+} */
 a {
   text-decoration: none;
   color: #000;
@@ -42,14 +69,9 @@ ul,
 li {
   list-style: none;
 }
-/* code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-} */
 
 .Toastify__toast {
   min-height: 50px !important;
-  /* transform: translateY(0px) !important; */
   padding-left: 5px !important;
   z-index: 10;
   width: 200px;

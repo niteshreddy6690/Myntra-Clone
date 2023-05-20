@@ -25,9 +25,9 @@ const mongoose = require("mongoose");
 //   },
 // });
 
-const Order = mongoose.model("Order", orderSchema);
+// const Order = mongoose.model("Order", orderSchema);
 
-module.exports = Order;
+// module.exports = Order;
 
 const orderSchema = new mongoose.Schema(
   {
@@ -59,6 +59,9 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+        selectedSize: {
+          type: String,
+        },
       },
     ],
     paymentStatus: {
@@ -68,15 +71,13 @@ const orderSchema = new mongoose.Schema(
     },
     paymentType: {
       type: String,
-      enum: ["cod", "card"],
-      required: true,
+      enum: ["cod", "card", "upi"],
     },
     orderStatus: [
       {
         type: {
           type: String,
           enum: ["ordered", "packed", "shipped", "delivered"],
-          default: "ordered",
         },
         date: {
           type: Date,
@@ -87,6 +88,9 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    paymentId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

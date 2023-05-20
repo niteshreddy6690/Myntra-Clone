@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useDebounce from "../useDebounce";
 import {
   NavbarContainer,
   NavContainer,
@@ -7,7 +8,9 @@ import {
   LogoContainer,
   Img,
   GridItemTwo,
+  SearchWrapper,
   SearchContainer,
+  SearchDropDown,
   SearchButton,
   Input,
   Span,
@@ -40,6 +43,7 @@ import LocalStorageService from "../../api/localStorage";
 import jwt_decode from "jwt-decode";
 import { request } from "../../api/axios";
 
+import { useNavigate, useLocation } from "react-router-dom";
 const NavItem = ({ to, color, name, children }) => {
   const [ishover, setHover] = useState(false);
 
@@ -64,7 +68,15 @@ const Navbar = () => {
   const [isFocus, setFocus] = useState(false);
   const [hover, setHover] = useState(false);
   const [stdHover, setStdHover] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [searchDropdownBrand, setSearchDropdownBrand] = useState(null);
+  const [searchDropdownCategory, setSearchDropdownCategory] = useState(null);
+
+  // const debouceSearchTerm = useDebounce(searchText, 300);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const refreshToken = LocalStorageService.getRefreshToken();
   const { currentUser } = useSelector((state) => ({ ...state.user }));
   console.log(" inside navbar currentUser", currentUser);
@@ -74,6 +86,36 @@ const Navbar = () => {
     (accum, item) => accum + item.quantity,
     0
   );
+
+  const searchApiCall = async () => {
+    const data = await request.get(
+      `products/search/autosuggest?q=${searchText}`
+    );
+    if (data?.data?.searchBrand.length > 0) {
+      setSearchDropdownBrand(data?.data?.searchBrand);
+    }
+
+    if (data?.data?.searchCategory.length > 0) {
+      setSearchDropdownCategory(data?.data?.searchCategory);
+    }
+
+    console.log(data);
+  };
+  useEffect(() => {
+    let handler;
+    if (searchText.length > 2) {
+      handler = setTimeout(() => {
+        searchApiCall();
+      }, 800);
+    } else {
+      setSearchDropdownCategory([]);
+      setSearchDropdownBrand([]);
+    }
+
+    return () => {
+      clearInterval(handler);
+    };
+  }, [searchText]);
 
   const apiCall = async (decoded) => {
     console.log("calling fetch user by id in app.js");
@@ -100,6 +142,24 @@ const Navbar = () => {
   //   dispatch(fetchCartItems());
   // }, [dispatch]);
 
+  const handleKeyPress = async (event) => {
+    if (event?.key === "Enter") {
+      const { name, value } = event?.target;
+      const params = new URLSearchParams({ [name]: value });
+      navigate({
+        pathname: value,
+        search: params.toString(),
+      });
+    }
+  };
+  const onClickSearch = () => {
+    // const { name, value } = event?.target;
+    // const params = new URLSearchParams({ [name]: value });
+    // history.replace({
+    //   pathname: location.pathname,
+    //   search: params.toString(),
+    // });
+  };
   const handleLogout = async () => {
     const action = dispatch(logOutUser({ refreshToken }));
     localStorage.clear();
@@ -182,9 +242,9 @@ const Navbar = () => {
           {stdHover ? <Overlay /> : null}
           <Span>New</Span>
         </GridItemOne>
-        <GridItemTwo>
+        <SearchWrapper>
           <SearchContainer isFocus={isFocus}>
-            <SearchButton>
+            <SearchButton onClick={onClickSearch}>
               <SearchIcon
                 style={{ color: "#6c6c6c", transform: "scale(.8)" }}
               />
@@ -192,10 +252,67 @@ const Navbar = () => {
             <Input
               placeholder="Search for products, brands and more"
               type="text"
+              value={searchText}
               onFocus={() => setFocus(true)}
               onBlur={() => setFocus(false)}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
           </SearchContainer>
+          {searchDropdownCategory?.length > 0 ||
+          searchDropdownBrand?.length > 0 ? (
+            <SearchDropDown isFocus={isFocus}>
+              {searchDropdownCategory?.length > 0 ? (
+                <>
+                  <div
+                    className="CategorySection"
+                    style={{
+                      padding: "5px 0 5px 10px",
+                    }}
+                  >
+                    Categories
+                  </div>
+
+                  {searchDropdownCategory.map((category) => (
+                    <div
+                      style={{
+                        padding: "5px 0 5px 10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {category?.name}
+                    </div>
+                  ))}
+                </>
+              ) : null}
+              {searchDropdownBrand?.length > 0 ? (
+                <>
+                  <div
+                    className="CategorySection"
+                    style={{
+                      padding: "5px 0 5px 10px",
+                    }}
+                  >
+                    Brand
+                  </div>
+
+                  {searchDropdownBrand.map((item) => (
+                    <div
+                      style={{
+                        padding: "5px 0 5px 10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {item?.brand}
+                    </div>
+                  ))}
+                </>
+              ) : null}
+            </SearchDropDown>
+          ) : null}
+          <SearchDropDown />
+        </SearchWrapper>
+        <GridItemTwo>
           <SvgImageContainer
             onMouseOver={() => setHover(true)}
             onMouseOut={() => setHover(false)}
@@ -320,23 +437,25 @@ const Navbar = () => {
             </div>
           </SvgImageContainer>
 
-          <SvgNavbarLink to={currentUser ? "/wishlist" : "/login"}>
-            <SvgImageContainer1>
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 16 16"
-                xmlns="http://www.w3.org/2000/svg"
-                width="18px"
-                height="18px"
-                fontWeight="600"
-              >
-                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path>
-              </svg>
-              <span className="desktop-userTitle">Wishlist</span>
-            </SvgImageContainer1>
-          </SvgNavbarLink>
+          {location?.pathname == "/wishlist" ? null : (
+            <SvgNavbarLink to={currentUser ? "/wishlist" : "/login"}>
+              <SvgImageContainer1>
+                <svg
+                  stroke="currentColor"
+                  fill="currentColor"
+                  strokeWidth="0"
+                  viewBox="0 0 16 16"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18px"
+                  height="18px"
+                  fontWeight="600"
+                >
+                  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path>
+                </svg>
+                <span className="desktop-userTitle">Wishlist</span>
+              </SvgImageContainer1>
+            </SvgNavbarLink>
+          )}
 
           <SvgNavbarLink to="/checkout/cart">
             <SvgImageContainer1>

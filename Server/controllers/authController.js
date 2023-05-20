@@ -178,7 +178,7 @@ const optverify = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_ACCESS_SECRET_KEY,
-      { expiresIn: "30m" }
+      { expiresIn: "30d" }
     );
     const RefreshToken = jwt.sign(
       {

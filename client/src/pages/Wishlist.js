@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { isFulfilled } from "@reduxjs/toolkit";
 import { Link } from "react-router-dom";
 import { request } from "../api/axios";
+import Navbar from "../components/Navbar/Navbar";
 const Layout = styled.div`
   /* padding: 0px 45px; */
 `;
@@ -222,6 +223,7 @@ const Wishlist = () => {
 
   return (
     <Layout>
+      <Navbar />
       <ToastContainer
         style={{ position: "absolute", top: "10px", right: "0px" }}
         toastStyle={{

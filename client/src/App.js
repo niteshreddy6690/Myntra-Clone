@@ -32,6 +32,7 @@ import MyOrders from "./pages/My/MyOrders";
 import OverView from "./pages/My/OverView";
 import ProfileEdit from "./pages/My/ProfileEdit";
 import Checkout from "./pages/Checkout";
+import MyAddress from "./pages/My/MyAddress";
 
 // import "./fonts/whitneybold.otf";
 import "./fonts/whitneybook.ttf";
@@ -70,10 +71,11 @@ function App() {
           <Route path="/similar" element={<Similar />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/category" element={<Category />} />
-          <Route path="/My/" element={<MyMainPage />}>
+          <Route path="/my/" element={<MyMainPage />}>
             <Route path="orders" element={<MyOrders />} />
             <Route path="dashboard" element={<OverView />} />
             <Route path="profile/edit" element={<ProfileEdit />} />
+            <Route path="address" element={<MyAddress />} />
           </Route>
 
           <Route path="/test" element={<Test3 />} />

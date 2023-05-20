@@ -9,7 +9,8 @@ const {
 } = require("../utils/verifyToken");
 
 router.post("/", authorize(), reviewController.addReviewToProduct);
-router.get("/:productId", reviewController.getAllReviewsForProduct);
+router.get("/product/:productId", reviewController.getAllReviewsForProduct);
+router.get("/getAllUser", authorize(), reviewController.getAllReviewForUser);
 router.put("/like", authorize(), reviewController.likeReview);
 router.put("/unlike", authorize(), reviewController.unLikeReview);
 

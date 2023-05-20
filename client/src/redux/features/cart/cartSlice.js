@@ -25,10 +25,10 @@ export const fetchCartItems = createAsyncThunk("cart/getCart", async () => {
 
 export const removeCartItem = createAsyncThunk(
   "cart/delete",
-  async ({ productId, toast }) => {
+  async ({ productId, toast }, { dispatch }) => {
     try {
       const response = await api.removeCartItem(productId);
-      if (response)
+      if (response) {
         toast("Removed item from Bag", {
           position: "top-right",
           autoClose: 2000,
@@ -46,7 +46,9 @@ export const removeCartItem = createAsyncThunk(
           ),
         });
 
-      return response?.data;
+        dispatch(fetchCartItems());
+        return response?.data;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -55,7 +57,7 @@ export const removeCartItem = createAsyncThunk(
 
 export const addItemToBag = createAsyncThunk(
   "cart/addToCart",
-  async ({ productId, size, toast }) => {
+  async ({ productId, size, toast }, { dispatch }) => {
     try {
       const response = await api.addItemToCart({ productId, size });
       console.log("Added Item to bag", response);
@@ -76,6 +78,9 @@ export const addItemToBag = createAsyncThunk(
             />
           ),
         });
+      if (response?.data) {
+        dispatch(fetchCartItems());
+      }
       return response?.data;
     } catch (error) {
       console.error(error);

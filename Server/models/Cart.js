@@ -22,8 +22,13 @@ let ItemSchema = new Schema(
 
 const CartSchema = new Schema(
   {
-    // user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     items: [ItemSchema],
+    status: {
+      type: String,
+      default: "active",
+      enum: ["active", "ordered", "delivered", "merged"],
+    },
   },
   {
     timestamps: true,

@@ -539,9 +539,18 @@ const TempProduct = () => {
   const [open, setOpen] = useState(false);
   const [wishlistProducts, setWishlistProducts] = useState(null);
   const location = useLocation();
+  console.log("Location", location);
+  // const cat = location.pathname.split("/")[1];
   const category = location.pathname.split("/")[1];
   const cat = category.split("-")[1];
+  console.log("cat", cat);
+  console.log("category", category);
 
+  // const index = category.indexOf("-");
+  // const firstPartOfCat = category.slice(0, index);
+  // const secondPartOfCat = category.slice(index + 1).replaceAll("-", " ");
+
+  console.log("category", cat);
   const ref = React.useRef();
   //   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -608,7 +617,9 @@ const TempProduct = () => {
 
   ///
 
-  console.log("category", category, cat);
+  // const index = str.indexOf("-");
+  // const firstPart = str.slice(0, index);
+  // const secondPart = str.slice(index + 1);
 
   console.log("Location.........", location);
   var lastScrollTop = 0;
@@ -774,12 +785,13 @@ const TempProduct = () => {
     ]);
   };
 
-  const getProducts = async ({ params, category }) => {
+  const getProducts = async ({ params }) => {
     document.documentElement.scrollTop = 0;
     // const searchString = location.search;
     console.log("calling Getproducts Function", params);
-    if (params) {
-      var url = new URL("http://localhost:8080/api/products");
+    if (params && category) {
+      console.log("category inside params", category);
+      var url = new URL(`http://localhost:8080/api/products/${category}`);
       if (params?.brands)
         url.searchParams.set("brand", params?.brands?.split(","));
       if (params?.p) url.searchParams.set("p", params?.p);
@@ -793,8 +805,9 @@ const TempProduct = () => {
     if (params?.discount) url.searchParams.set("discount", params?.discount);
     console.log("URL______: ", url);
     try {
+      console.log("cat inside api call", category);
       const res2 = await axios.get(
-        `http://localhost:8080/api/products?category=${cat}`
+        `http://localhost:8080/api/products/${category}`
       );
 
       console.log("Res2", res2);
@@ -802,7 +815,7 @@ const TempProduct = () => {
         // cat ? `http://localhost:8080/api/products?category=${cat}`
         //   : "http://localhost:8080/api/products"
         // `http://localhost:8080/api/products${searchString}`
-        url ? `${url}` : `http://localhost:8080/api/products?category=${cat}`
+        url ? `${url}` : `http://localhost:8080/api/products/${category}`
       );
 
       console.log("result??????????????????????", res);
@@ -968,6 +981,7 @@ const TempProduct = () => {
     getProducts({ params: _params });
   };
 
+  // handel Check box Discount
   //handel color
 
   const handelColor = (e) => {
@@ -1048,6 +1062,43 @@ const TempProduct = () => {
 
     getProducts({ params: _params });
   };
+
+  // handel Check box Discount
+  const handelCheckboxChangeDiscount = (e) => {
+    const value = e.target.value;
+    const checked = e.target.checked;
+
+    console.log("checked", checked);
+    let _params = null;
+    if (checked) {
+      let previous = params?.discount?.length
+        ? params?.discount?.split(",")
+        : "";
+      const discount = previous
+        ? [...previous, value].toString()
+        : [value].toString();
+      _params = { ...params, ...(discount && { discount: value }) };
+      setSearchParams(_params);
+    } else {
+      const filterArray = params?.discount
+        ?.split(",")
+        .filter((e) => e !== value);
+      console.log("brands ar", filterArray);
+      const discount = filterArray?.length
+        ? filterArray?.join(",")?.toString()
+        : "";
+      console.log("colors", discount);
+
+      let _temp = { ...params, ...(discount && { discount }) };
+
+      console.log("uncheckecd colors", _params);
+      _params = discount ? _temp : omit(_temp, "discount");
+      setSearchParams(discount ? _temp : omit(_temp, "discount"));
+    }
+
+    getProducts({ params: _params });
+  };
+
   //
   const handelSort = (e) => {
     const value = e.target.value;
@@ -1459,16 +1510,16 @@ const TempProduct = () => {
                       </li>
                     ))}
 
-                    {/* {params?.discount?.split(",").map((disc, i) => (
+                    {params?.discount?.split(",").map((disc, i) => (
                       <li key={i}>
                         <div className="filter-summary-filter">
                           {disc}
                           <label className="filter-summary-removeFilter">
                             <input
-                              type="radio"
+                              type="checkbox"
                               name="discount"
                               value={disc}
-                              onChange={handelChangeDiscount}
+                              onChange={handelCheckboxChangeDiscount}
                               checked={Boolean(
                                 params?.discount?.split(",")?.includes(disc)
                               )}
@@ -1482,7 +1533,7 @@ const TempProduct = () => {
                           </label>
                         </div>
                       </li>
-                    ))} */}
+                    ))}
                   </ul>
                 </ChipsContainer>
               </RowBase>

@@ -10,7 +10,8 @@ const { ObjectId } = mongoose.Schema.Types;
 
 exports.addReviewToProduct = catchAsync(async (req, res) => {
   console.log("calling add review");
-  const { productId, userId, comment, ratingNo } = req.body;
+  const userId = req.user.id;
+  const { productId, comment, ratingNo } = req.body;
   let product = await productService.getProductId(productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
@@ -166,7 +167,7 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
 exports.getAllReviewsForProduct = catchAsync(async (req, res) => {
   const { productId } = req.params;
   console.log("Product Id", productId);
-  //
+
   const allReviews = await Review.find({ productId })
     .populate("user")
     .sort("-rating");
@@ -194,6 +195,19 @@ exports.getAllReviewsForProduct = catchAsync(async (req, res) => {
   //   if (allReviews) res.status(httpStatus.OK).send(allReviews);
 });
 
+exports.getAllReviewForUser = catchAsync(async (req, res) => {
+  const { id } = req.user;
+  console.log("id", id);
+  const allReviewsOfUser = await Review.find({
+    user: id,
+  });
+  if (!allReviewsOfUser)
+    return res
+      .status(404)
+      .json({ message: "User as not provide any reviews " });
+
+  return res.status(200).json({ allReviews: allReviewsOfUser });
+});
 exports.likeReview = catchAsync(async (req, res) => {
   console.log("req.user", req.user);
 

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
+import NavBarForCartAndPayment from "../components/Navbar/NavBarForCartAndPayment";
 import CartCmp from "../components/Cart/CartCmp";
 import { useSelector, useDispatch } from "react-redux";
 // import { useSelector, useDispatch } from "react-redux";
+import { request } from "../api/axios";
+
 import {
   fetchCartItems,
   removeCartItem,
@@ -32,15 +35,15 @@ const Cart = () => {
 
   const handelDelete = async (productId) => {
     dispatch(removeCartItem({ productId, toast }));
-    try {
-      const deletedProduct = await axios.post(
-        "http://localhost:8080/api/carts/delete",
-        { productId }
-      );
-      SetDeleteProduct(deletedProduct.data);
-    } catch (error) {
-      console.log(error.message);
-    }
+    // try {
+    //   const deletedProduct = await request.post(
+    //     "http://localhost:8080/api/carts/delete",
+    //     { productId }
+    //   );
+    //   SetDeleteProduct(deletedProduct.data);
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
   };
 
   // const handelMoveToWishlist = async (id) => {
@@ -59,7 +62,7 @@ const Cart = () => {
       console.log("Product GID", productGId);
 
       if (selectedSize) {
-        const updatedsizeAndQuantity = await axios.post(
+        const updatedsizeAndQuantity = await request.post(
           "http://localhost:8080/api/carts/update",
           { productId, selectedSize, productGId }
         );
@@ -98,7 +101,8 @@ const Cart = () => {
     getCart();
 
     console.log("cart Products", cartItems);
-  }, [deleteProduct, updatedSizes]);
+  }, []);
+  // }, [deleteProduct, updatedSizes]);
 
   useEffect(() => {
     if (cartItem) {
@@ -111,7 +115,7 @@ const Cart = () => {
   }, [cartItems]);
   return (
     <div>
-      <Navbar />
+      <NavBarForCartAndPayment />
       <ToastContainer
         style={{ position: "absolute", top: "90px", right: "0px" }}
         toastStyle={{
