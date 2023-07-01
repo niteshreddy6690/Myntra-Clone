@@ -259,8 +259,8 @@ const SwiperCarousel = styled(Swiper)`
   .swiper-pagination {
     z-index: 3;
     position: absolute;
-    top: 275px;
-    height: 20px;
+    top: 278px;
+    height: 30px;
     padding-bottom: 20px;
     left: 0;
     text-align: center;
@@ -302,7 +302,7 @@ const ViewSimilar = styled.div`
   overflow: hidden;
   cursor: pointer;
   border: 1px solid #dadade;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
   border-radius: 50%;
   text-align: center;
   will-change: contents;
@@ -366,10 +366,11 @@ const WishlistContainer = styled.div`
   top: 275px;
   background: #fff;
   width: 100%;
-  height: 30px;
+  height: 40px;
   padding: 0px 10px;
   box-sizing: border-box;
   cursor: default;
+  transition: all 0.2s ease-in-out;
 `;
 const WishListDivWrapper = styled.div`
   display: flex;
@@ -380,6 +381,8 @@ const WishListDivWrapper = styled.div`
   font-size: 12px;
   border: 1px solid #d4d5d9;
   border-radius: 2px;
+  background: red;
+  transition: transform 0.2s ease-in-out;
   color: ${({ isWishlist }) => (isWishlist ? "#FFF" : "#282c3f")};
   background-color: ${({ isWishlist }) =>
     isWishlist ? "rgb(83, 87, 102)" : "#fff"};

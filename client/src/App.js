@@ -33,6 +33,9 @@ import OverView from "./pages/My/OverView";
 import ProfileEdit from "./pages/My/ProfileEdit";
 import Checkout from "./pages/Checkout";
 import MyAddress from "./pages/My/MyAddress";
+import Navbar from "./components/Navbar/Navbar";
+
+import NavText from "./pages/NavText";
 
 // import "./fonts/whitneybold.otf";
 import "./fonts/whitneybook.ttf";
@@ -57,11 +60,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/shop/:id" element={<Men />} />
-          <Route path="/:id/" element={<TempProduct />} />
+          <Route path="/:id" element={<TempProduct />} />
           {/* <Route path="/:id/" element={<Products />} /> */}
 
           <Route path="/:id/:id/:id/:id/buy" element={<ProductPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/nav" element={<NavText />} />
           <Route path="/accountlink" element={<AccountLink />} />
           <Route path="/createaccount" element={<CreateAccount />} />
           <Route path="/verifyotp" element={<VerifyOtp />} />

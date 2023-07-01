@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { Badge } from "@mui/material";
 // import { height } from "@mui/system";
 
-export const NavbarContainer = styled.div`
+export const NavbarWrapper = styled.div`
   box-sizing: border-box;
   font-family: Assistant;
-  max-width: 100%;
+  width: 100%;
   height: 80px;
   display: block;
   color: #000;
@@ -17,43 +17,44 @@ export const NavbarContainer = styled.div`
   z-index: 10;
   background-color: #fff;
   box-shadow: 0 4px 12px 0 rgb(0 0 0 / 5%);
-  @media (min-width: 1536px) {
-    width: 100%;
-  }
-  @media (min-width: 1280px) {
-    width: 100%;
-  }
-  @media (min-width: 1024px) {
-    width: 100%;
-  }
 `;
 export const NavContainer = styled.div`
   box-sizing: border-box;
   height: inherit;
-  display: grid;
+  display: flex;
+  justify-content: center;
   grid-gap: 10px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  /* grid-template-columns: 1fr 1fr 1fr; */
   margin-left: 1.8rem;
   margin-right: 1.8rem;
-  /* z-index: 10; */
-  /* @media (min-width: 1536px) {
-    display: grid;
-  }
-  @media (min-width: 1280px) {
-    display: grid;
+  z-index: 10;
+
+  @media (min-width: 860px) {
+    margin-left: 0rem;
+    margin-right: 0rem;
   }
   @media (min-width: 1024px) {
-    display: flex;
-  } */
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
+  }
+  @media (min-width: 1280px) {
+    margin-left: 0.8rem;
+    margin-right: 0.8rem;
+  }
+  @media (min-width: 1536px) {
+    margin-left: 1.8rem;
+    margin-right: 1.8rem;
+  }
 `;
 
 export const GridItemOne = styled.div`
-  font-family: Whitney;
   text-transform: uppercase;
   margin: 0;
   display: flex;
-  gap: 0px;
+  min-width: 500px;
+
+  /* gap: 0px;
+  grid-column: 2/3; */
+  justify-content: center;
   align-items: center;
   list-style: none;
   padding: 0;
@@ -62,8 +63,24 @@ export const GridItemOne = styled.div`
   letter-spacing: 0.3px;
   /* width: 75%; */
 
-  @media (min-width: 768px) {
+  .subMenu {
+    display: none;
+  }
+
+  li:hover .subMenu {
+    display: block;
+  }
+  @media (max-width: 768px) {
     font-size: 14px;
+  }
+  @media (min-width: 1024px) {
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
+  }
+  @media (min-width: 1280px) {
+  }
+  @media (min-width: 1440px) {
+    width: 500px;
   }
 `;
 export const LogoContainer = styled.div`
@@ -79,7 +96,6 @@ export const NavbarLink = styled(Link)`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-  /* font-family: Whitney Semibold; */
   font-family: Assistant;
   align-items: center;
   text-align: center;
@@ -87,11 +103,24 @@ export const NavbarLink = styled(Link)`
   font-size: 14px;
   height: 80px;
   color: #282c3f;
-  padding: 0 17px;
+  padding: 0 15px;
   letter-spacing: 0.3px;
   text-decoration: none;
   border-bottom: ${({ $active }) => ($active ? "4px solid" : "4px solid")};
   border-bottom-color: ${({ $active, color }) => ($active ? color : "#fff")};
+
+  @media (max-width: 768px) {
+    padding: 0 5px;
+  }
+  @media (max-width: 1024px) {
+    padding: 0 10px;
+  }
+  @media (max-width: 1280px) {
+    padding: 0 12px;
+  }
+  @media (max-width: 1536px) {
+    padding: 0 15px;
+  }
 `;
 
 export const Overlay = styled.div`
@@ -121,7 +150,7 @@ export const StyledSubLinksContainer = styled.div`
   width: 60vw;
   height: 450px;
   background: #fff;
-  position: absolute;
+    position: absolute;
   top: 80px;
   left: 80px;
   display: flex;
@@ -154,7 +183,7 @@ export const NavSubLinks = styled(Link)`
   text-decoration: none;
   text-transform: none;
   color: #282c3f;
-  font-family: "Whitney Book", "sans-serif";
+  font-family: "Assistant"
   line-height: 23px;
   font-weight: 500;
   display: block;
@@ -191,7 +220,6 @@ export const Span = styled.span`
 export const StdNavbarLink = styled(Link)`
   box-sizing: border-box;
   display: flex;
-  font-family: Whitney;
   font-family: Assistant;
   justify-content: center;
   align-items: center;
@@ -268,10 +296,11 @@ export const StdImg = styled.img`
 export const GridItemTwo = styled.div`
   font-weight: 500;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   list-style: none;
-  margin: 0%;
+  width: 250px;
+  margin: 0 0 0 0%;
   padding: 0%;
   height: inherit;
   font-size: 1rem;
@@ -283,8 +312,9 @@ export const GridItemTwo = styled.div`
   color: #282c3f;
   border-bottom: none;
   text-transform: uppercase;
-  @media (min-width: 768px) {
+  @media (max-width: 768px) {
     font-size: 14px;
+    display: none !important;
   }
   .desktop-userTitle {
     color: #282c3f;
@@ -293,31 +323,37 @@ export const GridItemTwo = styled.div`
     font-weight: 600;
   }
   svg {
-    /* /* display: block; */
-    /* vertical-align: center; */
     color: #282c3f;
   }
 `;
 export const SearchWrapper = styled.div`
   display: block;
   position: relative;
-  float: right;
-  width: 500px;
-  margin-left: 200px;
-  @media (max-width: 1079px) {
-    width: 100px;
+  width: 550px;
+  margin-left: 40px;
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+  @media (max-width: 1024px) {
+    width: 200px;
+    margin-left: 0px;
   }
   @media (max-width: 1199px) {
-    width: 200px;
+    width: 320px;
+    margin-left: 2px;
   }
   @media (max-width: 1250px) {
-    width: 280px;
+    width: 380px;
+    margin-left: 10px;
   }
   @media (max-width: 1366px) {
-    width: 320px;
-    margin-right: 8px;
+    width: 620px;
+    margin-left: 20px;
   }
-  /* background: red; */
+  @media (max-width: 1536px) {
+    width: 620px;
+    margin-left: 40px;
+  }
 `;
 export const SearchContainer = styled.div`
   border: 0.1px solid lightGray;
@@ -326,7 +362,7 @@ export const SearchContainer = styled.div`
   margin: 20px 20px 20px 0px;
   position: relative;
   height: 40px;
-  width: 90%;
+  width: 100%;
   text-align: center;
   border-radius: 5px;
   background: ${({ isFocus }) => (isFocus ? "#fff" : "#f5f5f6")};
@@ -411,7 +447,7 @@ export const SvgImageContainer1 = styled.div`
   width: 40px;
   height: inherit;
   position: relative;
-  top: 0;
+  /* top: 0; */
   padding: 0 10px;
   margin: 0 5px;
   display: flex;

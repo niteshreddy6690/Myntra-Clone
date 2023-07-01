@@ -72,7 +72,7 @@ router.get("/:combineCategory", async (req, res) => {
     console.log(
       await Category.find({ categoryPath: { $regex: keywords.join(".*") } })
     );
-    queryObject.categories = result1?._id;
+    queryObject.categories = await result1?._id;
   }
 
   // if (!queryObject.categories) {

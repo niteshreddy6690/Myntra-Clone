@@ -1,7 +1,7 @@
 export const links = [
   {
     to: "/shop/men",
-    color: "#ee5f73",
+    color: "#ff3f6c",
     name: "men",
     subLinks: [
       {

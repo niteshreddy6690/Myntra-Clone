@@ -538,6 +538,7 @@ const TempProduct = () => {
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
   const [wishlistProducts, setWishlistProducts] = useState(null);
+  const [combineCategory, setCombineCategory] = useState(null);
   const location = useLocation();
   console.log("Location", location);
   // const cat = location.pathname.split("/")[1];
@@ -758,7 +759,6 @@ const TempProduct = () => {
     params?.sort && setSort(sortDic[params?.sort]);
     params?.p && setPageNo(parseInt(params?.p));
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -789,7 +789,7 @@ const TempProduct = () => {
     document.documentElement.scrollTop = 0;
     // const searchString = location.search;
     console.log("calling Getproducts Function", params);
-    if (params && category) {
+    if (params) {
       console.log("category inside params", category);
       var url = new URL(`http://localhost:8080/api/products/${category}`);
       if (params?.brands)
@@ -820,25 +820,70 @@ const TempProduct = () => {
 
       console.log("result??????????????????????", res);
       if (res2) {
-        const brandData = [
-          ...new Set(
-            res2.data.products?.map((item) => {
-              return item.brand;
-            })
-          ),
-        ]?.map((key) => ({ key: key, value: key }));
+        // const brandData = [
+        //   ...new Set(
+        //     res2.data.products?.map((item) => {
+        //       return item.brand;
+        //     })
+        //   ),
+        // ]?.map((key) => ({ key: key, value: key }));
 
-        const colors = [
-          ...new Set(
-            res2.data.products?.map((item) => {
+        function filterUniqueBrandsWithFrequency(brandArray) {
+          const brandFrequency = {};
+          for (const brand of brandArray) {
+            if (brand in brandFrequency) {
+              brandFrequency[brand] += 1;
+            } else {
+              brandFrequency[brand] = 1;
+            }
+          }
+
+          const resultArray = [];
+          for (const brand in brandFrequency) {
+            resultArray.push({
+              brandName: brand,
+              frequency: brandFrequency[brand],
+            });
+          }
+
+          return resultArray;
+        }
+        const brandData = filterUniqueBrandsWithFrequency(
+          res2.data.products?.map((item) => {
+            return item.brand;
+          })
+        );
+        console.log("result", brandData);
+
+        // const colors = [
+        //   ...new Set(
+        //     res2.data.products?.map((item) => {
+        //       return item?.color;
+        //     })
+        //   ),
+        // ]
+        //   .filter(Boolean)
+        //   ?.map((key) => ({ key: key, value: key }))
+        //   .filter(Boolean);
+
+        const colors = Object.entries(
+          res2.data.products
+            ?.map((item) => {
               return item?.color;
             })
-          ),
-        ]
-          .filter(Boolean)
-          ?.map((key) => ({ key: key, value: key }))
+            .filter(Boolean)
+            .reduce(
+              (colorFrequency, color) => (
+                (colorFrequency[color] = (colorFrequency[color] || 0) + 1),
+                colorFrequency
+              ),
+              {}
+            )
+        )
+          .map(([color, frequency]) => ({ color, frequency }))
           .filter(Boolean);
 
+        console.log("Color", colors);
         const prices = [
           ...new Set(
             res2.data.products?.map((item) => {
@@ -904,9 +949,9 @@ const TempProduct = () => {
           .sort()
           .filter(Boolean);
 
+        console.log("brandData", brandData);
         setBrand(brandData);
         setColor(colors);
-        // setPrices(prices);
         setPriceRange(priceRanges);
         setDiscountRange(discountRange);
 
@@ -1059,7 +1104,6 @@ const TempProduct = () => {
     console.log("value", e.target?.value);
     const _params = { ...params, ...(value && { discount: value }) };
     setSearchParams(_params);
-
     getProducts({ params: _params });
   };
 
@@ -1213,13 +1257,17 @@ const TempProduct = () => {
                               }}
                               type="checkbox"
                               name="brand"
-                              value={brand?.key}
+                              value={brand?.brandName}
                               onChange={handelChange}
                               checked={Boolean(
-                                params?.brands?.split(",")?.includes(brand?.key)
+                                params?.brands
+                                  ?.split(",")
+                                  ?.includes(brand?.brandName)
                               )}
                             />
-                            {brand?.value?.toUpperCase()}
+                            {`${brand?.brandName?.toUpperCase()} (${
+                              brand.frequency
+                            })`}
                           </Label1>
                         </Li1>
                       ))}
@@ -1234,7 +1282,7 @@ const TempProduct = () => {
                     {PriceRange?.length > 0 &&
                       PriceRange?.map((price, i) => (
                         <>
-                          {price && (
+                          {price && price.numbers.length > 0 && (
                             <Li>
                               <Label style={{ textTransform: "capitalize" }}>
                                 <Input1
@@ -1250,7 +1298,6 @@ const TempProduct = () => {
                                       ?.includes(`${price.min} to ${price.max}`)
                                   )}
                                 />
-
                                 {`Rs.${price.min} to Rs.${price.max} (${price.numbers.length})`}
                               </Label>
                             </Li>
@@ -1270,7 +1317,7 @@ const TempProduct = () => {
                               <Label style={{ textTransform: "capitalize" }}>
                                 <Input1
                                   type="checkbox"
-                                  value={color.key}
+                                  value={color.color}
                                   style={{
                                     accentColor: "#ff3f6c",
                                   }}
@@ -1281,11 +1328,13 @@ const TempProduct = () => {
                                   checked={Boolean(
                                     params?.colors
                                       ?.split(",")
-                                      ?.includes(color?.key)
+                                      ?.includes(color?.color)
                                   )}
                                 />
-                                <ColorDisplay color={color.key}></ColorDisplay>
-                                {color.key}
+                                <ColorDisplay
+                                  color={color.color}
+                                ></ColorDisplay>
+                                {color.color} {`(${color.frequency})`}
                               </Label>
                             </Li>
                           )}

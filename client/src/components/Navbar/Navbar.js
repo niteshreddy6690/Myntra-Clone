@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useDebounce from "../useDebounce";
 import {
-  NavbarContainer,
+  NavbarWrapper,
   NavContainer,
   GridItemOne,
   NavbarLink,
@@ -43,6 +43,8 @@ import LocalStorageService from "../../api/localStorage";
 import jwt_decode from "jwt-decode";
 import { request } from "../../api/axios";
 
+import Men from "../SubMenu/Men";
+import Women from "../SubMenu/Women";
 import { useNavigate, useLocation } from "react-router-dom";
 const NavItem = ({ to, color, name, children }) => {
   const [ishover, setHover] = useState(false);
@@ -170,15 +172,21 @@ const Navbar = () => {
   };
 
   return (
-    <NavbarContainer>
+    <NavbarWrapper>
       <NavContainer>
+        <LogoContainer>
+          <NavbarLink to="/">
+            <Img src={MyntraLogo} alt="Myntra Logo" />
+          </NavbarLink>
+        </LogoContainer>
         <GridItemOne>
-          <LogoContainer>
-            <NavbarLink to="/">
-              <Img src={MyntraLogo} alt="Myntra Logo" />
-            </NavbarLink>
-          </LogoContainer>
-          {links?.map((link, i) => (
+          <NavItem to={"/shop/men"} color="red" name="Men">
+            <Men />
+          </NavItem>
+          <NavItem to={"/shop/women"} color="pink" name="Women">
+            <Women />
+          </NavItem>
+          {/* {links?.map((link, i) => (
             <NavItem
               to={link?.to}
               color={link?.color}
@@ -206,7 +214,7 @@ const Navbar = () => {
                 </StyledSubLinksContainer>
               </>
             </NavItem>
-          ))}
+          ))} */}
           <StdNavbarLink
             to={"/studio"}
             color={"#ff3f6c"}
@@ -478,7 +486,7 @@ const Navbar = () => {
           </SvgNavbarLink>
         </GridItemTwo>
       </NavContainer>
-    </NavbarContainer>
+    </NavbarWrapper>
   );
 };
 
