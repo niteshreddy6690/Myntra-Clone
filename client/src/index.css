@@ -1,12 +1,9 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Helvetica, Arial, sans-serif;
   scroll-behavior: smooth;
-
-  /* color-scheme: dark; */
 }
 
 body {
@@ -19,7 +16,6 @@ body {
   padding-top: 80px;
   font-size: 13px;
   line-height: 1.42857143;
-  /* color: #2d2e32; */
 }
 :not(input):not(textarea):not(button) {
   -webkit-touch-callout: none;
@@ -52,10 +48,12 @@ input[type="date"]::-webkit-datetime-edit-year-field {
   -webkit-appearance: none;
   display: none;
 } */
+
 a {
   text-decoration: none;
   color: #000;
 }
+
 .removeScroll::-webkit-scrollbar {
   display: none;
   overflow: hidden;

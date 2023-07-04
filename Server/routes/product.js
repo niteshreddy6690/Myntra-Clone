@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 // GET Category Products
 // GET New Product
 router.get("/:combineCategory", async (req, res) => {
-  console.log("get Product.........", req.query);
+  console.log("req.query", req.query);
 
   const { brand, gender, sort, colors, price, discount } = req.query;
   const { combineCategory } = req.params;
@@ -25,9 +25,7 @@ router.get("/:combineCategory", async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
   const queryObject = {};
-
   // console.log("qCategory :", qCategory);
-
   if (combineCategory) {
     console.log("calling by combineCategory");
     const index = combineCategory.indexOf("-");
@@ -113,7 +111,6 @@ router.get("/:combineCategory", async (req, res) => {
         price: { $gte: Number(pri[0].trim()), $lte: Number(pri[1].trim()) },
       };
     });
-
     tempObj = {
       $or: priceArray.map((p) => {
         return p;
@@ -168,7 +165,7 @@ router.get("/:combineCategory", async (req, res) => {
   let page = parseInt(req.query.p) - 1 || 0;
   let limit = parseInt(req.query.limit);
 
-  apiData = apiData.skip(page * limit).limit(limit);
+  apiData = apiData.skip(10 * limit).limit(limit);
   console.log("Query Object", queryObject);
   try {
     let products;
@@ -194,7 +191,7 @@ router.get("/:combineCategory", async (req, res) => {
     // console.log("toalP", toalP);
     let totalProduct = await Product.find(queryObject);
     // Product.find(queryObject);
-    // console.log(products);
+    console.log(products);
     res
       .status(200)
       .json({ products, totalPages: Math.ceil(totalProduct.length / 20) });

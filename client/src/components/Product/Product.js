@@ -56,37 +56,6 @@ import { request } from "../../api/axios";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
-//Import images
-// import images1 from "../../Assets/Images/Men/MenD1.jpeg";
-// import images2 from "../../Assets/Images/Men/MenD2.jpeg";
-// import images3 from "../../Assets/Images/Men/MenD3.jpeg";
-// import images4 from "../../Assets/Images/Men/MenD4.jpeg";
-// import images5 from "../../Assets/Images/Men/MenD5.jpeg";
-// import images6 from "../../Assets/Images/Men/MenD6.jpeg";
-
-// import imagesB1 from "../../Assets/Images/Men/MenB1.webp";
-// import imagesB2 from "../../Assets/Images/Men/MenB2.webp";
-// import imagesB3 from "../../Assets/Images/Men/MenB3.webp";
-// import imagesB4 from "../../Assets/Images/Men/MenB4.webp";
-
-// import imagesC1 from "../../Assets/Images/Men/MenC1.webp";
-// import imagesC2 from "../../Assets/Images/Men/MenC2.webp";
-// import imagesC3 from "../../Assets/Images/Men/MenC3.webp";
-// import imagesC4 from "../../Assets/Images/Men/MenC4.jpeg";
-
-// const products = [
-//   {
-//     id: "1",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images3, images4, images5, images6],
-//     size: ["S", "L", "M"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-// ];
 const PreDefinedSize = ["S", "L", "M", "XL", "XXL"];
 const SizeComponent = ({
   size,

@@ -1,7 +1,16 @@
-import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Badge } from "@mui/material";
 // import { height } from "@mui/system";
+import styled, { keyframes, css } from "styled-components";
+
+const Fade = keyframes`
+from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+`;
 
 export const NavbarWrapper = styled.div`
   box-sizing: border-box;
@@ -18,29 +27,67 @@ export const NavbarWrapper = styled.div`
   background-color: #fff;
   box-shadow: 0 4px 12px 0 rgb(0 0 0 / 5%);
 `;
+
+export const MobileNavBarContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 1.8rem;
+  margin-right: 1.8rem;
+  z-index: 10;
+  text-align: center;
+
+  .MobileNavHeader-actions {
+    text-align: center;
+  }
+  .MobileNavHeader-actions div {
+    display: inline-block;
+    padding: 0px 5px;
+    text-align: center;
+    margin: 0px 5px;
+  }
+  .bag span {
+    vertical-align: baseline;
+  }
+
+  @media (min-width: 860px) {
+    display: none;
+  }
+  @media (max-width: 440px) {
+    margin-left: 0.8rem;
+    margin-right: 0.8rem;
+  }
+`;
 export const NavContainer = styled.div`
   box-sizing: border-box;
   height: inherit;
-  display: flex;
-  justify-content: center;
+  display: none;
   grid-gap: 10px;
   margin-left: 1.8rem;
   margin-right: 1.8rem;
   z-index: 10;
 
   @media (min-width: 860px) {
+    display: flex;
+    justify-content: space-between;
     margin-left: 0rem;
     margin-right: 0rem;
   }
   @media (min-width: 1024px) {
+    display: flex;
+    justify-content: space-between;
     margin-left: 0.2rem;
     margin-right: 0.2rem;
   }
   @media (min-width: 1280px) {
+    display: flex;
+    justify-content: space-between;
     margin-left: 0.8rem;
     margin-right: 0.8rem;
   }
   @media (min-width: 1536px) {
+    display: flex;
+    justify-content: space-between;
     margin-left: 1.8rem;
     margin-right: 1.8rem;
   }
@@ -50,7 +97,7 @@ export const GridItemOne = styled.div`
   text-transform: uppercase;
   margin: 0;
   display: flex;
-  min-width: 500px;
+  min-width: 650px;
 
   /* gap: 0px;
   grid-column: 2/3; */
@@ -62,14 +109,14 @@ export const GridItemOne = styled.div`
   font-size: 14px;
   letter-spacing: 0.3px;
   /* width: 75%; */
-
+  /* 
   .subMenu {
     display: none;
   }
 
   li:hover .subMenu {
     display: block;
-  }
+  } */
   @media (max-width: 768px) {
     font-size: 14px;
   }
@@ -109,6 +156,19 @@ export const NavbarLink = styled(Link)`
   border-bottom: ${({ $active }) => ($active ? "4px solid" : "4px solid")};
   border-bottom-color: ${({ $active, color }) => ($active ? color : "#fff")};
 
+  // here we can go with two different approach to achieve the fadeIn design //
+  // below one is by using the transition  other one is using animation refer Men.js or Women.js file in sub- Menu folder//
+  /* .subcategories {
+    visibility: hidden;
+    transition: all 0.3s ease-out;
+    opacity: 0;
+  }
+  &:hover .subcategories {
+    visibility: visible;
+    transition-delay: 0.15s;
+    opacity: 1;
+  } */
+
   @media (max-width: 768px) {
     padding: 0 5px;
   }
@@ -130,7 +190,7 @@ export const Overlay = styled.div`
   bottom: 0;
   right: 0;
   z-index: 100;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.3);
   display: ${({ open }) => (open ? "block" : "none")};
   overflow: hidden;
   height: 100%; */
@@ -139,18 +199,19 @@ export const Overlay = styled.div`
   top: 80px;
   left: 0;
   z-index: -10;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.3);
   width: 100%;
   height: calc(100vh);
   overflow-x: hidden;
-  transition: width 0.5s linear;
+  pointer-events: none;
+  /* transition: width 0.5s linear; */
 `;
 export const StyledSubLinksContainer = styled.div`
   z-index: -8;
   width: 60vw;
   height: 450px;
   background: #fff;
-    position: absolute;
+  position: absolute;
   top: 80px;
   left: 80px;
   display: flex;
@@ -183,7 +244,7 @@ export const NavSubLinks = styled(Link)`
   text-decoration: none;
   text-transform: none;
   color: #282c3f;
-  font-family: "Assistant"
+  font-family: "Assistant";
   line-height: 23px;
   font-weight: 500;
   display: block;
@@ -331,16 +392,9 @@ export const SearchWrapper = styled.div`
   position: relative;
   width: 550px;
   margin-left: 40px;
-  @media (max-width: 768px) {
-    display: none !important;
-  }
-  @media (max-width: 1024px) {
-    width: 200px;
-    margin-left: 0px;
-  }
-  @media (max-width: 1199px) {
-    width: 320px;
-    margin-left: 2px;
+  @media (max-width: 1536px) {
+    width: 620px;
+    margin-left: 40px;
   }
   @media (max-width: 1250px) {
     width: 380px;
@@ -350,9 +404,12 @@ export const SearchWrapper = styled.div`
     width: 620px;
     margin-left: 20px;
   }
-  @media (max-width: 1536px) {
-    width: 620px;
-    margin-left: 40px;
+  @media (max-width: 1199px) {
+    width: 320px;
+    margin-left: 0px;
+  }
+  @media (max-width: 1024px) {
+    display: none !important;
   }
 `;
 export const SearchContainer = styled.div`

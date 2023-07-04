@@ -34,8 +34,8 @@ import ProfileEdit from "./pages/My/ProfileEdit";
 import Checkout from "./pages/Checkout";
 import MyAddress from "./pages/My/MyAddress";
 import Navbar from "./components/Navbar/Navbar";
-
 import NavText from "./pages/NavText";
+import MobileNav from "./components/MobileMenu/MobileNav";
 
 // import "./fonts/whitneybold.otf";
 import "./fonts/whitneybook.ttf";
@@ -61,6 +61,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/shop/:id" element={<Men />} />
           <Route path="/:id" element={<TempProduct />} />
+          <Route path="/Mobile" element={<MobileNav />} />
           {/* <Route path="/:id/" element={<Products />} /> */}
 
           <Route path="/:id/:id/:id/:id/buy" element={<ProductPage />} />
@@ -75,6 +76,7 @@ function App() {
           <Route path="/similar" element={<Similar />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/category" element={<Category />} />
+
           <Route path="/my/" element={<MyMainPage />}>
             <Route path="orders" element={<MyOrders />} />
             <Route path="dashboard" element={<OverView />} />
