@@ -96,13 +96,13 @@ const register = catchAsync(async (req, res) => {
     //   message: ` Your Myntra otp ${otp}`,
     //   numbers: ["9901145387"],
     // };
-    const userOtp = await Otp.findOne({ userId: user.id });
+    const userOtp = await Otp.deleteMany({ userId: user.id });
 
     console.log("user otp schema", userOtp);
 
-    if (userOtp) {
-      await Otp.deleteMany();
-    }
+    // if (userOtp) {
+    //   await userOtp.deleteMany();
+    // }
     if (user) {
       await Otp.create({
         userId: user.id,
@@ -149,11 +149,8 @@ const register = catchAsync(async (req, res) => {
 });
 
 const optverify = async (req, res) => {
-  console.log("req body", req.body);
-  console.log("req.params", req.params);
-  const { otp } = req.body;
-
-  const user = await User.findOne({ phonenumber: req.params.id });
+  const { otp, phoneNumber } = req.body;
+  const user = await User.findOne({ phonenumber: phoneNumber });
   console.log("user from user Schema", user);
   const otpUser = await Otp.findOne({ userId: user.id });
   //   console.log("OTp User", otpUser);
@@ -201,7 +198,6 @@ const optverify = async (req, res) => {
 
     console.log("AccessToken", AccessToken);
     console.log("RefreshToken", RefreshToken);
-    //   console.log("token", token);
     return res.status(200).json({ AccessToken, RefreshToken, user });
 
     return res.status(200).json({ message: "success", user: user });
@@ -213,27 +209,28 @@ const optverify = async (req, res) => {
 };
 
 const resendOtp = catchAsync(async (req, res) => {
+  console.log("calling otp callback", req.body);
   const { phonenumber } = req.body;
+  console.log("phone number", phonenumber);
   const user = await userService.getUserByPhoneNumber(phonenumber);
-  const otpUser = await Otp.findOne({ userId: user.id });
+  console.log("User", user);
+  const otpUser = await Otp.deleteMany({ userId: user.id });
 
   let otp = otpGenerator.generate(4, {
     upperCaseAlphabets: false,
     specialChars: false,
     lowerCaseAlphabets: false,
   });
-  if (otpUser) {
-    await Otp.remove();
-  }
+
   if (user) {
     await Otp.create({
       userId: user.id,
       otp: otp,
     });
   }
-
   res.status(200).json({ message: "success Resend OTP", otp: otp });
 });
+
 const createAccount = catchAsync(async (req, res) => {
   console.log(req.body);
   const user = await userService.updateUser(req.params.phone, req.body);

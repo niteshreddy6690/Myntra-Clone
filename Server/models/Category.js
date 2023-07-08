@@ -46,7 +46,7 @@ categorySchema.pre("save", async function (next) {
   // console.log("categoryPath.reverse()", categoryPath.reverse());
   // console.log("categoryPath.push(this.name)", categoryPath.push(this.name));
   // category.categoryPath = categoryPath.join("/");
-  // next();
+  next();
 });
 
 const Category = mongoose.model("Category", categorySchema);

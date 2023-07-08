@@ -24,6 +24,15 @@ const Container = styled.div`
   overflow: scroll;
 `;
 
+const Image = styled.img`
+  width: ${({ isLarge }) => (isLarge ? "150px" : "100px")};
+  height: ${({ isLarge }) => (isLarge ? "150px" : "100px")};
+  opacity: ${({ isLarge }) => (isLarge ? "1" : ".6")};
+  margin: 15px;
+  object-fit: cover;
+  border-radius: 5px;
+`;
+
 const Input = styled.input`
   display: none;
 `;
@@ -81,7 +90,7 @@ const Test5 = () => {
         imageType: file.type,
       };
     });
-    setPreviewFiles((prevState) => prevState.concat(imageArray).slice(0, 10));
+    setPreviewFiles((prevState) => prevState.concat(imageArray).slice(0, 6));
     e.currentTarget.value = null;
   };
 
@@ -101,14 +110,17 @@ const Test5 = () => {
                   src={closeIconSvg}
                   className="closeIcon"
                   onClick={() =>
-                    setPreviewFiles(previewFiles.filter((e) => e != image))
+                    setPreviewFiles(previewFiles.filter((e) => e !== image))
                   }
                 />
-                <PreviewImage src={image.imageBlobUrl} />
+                <PreviewImage
+                  isLarge={i == 0 ? 1 : 0}
+                  src={image.imageBlobUrl}
+                />
               </PreviewImageContainer>
             ))
           : null}
-        {previewFiles.length < 10 ? (
+        {previewFiles.length < 6 ? (
           <Label htmlFor="addImage">
             <Input
               id="addImage"

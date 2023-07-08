@@ -7,7 +7,6 @@ const {
 
 const { roles } = require("../utils/Constants");
 const { authorize } = require("../utils/verifyToken");
-
 router.get("/:id", authorize(), getUser);
 router.get("/", authorize(), getUsers);
 router.put("/", authorize(), updateUser);

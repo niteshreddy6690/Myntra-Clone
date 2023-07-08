@@ -764,7 +764,9 @@ const Home = () => {
           {DealOfTheDayImages?.map((item) => (
             <DealOfTheDayWrapper key={item.id}>
               <NavLink to={item.to} key={item.id}>
-                <Img src={item.img} key={item.id} />
+                <LazyComponent>
+                  <Img data-src={item.img} key={item.id} />
+                </LazyComponent>
               </NavLink>
             </DealOfTheDayWrapper>
           ))}
@@ -786,7 +788,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -815,7 +819,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -847,7 +853,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -881,7 +889,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -912,7 +922,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -943,7 +955,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -977,7 +991,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1008,7 +1024,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1039,7 +1057,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1073,7 +1093,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1107,7 +1129,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1138,7 +1162,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1172,7 +1198,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1203,7 +1231,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>
@@ -1237,7 +1267,9 @@ const Home = () => {
                               <BestOfMyntraRowBasedContainer>
                                 <BestOfMyntraRowBasedWrapper>
                                   <NavLink to={item.to}>
-                                    <Img src={item.img} />
+                                    <LazyComponent>
+                                      <Img data-src={item.img} />
+                                    </LazyComponent>
                                   </NavLink>
                                 </BestOfMyntraRowBasedWrapper>
                               </BestOfMyntraRowBasedContainer>

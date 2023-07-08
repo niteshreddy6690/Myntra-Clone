@@ -157,7 +157,7 @@ const Category = () => {
   const [data, setData] = useState(initialState);
 
   const callApi = async () => {
-    const res = await axios.get(`http://localhost:8080/api/category/${null}`);
+    const res = await axios.get(`http://localhost:8080/api/category`);
     setCategories(res.data);
   };
   useEffect(() => {

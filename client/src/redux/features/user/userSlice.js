@@ -10,7 +10,6 @@ const initialState = {
 
 export const fetchUserById = createAsyncThunk(
   "user/userById",
-
   async ({ id }) => {
     try {
       console.log("fetching user by id");
@@ -42,6 +41,7 @@ export const logOutUser = createAsyncThunk(
     }
   }
 );
+
 const userSlice = createSlice({
   name: "user",
   initialState,

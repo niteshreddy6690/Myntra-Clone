@@ -7,11 +7,14 @@ import menImage from "../Assets/Images/Men/Men1.webp";
 const CustomToast = ({ closeToast }) => {
   return (
     <div style={{ color: "white", textAlign: "center" }}>
-      {/* <img
-        src={menImage}
-        style={{ height: "30px", width: "30px", objectFit: "center" }}
-      /> */}
-      <span style={{ color: "white", textAlign: "center", margin: "auto 0px" }}>
+      <span
+        style={{
+          color: "white",
+          textAlign: "center",
+          margin: "auto 0px ",
+          fontSize: "24px",
+        }}
+      >
         Added to Bag
       </span>
     </div>
@@ -42,7 +45,7 @@ const Toast = () => {
       <ToastContainer
         style={{ position: "absolute", top: "90px", right: "0px" }}
         toastStyle={{
-          backgroundColor: "#171830",
+          backgroundColor: "#282c3f",
           width: "200px",
           height: "20px",
           color: "white",

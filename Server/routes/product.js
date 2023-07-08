@@ -2,6 +2,14 @@ const router = require("express").Router();
 const Product = require("../models/Product");
 const Category = require("../models/Category");
 const productController = require("../controllers/productController");
+const { roles } = require("../utils/Constants");
+const {
+  verifyToken,
+  verifyTokenAndAdmin,
+  verifyTokenAndAuthorization,
+  authorize,
+} = require("../utils/verifyToken");
+
 router.post("/", async (req, res) => {
   const newProduct = new Product(req.body);
   console.log(newProduct);
@@ -26,52 +34,52 @@ router.get("/:combineCategory", async (req, res) => {
   const qCategory = req.query.category;
   const queryObject = {};
   // console.log("qCategory :", qCategory);
-  if (combineCategory) {
-    console.log("calling by combineCategory");
-    const index = combineCategory.indexOf("-");
-    const firstPart =
-      index !== -1 ? combineCategory?.slice(0, index) : combineCategory;
-    const secondPart =
-      index !== -1 ? combineCategory?.slice(index + 1).replace(/-/g, " ") : "";
-    console.log(firstPart); // "I like"
-    console.log(secondPart);
-    const combinedArray = [];
-    console.log("secondPart", secondPart);
-    combinedArray.push(firstPart);
-    if (secondPart) combinedArray.push(secondPart);
-    console.log(combinedArray);
+  // if (combineCategory) {
+  //   console.log("calling by combineCategory");
+  //   const index = combineCategory.indexOf("-");
+  //   const firstPart =
+  //     index !== -1 ? combineCategory?.slice(0, index) : combineCategory;
+  //   const secondPart =
+  //     index !== -1 ? combineCategory?.slice(index + 1).replace(/-/g, " ") : "";
+  //   console.log(firstPart); // "I like"
+  //   console.log(secondPart);
+  //   const combinedArray = [];
+  //   console.log("secondPart", secondPart);
+  //   combinedArray.push(firstPart);
+  //   if (secondPart) combinedArray.push(secondPart);
+  //   console.log(combinedArray);
 
-    const keywords = ["men", "tshirt"];
+  //   const keywords = ["men", "tshirt"];
 
-    // const result = await Category.find({
-    //   categoryPath: { $in: keywords.map((keyword) => ({ $regex: keyword })) },
-    // });
+  //   // const result = await Category.find({
+  //   //   categoryPath: { $in: keywords.map((keyword) => ({ $regex: keyword })) },
+  //   // });
 
-    const regexKeywords = combinedArray.map(
-      (keyword) => new RegExp(keyword, "i")
-    );
-    console.log("regexKeywords", regexKeywords);
+  //   const regexKeywords = combinedArray.map(
+  //     (keyword) => new RegExp(keyword, "i")
+  //   );
+  //   console.log("regexKeywords", regexKeywords);
 
-    // const result = await Category.find({
-    //   categoryPath: { $all: regexKeywords },
-    // });
-    // console.log("result", result);
-    const result1 = await Category.findOne({
-      $and: [
-        { categoryPath: { $all: regexKeywords } },
-        { name: regexKeywords[1] },
-      ],
-    });
+  //   // const result = await Category.find({
+  //   //   categoryPath: { $all: regexKeywords },
+  //   // });
+  //   // console.log("result", result);
+  //   const result1 = await Category.findOne({
+  //     $and: [
+  //       { categoryPath: { $all: regexKeywords } },
+  //       { name: regexKeywords[1] },
+  //     ],
+  //   });
 
-    console.log("result1", result1);
+  //   console.log("result1", result1);
 
-    console.log(await Category.find({ categoryPath: "tshirt" }));
+  //   console.log(await Category.find({ categoryPath: "tshirt" }));
 
-    console.log(
-      await Category.find({ categoryPath: { $regex: keywords.join(".*") } })
-    );
-    queryObject.categories = await result1?._id;
-  }
+  //   console.log(
+  //     await Category.find({ categoryPath: { $regex: keywords.join(".*") } })
+  //   );
+  //   queryObject.categories = await result1?._id;
+  // }
 
   // if (!queryObject.categories) {
   //   queryObject.categories = {};
@@ -245,20 +253,20 @@ router.get("/prod", async (req, res) => {
 module.exports = router;
 
 // UPDATE PRODUCT
-router.put("/:id", async (req, res) => {
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body,
-      },
-      { new: true }
-    );
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(500).json({ err: err });
-  }
-});
+// router.put("/:id", async (req, res) => {
+//   try {
+//     const updatedProduct = await Product.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         $set: req.body,
+//       },
+//       { new: true }
+//     );
+//     res.status(200).json(updatedProduct);
+//   } catch (err) {
+//     res.status(500).json({ err: err });
+//   }
+// });
 
 // router.get("/abc", async (req, res) => {
 //   const abc = await Product.find({
@@ -268,6 +276,18 @@ router.put("/:id", async (req, res) => {
 //   res.send(abc);
 // });
 
+router.put(":/id", productController.updateProductByProductId);
+
+// related Product
+router.get("/related/:id", productController.getSimilarProductByProductId);
+
+// get All Products
+router.get("/", async (req, res) => {
+  const product = await Product.find({});
+
+  res.status(200).json(product);
+});
+// Auto suggest
 router.get("/search/autosuggest", async (req, res) => {
   const { q } = req.query;
   const searchBrand = await Product.find({
@@ -276,7 +296,12 @@ router.get("/search/autosuggest", async (req, res) => {
   const searchCategory = await Category.find({
     $or: [{ name: { $regex: q } }],
   });
+
+  console.log("req.headers.host", req.headers.host);
   res
     .status(200)
     .json({ searchBrand: searchBrand, searchCategory: searchCategory });
 });
+
+// delete Product
+router.delete("/:id", productController.deleteProductByProductId);

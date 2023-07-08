@@ -91,7 +91,7 @@ const TimerSpan = styled.span`
 const Container = styled.div`
   padding: 50px;
 `;
-const VerifyOtp = (separator) => {
+const VerifyOtp = () => {
   const otpInputsArray = Array.from({ length: 4 });
   const [mobileNumber, setMobileNumber] = useState("");
   const [displayTimer, setDisplayTimer] = useState(true);
@@ -111,8 +111,9 @@ const VerifyOtp = (separator) => {
     if (otp.length == 4) {
       console.log("otp", otp);
       axios
-        .put(`http://localhost:8080/api/auth/otpverify/${phoneNumber}`, {
+        .put(`http://localhost:8080/api/auth/otpverify/`, {
           otp: otp,
+          phoneNumber,
         })
         .then((response) => {
           console.log("res", response);
@@ -132,6 +133,7 @@ const VerifyOtp = (separator) => {
 
   useEffect(() => {
     // const mobileno = localStorage.getItem('mobileNumber');
+
     const Interval = setInterval(() => {
       if (Timer >= 1) {
         setTimer(Timer - 1);
@@ -144,11 +146,13 @@ const VerifyOtp = (separator) => {
     return () => {
       clearInterval(Interval);
     };
-  }, [Timer, displayTimer]);
+  }, [Timer]);
 
   useEffect(() => {
     setMobileNumber(localStorage.getItem("mobileNumber"));
   }, []);
+
+  console.log("mobileNumber", mobileNumber);
   const handleOnKeyDown = (idx) => (e) => {
     if (e.keyCode === BACKSPACE || e.key === "Backspace") {
       e.preventDefault();
@@ -193,13 +197,14 @@ const VerifyOtp = (separator) => {
   }, []);
 
   const handelResendOtp = () => {
+    console.log("mobileNumber inside reSendOtp", mobileNumber);
+    // setMobileNumber(localStorage.getItem("mobileNumber"));
     setDisplayTimer(true);
     setTimer(30);
     axios
-      .get(
-        "http://localhost:8080/api/auth/resendotp/63a5f5f61f55f73b177b57e1",
-        { phonenumber: mobileNumber }
-      )
+      .post("http://localhost:8080/api/auth/registermobile", {
+        phonenumber: mobileNumber,
+      })
       .then((response) => {
         console.log("otp", response.data.otp);
         LocalStorageService.setToken(response.data);
@@ -245,6 +250,7 @@ const VerifyOtp = (separator) => {
             ) : (
               <ResendOtp onClick={handelResendOtp}>Resend otp</ResendOtp>
             )}
+            {/* <ResendOtp onClick={handelResendOtp}>Resend otp</ResendOtp> */}
           </Container>
         </Section>
       </Main>

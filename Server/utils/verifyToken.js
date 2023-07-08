@@ -20,6 +20,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+// ignore this code
 const verifyTokenAndAuthorization = (req, res, next) => {
   console.log("req.params", req.params);
   verifyToken(req, res, () => {
@@ -31,6 +32,7 @@ const verifyTokenAndAuthorization = (req, res, next) => {
     }
   });
 };
+// ignore this piece of code
 
 const verifyTokenAndAdmin = (req, res, next) => {
   verifyToken(req, res, () => {

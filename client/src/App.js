@@ -22,6 +22,7 @@ import AccountLink from "./pages/AccountLink";
 import CreateAccount from "./pages/CreateAccount";
 import Wishlist from "./pages/Wishlist";
 import Test5 from "./pages/Test5";
+import PreviewImg from "./pages/PreviewImg";
 import Test8 from "./pages/Test8";
 import TempProduct from "./pages/TempProduct";
 import LazyComponent from "./components/LazyComponent";
@@ -84,7 +85,9 @@ function App() {
             <Route path="address" element={<MyAddress />} />
           </Route>
 
-          <Route path="/test" element={<Test3 />} />
+          <Route path="/test" element={<Test5 />} />
+          <Route path="/test3" element={<Test3 />} />
+          <Route path="/PreviewImg" element={<PreviewImg />} />
           <Route path="/addimages" element={<Test5 />} />
           <Route path="/radio" element={<Test8 />} />
           <Route path="/toast" element={<Toast />} />

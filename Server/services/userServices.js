@@ -16,7 +16,8 @@ const getUserById = async (id) => {
 };
 
 const getUserByPhoneNumber = async (phone) => {
-  return User.findOne({ phoneNumber: phone });
+  console.log("Phone Number", phone);
+  return User.findOne({ phonenumber: phone });
 };
 const getUserByEmail = async (email) => {
   return User.findOne({ email });

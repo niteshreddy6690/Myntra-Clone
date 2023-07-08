@@ -44,11 +44,11 @@ const createCategory = catchAsync(async (req, res) => {
 
 // Get all category
 const getAllCategory = catchAsync(async (req, res) => {
-  let { parentId } = req.params;
+  let parentId = null;
   const categories = await Category.find({});
   if (!categories) return res.json("No cart Found");
   //   const allCategories = nestedCategories(categories);
-  res.status(200).send(nestedCategories(categories, parentId.trim()));
+  res.status(200).send(nestedCategories(categories, parentId));
 });
 
 // This is a recursive  Function

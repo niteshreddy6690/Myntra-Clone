@@ -25,10 +25,27 @@ const NavLink = styled(Link)`
   text-decoration: none;
 `;
 
+const SwiperCarousel = styled(Swiper)`
+  .swiper-pagination-bullet {
+    background: #d4d5d9;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    opacity: 1;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #ff3f6c;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+`;
+
 const Slider = ({ sliders }) => {
   return (
     <>
-      <Swiper
+      <SwiperCarousel
         style={{ height: "575px" }}
         spaceBetween={30}
         centeredSlides={true}
@@ -51,7 +68,7 @@ const Slider = ({ sliders }) => {
             </SwiperSlide>
           ))}
         </>
-      </Swiper>
+      </SwiperCarousel>
     </>
   );
 };

@@ -15,20 +15,16 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-  padding: 36px 48px;
+  padding: 36px 38px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
   border-radius: 20px;
   text-align: center;
-  p {
-    margin-top: -10px;
-    color: #777;
-  }
 `;
 const Image = styled.img`
   width: ${({ isLarge }) => (isLarge ? "150px" : "100px")};
   height: ${({ isLarge }) => (isLarge ? "150px" : "100px")};
-  opacity: ${({ isLarge }) => (isLarge ? "1" : ".6")};
+  opacity: ${({ isLarge }) => (isLarge ? "1" : ".9")};
   margin: 15px;
   object-fit: cover;
   border-radius: 5px;
@@ -46,9 +42,20 @@ const DraggableDiv = styled.div`
   margin-top: 20px;
   border: 1.3px dashed #799cd9;
   border-radius: 5px;
-  width: 500px;
-  height: 400px;
+  min-width: 450px;
+  min-height: 350px;
+  width: 450px;
   background-color: #fff;
+
+  label {
+    width: 100px;
+    margin: 0 0 0 10px;
+    cursor: pointer;
+  }
+  label p {
+    margin-top: -20px;
+    color: #0a0a0a;
+  }
 `;
 
 const ImagePreViewWrapper = styled.div`
@@ -114,10 +121,14 @@ const Test3 = () => {
     const selectedFiles = e.target.files;
     const selectedFileArray = Array.from(selectedFiles);
     const imageArray = selectedFileArray?.map((file) => {
-      return { file: file, imgblob: URL.createObjectURL(file) };
+      return {
+        file: file,
+        imgblob: URL.createObjectURL(file),
+        imageType: file.type,
+      };
     });
     console.log("image array", imageArray);
-    setPreviewFiles((prev) => prev.concat(imageArray));
+    setPreviewFiles((prev) => prev.concat(imageArray).slice(0, 6));
     e.currentTarget.value = null;
   };
 
@@ -160,16 +171,30 @@ const Test3 = () => {
                   </ImagePreview>
                 </ImagePreViewWrapper>
               ))}
+              {previewFiles.length < 6 && previewFiles.length !== 0 ? (
+                <label htmlFor="file-upload">
+                  <img
+                    src={transparentFolderImage}
+                    draggable={false}
+                    style={{ width: "100px", height: "100px" }}
+                    alt="Upload"
+                  />
+                  <p>Add {6 - previewFiles.length} more Photo</p>
+                </label>
+              ) : null}
             </>
           ) : (
-            <label htmlFor="file-upload">
-              <img
-                src={transparentFolderImage}
-                draggable={false}
-                style={{ width: "100px", height: "100px" }}
-              />
-              <p>Click here to upload</p>
-            </label>
+            <div draggable={false}>
+              <label htmlFor="file-upload">
+                <img
+                  src={transparentFolderImage}
+                  draggable={false}
+                  style={{ width: "100px", height: "100px" }}
+                  alt="Upload"
+                />
+                <p>Click here to upload</p>
+              </label>
+            </div>
           )}
         </DraggableDiv>
       </Container>

@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema({
   },
   size: { type: Array },
   price: { type: "number", required: true },
-  mrp: { type: "number", required: true },
+  mrp: { type: "number" },
   discountPercentage: { type: "number" },
   gender: { type: "string", required: true },
   color: { type: "string" },
@@ -28,4 +28,13 @@ const ProductSchema = new mongoose.Schema({
   inStock: { type: Boolean, default: true },
 });
 
+ProductSchema.pre("save", function (next) {
+  if (this.price)
+    // do stuff
+    this.mrp = Math.trunc(
+      this.price - this.price * (this.discountPercentage / 100)
+    );
+  console.log("this", this);
+  next();
+});
 module.exports = mongoose.model("Product", ProductSchema);

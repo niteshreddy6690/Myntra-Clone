@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -15,14 +15,28 @@ import { isFulfilled } from "@reduxjs/toolkit";
 import { Link } from "react-router-dom";
 import { request } from "../api/axios";
 import Navbar from "../components/Navbar/Navbar";
+import LazyComponent from "../components/LazyComponent";
+
+import { Blurhash } from "react-blurhash";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
+import "react-lazy-load-image-component/src/effects/blur.css";
+import "react-lazy-load-image-component/src/effects/black-and-white.css";
+import "react-lazy-load-image-component/src/effects/opacity.css";
+
 const Layout = styled.div`
+  width: 100%;
   /* padding: 0px 45px; */
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
 `;
 
 const Container = styled.div`
   padding: 0 40px;
   max-width: 1400px;
   min-width: 780px;
+  margin-top: 40px;
   /* margin: 60px auto 0; */
 `;
 const Header = styled.div`
@@ -102,7 +116,7 @@ const Li = styled.li`
   }
   .itemcard-removeMark {
     margin-top: 5px;
-    margin-left: -1px;
+    margin-left: 0px;
     zoom: 0.8;
   }
 `;
@@ -166,7 +180,7 @@ const Wishlist = () => {
   }));
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const dispatch = useDispatch();
-
+  const imgRef = useRef(null);
   const CallApi = async () => {
     const action = await dispatch(fetchWishListItems());
     console.log("res", action);
@@ -259,7 +273,20 @@ const Wishlist = () => {
                       .replaceAll(" ", "-")
                       .toLowerCase()}/${item?.wishlistProduct?._id}/buy`}
                   >
-                    <ImageCard src={item?.wishlistProduct?.images[0]} />
+                    <LazyComponent>
+                      <ImageCard
+                        data-src={item?.wishlistProduct?.images[0]}
+                        loading="lazy"
+                        // style={{ display: "none" }}
+                      />
+                    </LazyComponent>
+                    {/* <LazyLoadImage
+                      src={item?.wishlistProduct?.images[0]}
+                      effect="blur"
+                      height={"280px"}
+                      width={"250px"}
+                      threshold="-100"
+                    /> */}
                   </Link>
                   <ProductInfo>
                     <ProductTitle>
@@ -296,6 +323,20 @@ const Wishlist = () => {
       )}
     </Layout>
   );
+
+  // return (
+  //   <div className="App">
+  //     <Blurhash
+  //       hash="L69G{zR+%MD%~qofWCofNGM{WBxu"
+  //       width={400}
+  //       height={300}
+  //       resolutionX={32}
+  //       resolutionY={32}
+  //       punch={1}
+  //     />
+  //     {/* <img src="https://example.org/original.jpg" width={600} height={400} /> */}
+  //   </div>
+  // );
 };
 
 export default Wishlist;
