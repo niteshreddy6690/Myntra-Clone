@@ -3,11 +3,14 @@ const Product = require("../models/Product");
 
 exports.addItemToCart = async (req, res) => {
   const userId = req.user.id;
+  console.log("Adding item to cart", req.user.id);
   const { productId, size, quantity = 1, gId } = req.body;
 
   try {
     let cart = await cartService.cart(userId);
+    console.log("cart", cart);
     let productDetails = await Product.findById(productId);
+    console.log("Product details", productDetails);
     if (!productDetails) {
       return res.status(500).json({
         type: "Not Found",

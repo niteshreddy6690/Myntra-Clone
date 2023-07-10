@@ -24,7 +24,7 @@ export default function FeaturedInfo() {
       <div className="featuredItem">
         <span className="featuredTitle">Revanue</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">${income[1]?.total}</span>
+          <span className="featuredMoney">₹{income[1]?.total}</span>
           <span className="featuredMoneyRate">
             {Math.floor(perc)}%{" "}
             {perc < 0 ? (
@@ -39,12 +39,12 @@ export default function FeaturedInfo() {
       <div className="featuredItem">
         <span className="featuredTitle">Sales</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">$4,415</span>
-          <span className="featuredMoneyRate">
+          <span className="featuredMoney">₹{income[0]?.total}</span>
+          {/* <span className="featuredMoneyRate">
             -1.4 <ArrowDownward className="featuredIcon negative" />
-          </span>
+          </span> */}
         </div>
-        <span className="featuredSub">Compared to last month</span>
+        <span className="featuredSub">previous month revenue</span>
       </div>
       <div className="featuredItem">
         <span className="featuredTitle">Cost</span>

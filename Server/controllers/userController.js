@@ -2,7 +2,7 @@ const userService = require("../services/userServices");
 const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
 const ApiError = require("../utils/ApiError");
-
+const User = require("../models/User");
 const getUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   const user = await userService.getUserById(id);
@@ -36,8 +36,30 @@ const updateUser = catchAsync(async (req, res) => {
   console.log("updatedUser", updatedUser);
   res.status(httpStatus.OK).send(updatedUser);
 });
+
+const getUserStats = catchAsync(async (req, res) => {
+  const date = new Date();
+  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+  try {
+    const data = await User.aggregate([
+      { $match: { createdAt: { $gte: lastYear } } },
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+        },
+      },
+      {
+        $group: { _id: "$month", total: { $sum: 1 } },
+      },
+    ]);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = {
   getUser,
   getUsers,
   updateUser,
+  getUserStats,
 };

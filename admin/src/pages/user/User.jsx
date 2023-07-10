@@ -8,7 +8,7 @@ import {
 } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import "./user.css";
-
+import { request } from "../../utils/api/axios";
 export default function User() {
   return (
     <div className="user">

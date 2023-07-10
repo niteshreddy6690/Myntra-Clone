@@ -19,6 +19,7 @@ export default function ProductList() {
     deleteProduct(id, dispatch);
   };
 
+  console.log("product from State", products);
   const columns = [
     { field: "_id", headerName: "ID", width: 220 },
     {
@@ -28,7 +29,11 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            <img className="productListImg" src={params.row.images[0]} alt="" />
+            <img
+              className="productListImg"
+              src={params.row.images[0].url}
+              alt={params.row.images[0].name}
+            />
             {params.row.title}
           </div>
         );

@@ -21,75 +21,11 @@ import {
 // import format from "indian-number-format";
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-
-import images1 from "../../Assets/Images/Men/MenD1.jpeg";
-import images2 from "../../Assets/Images/Men/MenD2.jpeg";
-import images3 from "../../Assets/Images/Men/MenD3.jpeg";
-import images4 from "../../Assets/Images/Men/MenD4.jpeg";
-import images5 from "../../Assets/Images/Men/MenD5.jpeg";
-import images6 from "../../Assets/Images/Men/MenD6.jpeg";
 import emptyBag from "../../Assets/Images/empty-bag.webp";
 
 import axios from "axios";
 import CartOverlay from "./CartOverlay";
 
-// const products = [
-//   {
-//     id: "1",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images3, images4, images5, images6],
-//     size: ["S", "L", "M"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "1",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images3, images4, images5, images6],
-//     size: ["S", "L", "M"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "1",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images3, images4, images5, images6],
-//     size: ["S", "L", "M"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "1",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images3, images4, images5, images6],
-//     size: ["S", "L", "M"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-//   {
-//     id: "1",
-//     brand: "HRX by Hrithik Roshan",
-//     Gender: ["men"],
-//     Desc: "Rapid Dry Training T-shirt",
-//     img: [images2, images1, images3, images4, images5, images6],
-//     size: ["S", "L", "M"],
-//     OriginalPrice: "1999",
-//     discountPercentage: "60",
-//     inStock: true,
-//   },
-// ];
 const CartCmp = ({
   products,
   prices,
@@ -97,13 +33,9 @@ const CartCmp = ({
   handelUpdateSizeAndQuantity,
   disableSizeModal = false,
 }) => {
-  // console.log(products);
   const [isSetSize, SetSize] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isSetQty, SetQty] = useState(false);
-  // useEffect(() => {
-  //   SetSize(!disableSizeModal);
-  // }, [disableSizeModal, isSetSize]);
 
   const handelSetSize = (_product) => {
     setSelectedProduct(_product);
@@ -130,8 +62,8 @@ const CartCmp = ({
                         <div className="leftItem">
                           <NavLink to={"/"}>
                             <Img
-                              src={product?.productId?.images[0]}
-                              alt={product?.productId?.brand}
+                              src={product?.productId?.images[0]?.url}
+                              alt={product?.productId?.images[0]?.name}
                             />
                           </NavLink>
                         </div>
@@ -146,12 +78,8 @@ const CartCmp = ({
                           </div>
                           <div className="productPrice">
                             <span className="discountedPrice">
-                              {`₹${Math.round(
-                                (product?.productId?.price -
-                                  product?.productId?.price *
-                                    (product?.productId?.discountPercentage /
-                                      100)) *
-                                  product?.quantity
+                              {`₹${Math.trunc(
+                                product?.productId?.mrp * product?.quantity
                               )}`}
                             </span>
                             <span className="originalPrice">{`₹${
@@ -203,10 +131,10 @@ const CartCmp = ({
             <RightSection>
               <PriceContainer>
                 <div className="priceBlock-base-priceHeader">
-                  PRICE DETAILS{" "}
+                  PRICE DETAILS
                   {products.length > 1
-                    ? `(${products.length} items)`
-                    : `(${products.length} item)`}
+                    ? `(${products?.length} items)`
+                    : `(${products?.length} item)`}
                 </div>
                 <div className="priceBreakUp-base-orderSummary">
                   <div className="priceDetail-base-row">

@@ -7,6 +7,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import app from "../../firebase";
+import Topbar from "../../components/topbar/Topbar";
 import { addProduct } from "../../redux/apiCalls";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -60,9 +61,9 @@ const Container = styled.div`
   text-align: center;
 `;
 const Image = styled.img`
-  width: ${({ isLarge }) => (isLarge ? "150px" : "100px")};
-  height: ${({ isLarge }) => (isLarge ? "150px" : "100px")};
-  opacity: ${({ isLarge }) => (isLarge ? "1" : ".9")};
+  width: ${({ isLarge }) => (isLarge ? "150px" : "115px")};
+  height: ${({ isLarge }) => (isLarge ? "200px" : "140px")};
+  opacity: ${({ isLarge }) => (isLarge ? "1" : ".8")};
   margin: 15px;
   object-fit: cover;
   border-radius: 5px;
@@ -838,6 +839,12 @@ export default function NewProduct() {
     { value: "XXL", label: "XXL" },
   ];
 
+  const GenderOptions = [
+    { value: "Men", label: "Men" },
+    { value: "Women", label: "Women" },
+    { value: "Boys", label: "Boys" },
+    { value: "Girls", label: "Girls" },
+  ];
   const colorOptions = Colors.map((color) => ({
     value: color.hex,
     label: color.name,
@@ -863,6 +870,7 @@ export default function NewProduct() {
   const [inputs, setInputs] = useState({});
   const [category, setCategory] = useState({});
   const [brand, setBrand] = useState([]);
+  const [selectedGender, setSelectedGender] = useState(null);
   const [data, setData] = useState(initialState);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -921,6 +929,7 @@ export default function NewProduct() {
 
   console.log("selectedSize", selectedSize);
   console.log("selectedColor", selectedColor);
+  console.log("selectedGender", selectedGender);
   const handleClickCategory = (e, categoryId, categoryName) => {
     e.stopPropagation();
     console.log("categoryName", categoryName);
@@ -941,8 +950,6 @@ export default function NewProduct() {
   };
 
   const uploadFiles = async (file) => {
-    // const promises = [];
-    // console.log(Object.entries(file));
     const retPromise = new Promise(function (resolve, reject) {
       const storageRef = ref(storage, `/Myntra Clone Images/3${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -966,7 +973,9 @@ export default function NewProduct() {
               "https://ik.imagekit.io/utywuh2nq"
             );
 
-            resolve(url);
+            const data = { url: url, name: file.name };
+            console.log("data", data);
+            resolve(data);
             console.log("File available at", url);
             // return urls;
           });
@@ -991,15 +1000,16 @@ export default function NewProduct() {
       // Array of "Promises"
       status
     )
-      .then((urls) => {
+      .then((imageData) => {
         // console.log(url);
-        console.log("url", urls);
+        console.log("url", imageData);
         console.log(`All success`);
         // setURLs(url);
 
         const product = {
           ...inputs,
-          images: urls,
+          gender: selectedGender,
+          images: imageData,
           color: selectedColor,
           categories: data.categoryId,
           size: selectedSize,
@@ -1074,59 +1084,6 @@ export default function NewProduct() {
     //   }
     // );
   };
-
-  // const UploadFiles = () => {
-  //   const uploads = [];
-  //   Object.entries(file).map((file) => {
-  //     const fileName = ("images/" + file.name).toString();
-  //     const storage = getStorage(app);
-  //     const storageRef = ref(storage, fileName);
-  //     const uploadTask = uploadBytesResumable(storageRef, file);
-
-  //     // // Register three observers:
-  //     // // 1. 'state_changed' observer, called any time the state changes
-  //     // // 2. Error observer, called on failure
-  //     // // 3. Completion observer, called on successful completion
-  //     uploadTask.on(
-  //       "state_changed",
-  //       (snapshot) => {
-  //         // Observe state change events such as progress, pause, and resume
-  //         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-  //         const progress =
-  //           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //         console.log("Upload is " + progress + "% done");
-  //         switch (snapshot.state) {
-  //           case "paused":
-  //             console.log("Upload is paused");
-  //             break;
-  //           case "running":
-  //             console.log("Upload is running");
-  //             break;
-  //           default:
-  //         }
-  //       },
-  //       (error) => {
-  //         // Handle unsuccessful uploads
-  //       },
-  //       () => {
-  //         // Handle successful uploads on complete
-  //         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-  //         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //           // const product = {
-  //           //   ...inputs,
-  //           //   img: urls,
-  //           //   categories: cat,
-  //           //   color: color,
-  //           //   size: size,
-  //           // };
-  //           // addProduct(product, dispatch);
-  //           uploads.push(downloadURL);
-  //         });
-  //       }
-  //     );
-  //   });
-  //   console.log("array of images", uploads);
-  // };
 
   return (
     <>
@@ -1241,12 +1198,19 @@ export default function NewProduct() {
           </div>
           <div className="addProductItem">
             <label>Gender</label>
-            <input
+            <Select
+              defaultValue={selectedGender}
+              onChange={(values) => {
+                setSelectedGender(values.value);
+              }}
+              options={GenderOptions}
+            />
+            {/* <input
               name="gender"
               type="text"
               placeholder="Men"
               onChange={handleChange}
-            />
+            /> */}
           </div>
           <div className="addProductItem">
             <label>Colors</label>
@@ -1293,6 +1257,7 @@ export default function NewProduct() {
           <div className="addProductItem">
             <label>Stock</label>
             <select
+              defaultValue="yes"
               name="inStock"
               value={inputs.inStock}
               onChange={handleChange}
@@ -1332,34 +1297,38 @@ const Category = ({ handleClick, data }) => {
   // };
 
   return (
-    <div style={{ margin: "30px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <h2>Categories</h2>
-          <Tree categories={categories} handleClick={handleClick} />
-        </div>
-        <div>
-          {data.categoryName ? (
-            <div>
-              <span>Selected Category : </span>
-              <span style={{ textTransform: "capitalize" }}>
-                {data.categoryName}
-              </span>
-            </div>
-          ) : null}
+    <>
+      {/* <Topbar /> */}
 
-          <div
-            style={{ display: "flex", flexDirection: "row", width: "500px" }}
-          ></div>
+      <div style={{ margin: "30px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <h2>Categories</h2>
+            <Tree categories={categories} handleClick={handleClick} />
+          </div>
+          <div>
+            {data.categoryName ? (
+              <div>
+                <span>Selected Category : </span>
+                <span style={{ textTransform: "capitalize" }}>
+                  {data.categoryName}
+                </span>
+              </div>
+            ) : null}
+
+            <div
+              style={{ display: "flex", flexDirection: "row", width: "500px" }}
+            ></div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import axios from "axios";
+import * as axios from "axios";
 import LocalStorageService from "./localStorage";
 
 const isLocal = process.env.NODE_ENV === "development";
@@ -50,6 +50,8 @@ const ErrorResponse = async (error) => {
       );
       if (data.AccessToken) {
         window.localStorage.setItem("AccessToken", data.AccessToken);
+        // const { access } = data;
+        // LocalStorageService.setToken(data);
         // authStore.setToken(data)
         const request = {
           ...error.config,
@@ -64,7 +66,7 @@ const ErrorResponse = async (error) => {
       }
     } catch (e) {
       const authUrl = isLocal
-        ? "http://localhost:3000/login"
+        ? "http://localhost:3001/login"
         : `${window.location.origin}/login`;
       window.location.href = authUrl;
       return Promise.reject(error);

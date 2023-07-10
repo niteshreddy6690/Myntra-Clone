@@ -148,30 +148,29 @@ import BestBuy16 from "../Assets/Images/g16.webp";
 
 const Div = styled.div`
   max-width: 100%;
-  box-sizing: border-box;
 `;
 
+const SliderWrapper = styled.div`
+  flex: 0 1 200px;
+`;
 const DealOfTheDayContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 330px;
-  background-color: green;
   display: flex;
   justify-content: flex-start;
   align-items: stretch;
   align-content: stretch;
-  background-color: green;
 `;
 
 const DealOfTheDayWrapper = styled.div`
   width: 100%;
   height: 100%;
-  flex: 1 1 0%;
+  flex: 1 1 200px;
 `;
 
 const HeaderContainer = styled.div`
   display: block;
-  width: 100%;
+  /* width: 100%; */
 `;
 const HeaderText = styled.h1`
   box-sizing: border-box;
@@ -193,7 +192,7 @@ const NavLink = styled(Link)`
 const Img = styled.img`
   width: 100%;
   height: 100%;
-  margin: -3px;
+  margin: 0px;
   padding: 0;
 `;
 const BestOfMyntraHeaderContainer = styled.div`
@@ -226,7 +225,6 @@ const BestOfMyntraRowBasedWrapper = styled.div`
   align-self: flex-start;
   flex-wrap: wrap;
   flex-direction: column;
-  flex: 1;
 `;
 const BestOfMyntraContainerBase = styled.div`
   box-sizing: border-box;
@@ -755,7 +753,9 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Slider sliders={sliders} />
+      <SliderWrapper>
+        <Slider sliders={sliders} />
+      </SliderWrapper>
       <Div>
         <HeaderContainer>
           <HeaderText>Deal of the day</HeaderText>

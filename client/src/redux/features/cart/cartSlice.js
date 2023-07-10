@@ -40,7 +40,8 @@ export const removeCartItem = createAsyncThunk(
           theme: "colored",
           icon: () => (
             <img
-              src={response?.data?.deletedProduct?.productId?.images[0]}
+              src={response?.data?.deletedProduct?.productId?.images[0].url}
+              alt={response?.data?.deletedProduct?.productId?.images[0]?.name}
               style={{ height: "30px", width: "30px", objectFit: "center" }}
             />
           ),
@@ -73,7 +74,8 @@ export const addItemToBag = createAsyncThunk(
           theme: "colored",
           icon: () => (
             <img
-              src={response?.data?.productDetails?.images[0]}
+              src={response?.data?.productDetails?.images[0].url}
+              alt={response.data?.productDetails?.images[0].name}
               style={{ height: "30px", width: "30px", objectFit: "center" }}
             />
           ),
@@ -85,9 +87,6 @@ export const addItemToBag = createAsyncThunk(
     } catch (error) {
       console.error(error);
     }
-    // return axios
-    //   .get("http://localhost:8080/api/carts")
-    //   .then((response) => response?.data?.cart.items);
   }
 );
 

@@ -153,8 +153,6 @@ const optverify = async (req, res) => {
   const user = await User.findOne({ phonenumber: phoneNumber });
   console.log("user from user Schema", user);
   const otpUser = await Otp.findOne({ userId: user.id });
-  //   console.log("OTp User", otpUser);
-  //   console.log("otp value", otp);
   if (!otpUser?.otp) {
     return res.status(401).json({
       message: "Your OTP has been expired",

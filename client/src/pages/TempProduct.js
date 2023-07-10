@@ -1230,14 +1230,12 @@ const TempProduct = () => {
                             <Input
                               type="radio"
                               name="gender"
-                              value={gender?.toLowerCase()}
+                              value={gender}
                               style={{
                                 accentColor: "#ff3f6c",
                               }}
                               onChange={handelChangeGender}
-                              checked={Boolean(
-                                params?.gender === gender?.toLowerCase()
-                              )}
+                              checked={Boolean(params?.gender === gender)}
                             />
                             {gender.toUpperCase()}
                           </Label1>

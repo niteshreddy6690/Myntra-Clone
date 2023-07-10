@@ -2,8 +2,8 @@ import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
-
 import menImage from "../Assets/Images/Men/Men1.webp";
+
 const CustomToast = ({ closeToast }) => {
   return (
     <div style={{ color: "white", textAlign: "center" }}>

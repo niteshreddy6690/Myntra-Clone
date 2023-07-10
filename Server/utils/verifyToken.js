@@ -65,7 +65,7 @@ const authorize =
 
       console.log("Roles", roles);
       if (roles.length && !roles.includes(req.user.role)) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(403).json({ message: "Unauthorized" });
       }
       console.log("calling next");
       next();

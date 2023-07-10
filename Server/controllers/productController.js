@@ -7,7 +7,9 @@ const httpStatus = require("http-status");
 const getProductId = catchAsync(async (req, res) => {
   try {
     console.log("PID", req.params.id);
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate([
+      "categories",
+    ]);
     return res.status(200).json(product);
   } catch (err) {
     return res.status(500).json(err);

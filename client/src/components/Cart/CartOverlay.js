@@ -88,8 +88,8 @@ const CartOverlay = ({
             <div className="dialogs-base-productRow">
               <div className="dialogs-base-productImage">
                 <SizeAndQuantityImage
-                  src={product?.productId?.images[0]}
-                  alt={product?.productId?.brand}
+                  src={product?.productId?.images[0]?.url}
+                  alt={product?.productId?.images[0]?.name}
                 />
               </div>
               <div className="dialogs-base-productDetails">

@@ -5,27 +5,33 @@ import styled from "styled-components";
 
 const Div = styled.div`
   .hello {
-    width: 500px;
-    position: fixed;
-    overflow: hidden;
-    overflow-y: scroll;
-    background: red;
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
     height: 100%;
+    border: 1px solid red;
+    overflow: hidden;
   }
   .child {
-    width: 400px;
-    height: 300px;
     background: lightblue;
-    margin: 20px;
+    /* margin: 20px; */
+  }
+  .child:nth-child(odd) {
+    background: orange;
+    border: 1px solid black;
+    height: 20px;
+    min-width: 200px;
+    flex: 1 1 0%;
+  }
+  .child:nth-child(even) {
+    background: blue;
+    border: 1px solid black;
+    height: 20px;
+    flex: 1 0 0%;
+    min-width: 200px;
   }
 `;
 const Test = () => {
-  // const inputref = useRef(null);
-
-  // useEffect(() => {
-  //   console.log(inputref.current);
-  // }, []);
-
   return (
     <Div>
       <div className="hello">

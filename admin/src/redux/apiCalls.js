@@ -1,6 +1,8 @@
 import { loginFailure, loginStart, loginSuccess } from "./userRedux";
 import { otpStart, otpSuccess, otpFailure } from "./otpredux";
 import { publicRequest, userRequest } from "../requestMethods";
+import LocalStorageService from "../utils/api/localStorage";
+import { request } from "../utils/api/axios";
 import {
   getProductFailure,
   getProductStart,
@@ -19,7 +21,7 @@ import {
 export const login = async (dispatch, phoneNumber, navigate) => {
   dispatch(otpStart());
   try {
-    const res = await publicRequest.post("/auth/registermobile", phoneNumber);
+    const res = await request.post("/auth/registermobile", phoneNumber);
     dispatch(otpSuccess(res.data));
     if (res) {
       navigate("/verifyotp");
@@ -29,11 +31,14 @@ export const login = async (dispatch, phoneNumber, navigate) => {
   }
 };
 
-export const verifyOtp = async (dispatch, user) => {
-  dispatch(loginStart());
+export const verifyOtp = async (dispatch, otpData, navigate) => {
   try {
-    const res = await publicRequest.put("/auth/otpverify", user);
-    dispatch(loginSuccess(res.data));
+    const res = await request.put("/auth/otpverify", otpData);
+    if (res) {
+      LocalStorageService.setToken(res.data);
+      dispatch(loginSuccess(res.data));
+      navigate("/");
+    }
   } catch (err) {
     dispatch(loginFailure());
   }
@@ -42,7 +47,7 @@ export const verifyOtp = async (dispatch, user) => {
 export const getProducts = async (dispatch) => {
   dispatch(getProductStart());
   try {
-    const res = await publicRequest.get("/products");
+    const res = await request.get("/products");
     dispatch(getProductSuccess(res.data));
   } catch (err) {
     dispatch(getProductFailure());
@@ -52,8 +57,9 @@ export const getProducts = async (dispatch) => {
 export const deleteProduct = async (id, dispatch) => {
   dispatch(deleteProductStart());
   try {
-    const res = await userRequest.delete(`/products/${id}`);
+    const res = await request.delete(`/products/${id}`);
     dispatch(deleteProductSuccess(res.data));
+    getProducts(dispatch);
   } catch (err) {
     dispatch(deleteProductFailure());
   }
@@ -63,7 +69,7 @@ export const updateProduct = async (id, product, dispatch) => {
   dispatch(updateProductStart());
   try {
     // update
-    const res = await userRequest.put(`/products/${id}`, product);
+    const res = await request.put(`/products/${id}`, product);
     console.log(product);
     dispatch(updateProductSuccess({ id, product }));
   } catch (err) {
@@ -73,7 +79,7 @@ export const updateProduct = async (id, product, dispatch) => {
 export const addProduct = async (product, dispatch) => {
   dispatch(addProductStart());
   try {
-    const res = await userRequest.post(`/products`, product);
+    const res = await request.post(`/products`, product);
     dispatch(addProductSuccess(res.data));
   } catch (err) {
     dispatch(addProductFailure());

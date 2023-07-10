@@ -17,7 +17,7 @@ import { request } from "../api/axios";
 // import required modules
 import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 
- const RUl = styled.ul`
+const RUl = styled.ul`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -422,7 +422,7 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
               <ProductSliderContainer>
                 {product.images.map((image, i) => (
                   <SwiperSlide key={i}>
-                    <Image src={image} loading="lazy" />
+                    <Image src={image.url} alt={image.name} loading="lazy" />
                   </SwiperSlide>
                 ))}
               </ProductSliderContainer>

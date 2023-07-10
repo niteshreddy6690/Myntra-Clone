@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import MobileVerify from "../Assets/Images/mobile-verification.webp";
+import MobileVerify from "../../Assets/Images/mobile-verification.webp";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyOtp, } from "../../redux/apiCalls";
+import { verifyOtp } from "../../redux/apiCalls";
 // import LocalStorageService from "../api/localStorage";
 // import { request } from "../api/axios";
 const BACKSPACE = 8;
@@ -100,6 +100,7 @@ const VerifyOtp = (separator) => {
   const [Timer, setTimer] = useState(30);
   const inputsRef = useRef([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const phoneNumber = localStorage.getItem("mobileNumber");
   const handler = (idx) => (e) => {
@@ -112,24 +113,25 @@ const VerifyOtp = (separator) => {
     console.log("oto", otp);
     if (otp.length == 4) {
       console.log("otp", otp);
-      axios
-        .put(`http://localhost:8080/api/auth/otpverify`, {
-          otp: otp,
-          phoneNumber,
-        })
-        .then((response) => {
-          console.log("res", response);
-          //   LocalStorageService.setToken(response.data);
-          localStorage.setItem("user", response?.data?.user);
-          if (response.data.user.isExistingUser) {
-            navigate("/");
-          } else {
-            navigate("/createaccount");
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+      verifyOtp(dispatch, { otp, phoneNumber }, navigate);
+      // axios
+      //   .put(`http://localhost:8080/api/auth/otpverify`, {
+      //     otp: otp,
+      //     phoneNumber,
+      //   })
+      //   .then((response) => {
+      //     console.log("res", response);
+      //     //   LocalStorageService.setToken(response.data);
+      //     localStorage.setItem("user", response?.data?.user);
+      //     if (response.data.user.isExistingUser) {
+      //       // navigate("/");
+      //     } else {
+      //       navigate("/createaccount");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("error", error);
+      //   });
     }
   };
 

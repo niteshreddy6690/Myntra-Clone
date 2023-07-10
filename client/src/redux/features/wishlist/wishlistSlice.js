@@ -29,7 +29,7 @@ export const removeWishListItems = createAsyncThunk(
       const response = await api.removeItemFromWishlist({ id });
       console.log(
         "response",
-        response.data?.removedProduct?.wishlistProduct?.images[0]
+        response.data?.removedProduct?.wishlistProduct?.images[0].url
       );
       if (response)
         toast("Remove item from wishlist", {
@@ -43,7 +43,12 @@ export const removeWishListItems = createAsyncThunk(
           theme: "colored",
           icon: () => (
             <img
-              src={response.data?.removedProduct?.wishlistProduct?.images[0]}
+              src={
+                response.data?.removedProduct?.wishlistProduct?.images[0]?.url
+              }
+              alt={
+                response.data?.removedProduct?.wishlistProduct?.images[0]?.name
+              }
               style={{ height: "30px", width: "30px", objectFit: "center" }}
             />
           ),

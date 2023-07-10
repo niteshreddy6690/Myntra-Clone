@@ -121,7 +121,7 @@ const Product = () => {
   console.log("slected size: ", selectedSize);
 
   const handelAddToWishlist = async (id) => {
-    const res = await request.post("http://localhost:8080/api/wishlist/", {
+    const res = await request.post("/wishlist/", {
       id,
     });
     console.log("result", res);
@@ -129,19 +129,13 @@ const Product = () => {
   };
 
   const checkProductInWishlist = async (id) => {
-    const res = await request.get(`http://localhost:8080/api/wishlist/${id}`);
+    const res = await request.get(`/wishlist/${id}`);
     setProductInWishlist(true);
   };
 
   useEffect(() => {
     const getProductById = async () => {
       try {
-        // const res = await axios.get(
-        //   `http://localhost:8080/api/products/find/${id}/`
-        // );
-
-        // console.log("res", res);
-
         const action = await dispatch(fetchProductById({ id }));
         if (isFulfilled(action)) {
           checkProductInWishlist(action.payload._id);
@@ -158,9 +152,7 @@ const Product = () => {
         }
         const productId = id;
         console.log("productId", productId);
-        const review = await axios.get(
-          `http://localhost:8080/api/review/product/${productId}`
-        );
+        const review = await request.get(`/review/product/${productId}`);
         console.log("reviews", review);
         if (review) SetReviews(review.data);
       } catch (err) {
@@ -227,8 +219,9 @@ const Product = () => {
                 <ImageContainer1 key={i}>
                   <ImageContainer2>
                     <Img
-                      src={image}
-                      // loading="lazy"
+                      src={image.url}
+                      loading="lazy"
+                      alt={image.name}
                       // style={{ width: "550px", height: "720px" }}
                     />
                   </ImageContainer2>

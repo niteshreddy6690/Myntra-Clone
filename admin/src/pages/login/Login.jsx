@@ -1,48 +1,3 @@
-// import { useState } from "react";
-// import { useDispatch } from "react-redux";
-// import { login } from "../../redux/apiCalls";
-
-// const Login = () => {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const dispatch = useDispatch();
-
-//   const handleClick = (e) => {
-//     e.preventDefault();
-//     login(dispatch, { email, password });
-//   };
-
-//   return (
-//     <div
-//       style={{
-//         height: "100vh",
-//         display: "flex",
-//         flexDirection: "column",
-//         alignItems: "center",
-//         justifyContent: "center",
-//       }}
-//     >
-//       <input
-//         style={{ padding: 10, marginBottom: 20 }}
-//         type="text"
-//         placeholder="username"
-//         onChange={(e) => setEmail(e.target.value)}
-//       />
-//       <input
-//         style={{ padding: 10, marginBottom: 20 }}
-//         type="password"
-//         placeholder="password"
-//         onChange={(e) => setPassword(e.target.value)}
-//       />
-//       <button onClick={handleClick} style={{ padding: 10, width: 100 }}>
-//         Login
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
@@ -140,7 +95,6 @@ const Input = styled.input`
   color: #282c3f;
   outline: none;
   width: 100%;
-
   &:focus {
     transition: 0.4s;
     border: 1px solid #282c3f;
@@ -195,7 +149,7 @@ const Login = () => {
     localStorage.setItem("mobileNumber", phoneNumber);
     try {
       if (phoneNumber) {
-        login(dispatch, { phonenumber: phoneNumber },navigate);
+        login(dispatch, { phonenumber: phoneNumber }, navigate);
         // const login = await axios.post(
         //   "http://localhost:8080/api/auth/registermobile",
         //   { phonenumber: phoneNumber }

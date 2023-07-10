@@ -268,14 +268,6 @@ module.exports = router;
 //   }
 // });
 
-// router.get("/abc", async (req, res) => {
-//   const abc = await Product.find({
-//     "categories.categoryPath": "men/topwear/tshirt",
-//   }).populate("categories");
-//   console.log(abc);
-//   res.send(abc);
-// });
-
 router.put(":/id", productController.updateProductByProductId);
 
 // related Product
@@ -283,10 +275,11 @@ router.get("/related/:id", productController.getSimilarProductByProductId);
 
 // get All Products
 router.get("/", async (req, res) => {
-  const product = await Product.find({});
-
+  console.log("get all products");
+  const product = await Product.find({}).populate("categories");
   res.status(200).json(product);
 });
+
 // Auto suggest
 router.get("/search/autosuggest", async (req, res) => {
   const { q } = req.query;

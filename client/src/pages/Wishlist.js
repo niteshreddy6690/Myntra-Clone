@@ -275,8 +275,9 @@ const Wishlist = () => {
                   >
                     <LazyComponent>
                       <ImageCard
-                        data-src={item?.wishlistProduct?.images[0]}
+                        data-src={item?.wishlistProduct?.images[0]?.url}
                         loading="lazy"
+                        alt={item?.wishlistProduct?.images[0]?.name}
                         // style={{ display: "none" }}
                       />
                     </LazyComponent>
