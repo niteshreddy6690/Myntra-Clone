@@ -6,17 +6,19 @@ const categorySchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    namepath: {
+      type: String,
+      require: true,
+      trim: true,
+    },
     parentId: {
       type: mongoose.Schema.Types.ObjectId,
       default: null,
     },
-    image: {
-      url: String,
-      public_id: String,
-    },
     categoryPath: {
       type: String,
     },
+    categoryTypes: { type: Array, default: [] },
   },
   { timestamps: true }
 );

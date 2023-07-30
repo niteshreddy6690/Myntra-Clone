@@ -3,61 +3,174 @@ const Product = require("../models/Product");
 const Category = require("../models/Category");
 const productController = require("../controllers/productController");
 const { roles } = require("../utils/Constants");
-const {
-  verifyToken,
-  verifyTokenAndAdmin,
-  verifyTokenAndAuthorization,
-  authorize,
-} = require("../utils/verifyToken");
+const { authorize } = require("../middleware/verifyToken");
+const stringSimilarity = require("string-similarity");
 
-router.post("/", async (req, res) => {
-  const newProduct = new Product(req.body);
-  console.log(newProduct);
-  try {
-    const savedProduct = await newProduct.save();
-    res.status(200).json(savedProduct);
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-});
-
-//GET All Products
+// GET All Products
 // GET Category Products
 // GET New Product
+
 router.get("/:combineCategory", async (req, res) => {
   console.log("req.query", req.query);
-
   const { brand, gender, sort, colors, price, discount } = req.query;
   const { combineCategory } = req.params;
+  function extractGenderFromTshirtString(InputDynamicString) {
+    const genderKeywords = ["men", "women", "girls", "boys", "unisex"];
+    const matches = InputDynamicString.match(/\b\w+\b/gi);
+
+    if (!matches) {
+      return { genderData: null, remainingString: InputDynamicString };
+    }
+
+    const similarities = genderKeywords.map((keyword) =>
+      stringSimilarity.findBestMatch(
+        keyword.toLowerCase(),
+        matches.map((match) => match.toLowerCase())
+      )
+    );
+    const bestMatch = similarities.reduce((prev, current) =>
+      prev.bestMatch.rating > current.bestMatch.rating ? prev : current
+    );
+    if (bestMatch.bestMatch.rating >= 0.6) {
+      const gender = bestMatch.bestMatch.target;
+      const genderRegex = new RegExp(`\\b${gender}(?:'s)?\\b`, "gi");
+      let remainingString = InputDynamicString?.replace("-", " ")
+        .replace(new RegExp(`\\b${gender}(?:'s)?\\b`, "gi"), "")
+        .trim();
+      remainingString = remainingString?.replace("-", " ");
+      console.log("remaining string: " + remainingString);
+      return { genderData: gender.toLowerCase(), remainingString };
+    } else {
+      return { genderData: null, remainingString: InputDynamicString };
+    }
+  }
+
+  const { genderData, remainingString } =
+    extractGenderFromTshirtString(combineCategory);
+  console.log("genderData", genderData, "remainingString", remainingString);
   console.log("cat", req.params.combineCategory);
   const qNew = req.query.new;
   const qCategory = req.query.category;
   const queryObject = {};
-  // console.log("qCategory :", qCategory);
+  console.log("qCategory :", qCategory);
+
+  if (combineCategory && remainingString) {
+    const categoryWords = remainingString.split("-");
+    const regexKeywords = categoryWords.map(
+      (keyword) => new RegExp(keyword, "i")
+    );
+    console.log("keyword", regexKeywords);
+
+    console.log("remainingString", remainingString);
+    const category = await Category.findOne({ name: remainingString });
+
+    console.log("category identified", category);
+    if (!category) {
+      const result = await Category.find({
+        $or: [
+          {
+            categoryPath: {
+              $in: regexKeywords,
+            },
+          },
+          // { name: { $in: regexKeywords } },
+          // { namepath: { $in: regexKeywords } },
+        ],
+      });
+      console.log("result", result);
+      console.log(result.map((res) => res?._id));
+      queryObject.categories = { $in: result.map((res) => res?._id) };
+    } else if (category?.categoryTypes && category?.categoryTypes?.length > 0) {
+      // If the category has associated product types, use them in the query
+      queryObject.categories = { $in: category.categoryTypes };
+    } else {
+      // If the category doesn't have associated product types, fetch all products of that category
+      // products = await Product.find({ gender, category: category._id });
+      console.log("calling else conditioan");
+      const ChildrenCategories = await Category.find({
+        parentId: category._id,
+      });
+      console.log("ChildrenCategories", ChildrenCategories);
+      queryObject.categories = { $in: ChildrenCategories };
+    }
+
+    const result = await Category.find({
+      $or: [
+        {
+          categoryPath: {
+            $in: regexKeywords,
+          },
+        },
+        // { name: { $in: regexKeywords } },
+        // { namepath: { $in: regexKeywords } },
+      ],
+    });
+    // console.log(
+    //   await Category.find({
+    //     $or: [
+    //       {
+    //         categoryPath: {
+    //           $in: [/ethnic/i],
+    //         },
+    //       },
+    //       { name: { $in: [/ethnic/i] } },
+    //       { namepath: { $in: [/ethnic/i] } },
+    //     ],
+    //   })
+    // );
+    // console.log("result", result);
+    // console.log(result.map((res) => res?._id));
+    // const result1 = await Category.findOne({
+    //   $and: [
+    //     { categoryPath: { $all: regexKeywords } },
+    //     { name: regexKeywords[1] },
+    //     { namepath: regexKeywords[0] },
+    //   ],
+    // });
+
+    // queryObject.categories = { $in: result.map((res) => res?._id) };
+  }
   // if (combineCategory) {
   //   console.log("calling by combineCategory");
+
   //   const index = combineCategory.indexOf("-");
   //   const firstPart =
   //     index !== -1 ? combineCategory?.slice(0, index) : combineCategory;
-  //   const secondPart =
-  //     index !== -1 ? combineCategory?.slice(index + 1).replace(/-/g, " ") : "";
+  //   const secondPart = index !== -1 ? combineCategory?.slice(index + 1) : "";
+
+  //   const categoryWords = combineCategory.split("-");
+  //   console.log(categoryWords);
+  //   // .replace(/-/g, " ")
   //   console.log(firstPart); // "I like"
   //   console.log(secondPart);
+
   //   const combinedArray = [];
   //   console.log("secondPart", secondPart);
   //   combinedArray.push(firstPart);
   //   if (secondPart) combinedArray.push(secondPart);
   //   console.log(combinedArray);
 
-  //   const keywords = ["men", "tshirt"];
-
   //   // const result = await Category.find({
   //   //   categoryPath: { $in: keywords.map((keyword) => ({ $regex: keyword })) },
   //   // });
 
-  //   const regexKeywords = combinedArray.map(
+  //   const regexKeywords = categoryWords.map(
   //     (keyword) => new RegExp(keyword, "i")
   //   );
+  //   console.log("keyword", regexKeywords);
+  //   const result = await Category.find({
+  //     $or: [
+  //       {
+  //         categoryPath: {
+  //           $in: categoryWords,
+  //         },
+  //       },
+  //       { name: { $in: categoryWords } },
+  //       { namepath: { $in: categoryWords } },
+  //     ],
+  //   });
+  //   console.log("result", result);
+
   //   console.log("regexKeywords", regexKeywords);
 
   //   // const result = await Category.find({
@@ -68,55 +181,38 @@ router.get("/:combineCategory", async (req, res) => {
   //     $and: [
   //       { categoryPath: { $all: regexKeywords } },
   //       { name: regexKeywords[1] },
+  //       { namepath: regexKeywords[0] },
   //     ],
   //   });
 
-  //   console.log("result1", result1);
+  //   // console.log("result1", result1);
 
-  //   console.log(await Category.find({ categoryPath: "tshirt" }));
+  //   // console.log(await Category.find({ categoryPath: "tshirt" }));
 
-  //   console.log(
-  //     await Category.find({ categoryPath: { $regex: keywords.join(".*") } })
-  //   );
+  //   // console.log(
+  //   //   await Category.find({ categoryPath: { $regex: keywords.join(".*") } })
+  //   // );
   //   queryObject.categories = await result1?._id;
   // }
-
-  // if (!queryObject.categories) {
-  //   queryObject.categories = {};
-  // }
-
   // // Assign the value to categoryPath
   // queryObject.categories.categoryPath = "hvjhbjhbhv";
 
   if (brand) {
-    queryObject.brand = { $in: brand.split(",") };
+    queryObject.brand = { $in: brand?.split(",") };
   }
-  if (gender) {
+  if (gender || genderData) {
     queryObject.gender = gender;
+    queryObject.gender = gender ? gender : genderData;
   }
   if (colors) {
-    console.log("Gender", colors);
-    queryObject.color = { $in: colors.split(",") };
+    queryObject.color = { $in: colors?.split(",") };
   }
 
-  // console.log(
-  //   "Product",
-  //   await Product.find({
-  //     discountPercentage: { $gte: 50 },
-  //   })
-  // );
-
-  // data = "{price:{$gte:1699 ,$lte: 2999}}";
-
-  // obj = JSON.parse(data);
-
-  // console.log(obj);
-
   if (price) {
-    let priceArray = price.split(",").map((p) => {
-      let pri = p.split("to");
+    let priceArray = price?.split(",").map((p) => {
+      let pri = p?.split("to");
       return {
-        price: { $gte: Number(pri[0].trim()), $lte: Number(pri[1].trim()) },
+        price: { $gte: Number(pri[0]?.trim()), $lte: Number(pri[1]?.trim()) },
       };
     });
     tempObj = {
@@ -142,29 +238,10 @@ router.get("/:combineCategory", async (req, res) => {
       new: "createdAt",
       popularity: "-noOfRatings",
       discount: "-discountPercentage",
-      price_desc: "-price",
-      price_asc: "price",
+      price_desc: "-mrp",
+      price_asc: "mrp",
     };
 
-    // let entries = Object.entries(sortDic);
-    // let data = entries.map(([key, val]) => {
-    //   if (key == sort) {
-    //     return val;
-    //   }
-    // });
-    // console.log(
-    //   "Product",
-    //   await Product.find({
-    //     // $or: [
-    //     //   { price: { $gte: 501, $lte: 1000 } },
-    //     //   { price: { $gte: 201, $lte: 1500 } },
-    //     // ],
-    //     $or: [
-    //       "{price:{$gte:1699 ,$lte: 2999}}",
-    //       "{price:{$gte:399 ,$lte: 1699}}",
-    //     ],
-    //   })
-    // );
     let sortFix = sortDic[sort];
     apiData = apiData.sort(sortFix);
     // queryObject.sort = sortFix;
@@ -174,7 +251,6 @@ router.get("/:combineCategory", async (req, res) => {
   let limit = parseInt(req.query.limit);
 
   apiData = apiData.skip(10 * limit).limit(limit);
-  console.log("Query Object", queryObject);
   try {
     let products;
 
@@ -199,7 +275,7 @@ router.get("/:combineCategory", async (req, res) => {
     // console.log("toalP", toalP);
     let totalProduct = await Product.find(queryObject);
     // Product.find(queryObject);
-    console.log(products);
+
     res
       .status(200)
       .json({ products, totalPages: Math.ceil(totalProduct.length / 20) });
@@ -209,15 +285,6 @@ router.get("/:combineCategory", async (req, res) => {
 });
 
 //Get Product Id
-// router.get("/find/:id", async (req, res) => {
-//   try {
-//     const product = await Product.findById(req.params.id);
-//     res.status(200).json(product);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
 router.get("/find/:id", productController.getProductId);
 
 // PAGINATION
@@ -250,26 +317,6 @@ router.get("/prod", async (req, res) => {
   }
 });
 
-module.exports = router;
-
-// UPDATE PRODUCT
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const updatedProduct = await Product.findByIdAndUpdate(
-//       req.params.id,
-//       {
-//         $set: req.body,
-//       },
-//       { new: true }
-//     );
-//     res.status(200).json(updatedProduct);
-//   } catch (err) {
-//     res.status(500).json({ err: err });
-//   }
-// });
-
-router.put(":/id", productController.updateProductByProductId);
-
 // related Product
 router.get("/related/:id", productController.getSimilarProductByProductId);
 
@@ -296,5 +343,30 @@ router.get("/search/autosuggest", async (req, res) => {
     .json({ searchBrand: searchBrand, searchCategory: searchCategory });
 });
 
+// create product
+router.post("/", authorize(roles.admin), async (req, res) => {
+  const newProduct = new Product(req.body);
+  console.log(newProduct);
+  try {
+    const savedProduct = await newProduct.save();
+    res.status(200).json(savedProduct);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
+
+// UPDATE PRODUCT
+router.put(
+  "/:id",
+
+  productController.updateProductByProductId
+);
+
 // delete Product
-router.delete("/:id", productController.deleteProductByProductId);
+router.delete(
+  "/:id",
+  authorize(roles.admin),
+  productController.deleteProductByProductId
+);
+
+module.exports = router;

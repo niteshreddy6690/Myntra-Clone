@@ -5,11 +5,11 @@ const getProductId = async (id) => {
   return Product.findById(id).populate("reviews");
 };
 
-const updateProductById = async (id) => {
+const updateProductById = async (id, bodyData) => {
   return Product.findByIdAndUpdate(
-    req.params.id,
+    id,
     {
-      $set: req.body,
+      $set: bodyData,
     },
     { new: true }
   );

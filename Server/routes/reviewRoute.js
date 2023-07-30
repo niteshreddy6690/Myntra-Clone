@@ -1,12 +1,7 @@
 const router = require("express").Router();
 const reviewController = require("../Controllers/reviewController");
 
-const {
-  verifyToken,
-  verifyTokenAndAdmin,
-  verifyTokenAndAuthorization,
-  authorize,
-} = require("../utils/verifyToken");
+const { authorize } = require("../middleware/verifyToken");
 
 router.post("/", authorize(), reviewController.addReviewToProduct);
 router.get("/product/:productId", reviewController.getAllReviewsForProduct);

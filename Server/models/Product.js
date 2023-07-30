@@ -11,11 +11,12 @@ const ProductSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
+  // category: { type: "string", required: true},
   size: { type: Array },
   price: { type: "number", required: true },
   mrp: { type: "number" },
   discountPercentage: { type: "number" },
-  gender: { type: "string", required: true },
+  gender: { type: "string", required: true, lowercase: true },
   color: { type: "string" },
   reviews: [
     {
@@ -35,6 +36,24 @@ ProductSchema.pre("save", function (next) {
       this.price - this.price * (this.discountPercentage / 100)
     );
   console.log("this", this);
+  next();
+});
+
+ProductSchema.pre("remove", async function (next) {
+  const productId = this._id;
+
+  // Remove the product reference from all wishlists
+  await Wishlist.updateMany(
+    { wishlistProduct: productId },
+    { $pull: { wishlistProduct: productId } }
+  );
+
+  // Remove the product reference from all carts
+  await Cart.updateMany(
+    { "items.productId": productId },
+    { $pull: { "items.productId": productId } }
+  );
+
   next();
 });
 module.exports = mongoose.model("Product", ProductSchema);

@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
   width: 100%;
   height: 600px;
-  background: blue;
+  background: grey;
 `;
 
 const Footer = () => {

@@ -1,0 +1,7 @@
+.CategoryMain {
+  display: flex;
+}
+.createCategoryMain {
+  width: 550px;
+  margin: 0 50px;
+}

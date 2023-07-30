@@ -19,6 +19,8 @@ import ArrowRightTwoToneIcon from "@mui/icons-material/ArrowRightTwoTone";
 
 import transparentFolderImage from "../../Assets/png/folder_icon_transparent.png";
 import closeIconSvg from "../../Assets/svg/CloseIcon.svg";
+import { request } from "../../utils/api/axios";
+import Category from "../../components/Category/Category";
 
 const MainContainer = styled.div`
   box-sizing: border-box;
@@ -875,6 +877,7 @@ export default function NewProduct() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [previewFiles, setPreviewFiles] = useState([]);
+  const [selectedImageFile, setSelectedImageSize] = useState(null);
   const dispatch = useDispatch();
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
@@ -913,23 +916,18 @@ export default function NewProduct() {
   // storage = firebase.storage();
 
   const callCategory = async () => {
-    const res = await axios.get(`http://localhost:8080/api/category`);
-    if (res) setCategory(res.data);
+    // const res = await request.get(`/category`);
+    // if (res) setCategory(res.data);
   };
   const callBrand = async () => {
-    const res = await axios.get(`http://localhost:8080/api/brand`);
+    const res = await request.get(`/brand`);
     if (res) setBrand(res.data);
   };
   useEffect(() => {
     callCategory();
     callBrand();
   }, []);
-  console.log("Category", category);
-  console.log("Brand", brand);
 
-  console.log("selectedSize", selectedSize);
-  console.log("selectedColor", selectedColor);
-  console.log("selectedGender", selectedGender);
   const handleClickCategory = (e, categoryId, categoryName) => {
     e.stopPropagation();
     console.log("categoryName", categoryName);
@@ -951,7 +949,7 @@ export default function NewProduct() {
 
   const uploadFiles = async (file) => {
     const retPromise = new Promise(function (resolve, reject) {
-      const storageRef = ref(storage, `/Myntra Clone Images/3${file.name}`);
+      const storageRef = ref(storage, `/Myntra Clone Images/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
       // promises.push(uploadTask);
       uploadTask.on(
@@ -984,42 +982,50 @@ export default function NewProduct() {
     });
     return retPromise;
   };
-  const handleClick = async (e) => {
-    e.preventDefault();
-    // const upload = await uploadFiles();
-    previewFiles.map((fileImages) => {
-      console.log(fileImages.file);
-    });
 
+  const handelUploadFiles = async (e) => {
+    e.preventDefault();
     const status = previewFiles?.map((fileImages) =>
       uploadFiles(fileImages.file)
     );
-    console.log(status);
-
-    Promise.all(
-      // Array of "Promises"
-      status
-    )
+    Promise.all(status)
       .then((imageData) => {
-        // console.log(url);
-        console.log("url", imageData);
-        console.log(`All success`);
-        // setURLs(url);
-
-        const product = {
-          ...inputs,
-          gender: selectedGender,
-          images: imageData,
-          color: selectedColor,
-          categories: data.categoryId,
-          size: selectedSize,
-        };
-        console.log("Product", product);
-        addProduct(product, dispatch);
+        setSelectedImageSize(imageData);
       })
-      .catch((error) => {
-        console.log(`Some failed: `, error.message);
+      .catch((err) => {
+        console.log("error");
       });
+  };
+  const handleClick = async (e) => {
+    e.preventDefault();
+    // const status = previewFiles?.map((fileImages) =>
+    //   uploadFiles(fileImages.file)
+    // );
+    // //console.log(status);
+    // Promise.all(
+    //   // Array of "Promises"
+    //   status
+    // )
+    //   .then((imageData) => {
+    //     // console.log(url);
+    //     console.log("url", imageData);
+    //     console.log(`All success`);
+    //     // setURLs(url);
+
+    //     const product = {
+    //       ...inputs,
+    //       gender: selectedGender,
+    //       images: imageData,
+    //       color: selectedColor,
+    //       categories: data.categoryId,
+    //       size: selectedSize,
+    //     };
+    //     console.log("Product", product);
+    //     addProduct(product, dispatch);
+    //   })
+    //   .catch((error) => {
+    //     console.log(`Some failed: `, error.message);
+    //   });
 
     // uploadCompleted
     //   .then(() => {
@@ -1036,120 +1042,192 @@ export default function NewProduct() {
     //   .catch((error) => {
     //     console.log(error);
     //   });
-    // UploadFiles();
-    // console.log(urls);
-    // const fileName = new Date().getTime() + file.name;
-    // const storage = getStorage(app);
-    // const storageRef = ref(storage, fileName);
-    // const uploadTask = uploadBytesResumable(storageRef, file);
 
-    // // Register three observers:
-    // // 1. 'state_changed' observer, called any time the state changes
-    // // 2. Error observer, called on failure
-    // // 3. Completion observer, called on successful completion
-    // uploadTask.on(
-    //   "state_changed",
-    //   (snapshot) => {
-    //     // Observe state change events such as progress, pause, and resume
-    //     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-    //     const progress =
-    //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //     console.log("Upload is " + progress + "% done");
-    //     switch (snapshot.state) {
-    //       case "paused":
-    //         console.log("Upload is paused");
-    //         break;
-    //       case "running":
-    //         console.log("Upload is running");
-    //         break;
-    //       default:
-    //     }
-    //   },
-    //   (error) => {
-    //     // Handle unsuccessful uploads
-    //   },
-    //   () => {
-    //     // Handle successful uploads on complete
-    //     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //       const product = {
-    //         ...inputs,
-    //         img: urls,
-    //         categories: cat,
-    //         color: color,
-    //         size: size,
-    //       };
-    //       addProduct(product, dispatch);
-    //     });
-    //   }
-    // );
+    if (selectedImageFile) {
+      const product = {
+        ...inputs,
+        gender: selectedGender.toLowerCase(),
+        images: selectedImageFile,
+        color: selectedColor.toLowerCase(),
+        categories: data.categoryId,
+        size: selectedSize,
+      };
+      addProduct(product, dispatch);
+    } else {
+      console.log("Please Select Files");
+    }
   };
 
   return (
     <>
-      <div className="newProduct">
-        <h1 className="addProductTitle">New Product</h1>
-        <form className="addProductForm">
-          <div className="addProductItem">
-            <label>Brand</label>
-            <select name="brand" value={inputs.brand} onChange={handleChange}>
-              {brand.length > 0 &&
-                brand?.map((option, i) => (
-                  <option key={i} value={option.name}>
-                    {option.name}
-                  </option>
-                ))}
-            </select>
+      <form className="addProductForm">
+        <div className="newProduct">
+          <div>
+            <h2 className="addProductTitle">Create New Product</h2>
+            <div className="addProductItem">
+              <label>Brand</label>
+              <select
+                name="brand"
+                value={inputs?.brand}
+                onChange={handleChange}
+              >
+                {brand?.length > 0 &&
+                  brand?.map((option, i) => (
+                    <option key={i} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="addProductItem">
+              <label>Description</label>
+              <input
+                name="description"
+                type="text"
+                value={inputs?.description}
+                placeholder="description..."
+                onChange={handleChange}
+              />
+            </div>
+            <div className="addProductItem">
+              <label>Price</label>
+              <input
+                name="price"
+                type="number"
+                placeholder="100"
+                value={inputs?.price}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="addProductItem">
+              <label>Percentage discount</label>
+              <input
+                name="discountPercentage"
+                type="number"
+                placeholder="100"
+                value={inputs?.discountPercentage}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="addProductItem">
+              <label>Gender</label>
+              <Select
+                defaultValue={selectedGender}
+                onChange={(values) => {
+                  setSelectedGender(values.value);
+                }}
+                options={GenderOptions}
+              />
+            </div>
+            <div className="addProductItem">
+              <label>Colors</label>
+              <Select
+                options={colorOptions}
+                onChange={handleColorChange}
+                getOptionLabel={(option) => (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      style={{
+                        backgroundColor: option.color,
+                        width: "20px",
+                        height: "20px",
+                        marginRight: "10px",
+                        borderRadius: "5px",
+                      }}
+                    ></div>
+                    {option.label}
+                  </div>
+                )}
+                getOptionValue={(option) => {}}
+                styles={customStyles}
+              />
+            </div>
+            <div className="addProductItem">
+              <label>Size</label>
+              <Select
+                defaultValue={selectedSize}
+                onChange={(values) => {
+                  setSelectedSize(values.map((option) => option.value));
+                }}
+                options={options}
+                isMulti
+              />
+            </div>
+            <div className="addProductItem">
+              <label>Categories</label>
+              <input
+                type="text"
+                placeholder="jeans"
+                value={data.categoryName}
+              />
+            </div>
+            <div className="addProductItem">
+              <label>Stock</label>
+              <select name="inStock" onChange={handleChange}>
+                <option value={true}>Yes</option>
+                <option value={false}>No</option>
+              </select>
+            </div>
+            <button onClick={handleClick} className="addProductButton">
+              Create New Product
+            </button>
           </div>
-          <div className="addProductItem">
-            <label>Description</label>
-            <input
-              name="description"
-              type="text"
-              placeholder="description..."
-              onChange={handleChange}
-            />
-          </div>
-          <div className="addProduct">
-            <label>Images</label>
-            <Wrapper>
-              <Container>
-                <h1>Upload Product Images</h1>
-                <p>Select multiple images </p>
-
-                <DraggableDiv>
-                  <Input
-                    id="file-upload"
-                    type="file"
-                    onChange={handelChange}
-                    multiple
-                    accept="image/*"
-                  />
-                  {previewFiles.length > 0 ? (
-                    <>
-                      {previewFiles?.map((img, i) => (
-                        <ImagePreViewWrapper>
-                          <ImagePreview
-                            key={i}
-                            draggable
-                            onDragStart={(e) => (dragItem.current = i)}
-                            onDragEnter={(e) => (dragOverItem.current = i)}
-                            onDragEnd={handelSort}
-                          >
-                            <Image src={img.imgblob} isLarge={i == 0 ? 1 : 0} />
-                            <div
-                              onClick={() =>
-                                setPreviewFiles(
-                                  previewFiles.filter((e) => e != img)
-                                )
-                              }
+          <div>
+            <div className="addProduct">
+              <Wrapper>
+                <Container>
+                  <h3>Upload Product Images</h3>
+                  <p>Select multiple images </p>
+                  <DraggableDiv>
+                    <Input
+                      id="file-upload"
+                      type="file"
+                      onChange={handelChange}
+                      multiple
+                      accept="image/*"
+                    />
+                    {previewFiles.length > 0 ? (
+                      <>
+                        {previewFiles?.map((img, i) => (
+                          <ImagePreViewWrapper>
+                            <ImagePreview
+                              key={i}
+                              draggable
+                              onDragStart={(e) => (dragItem.current = i)}
+                              onDragEnter={(e) => (dragOverItem.current = i)}
+                              onDragEnd={handelSort}
                             >
-                              <img className="closeIcon" src={closeIconSvg} />
-                            </div>
-                          </ImagePreview>
-                        </ImagePreViewWrapper>
-                      ))}
-                      {previewFiles.length < 6 && previewFiles.length !== 0 ? (
+                              <Image
+                                src={img.imgblob}
+                                isLarge={i == 0 ? 1 : 0}
+                              />
+                              <div
+                                onClick={() =>
+                                  setPreviewFiles(
+                                    previewFiles.filter((e) => e != img)
+                                  )
+                                }
+                              >
+                                <img className="closeIcon" src={closeIconSvg} />
+                              </div>
+                            </ImagePreview>
+                          </ImagePreViewWrapper>
+                        ))}
+                        {previewFiles.length < 6 &&
+                        previewFiles.length !== 0 ? (
+                          <label htmlFor="file-upload">
+                            <img
+                              src={transparentFolderImage}
+                              draggable={false}
+                              style={{ width: "100px", height: "100px" }}
+                              alt="Upload"
+                            />
+                            <p>Add {6 - previewFiles.length} more Photo</p>
+                          </label>
+                        ) : null}
+                      </>
+                    ) : (
+                      <div draggable={false}>
                         <label htmlFor="file-upload">
                           <img
                             src={transparentFolderImage}
@@ -1157,224 +1235,26 @@ export default function NewProduct() {
                             style={{ width: "100px", height: "100px" }}
                             alt="Upload"
                           />
-                          <p>Add {6 - previewFiles.length} more Photo</p>
+                          <p>Click here to upload</p>
                         </label>
-                      ) : null}
-                    </>
-                  ) : (
-                    <div draggable={false}>
-                      <label htmlFor="file-upload">
-                        <img
-                          src={transparentFolderImage}
-                          draggable={false}
-                          style={{ width: "100px", height: "100px" }}
-                          alt="Upload"
-                        />
-                        <p>Click here to upload</p>
-                      </label>
-                    </div>
-                  )}
-                </DraggableDiv>
-              </Container>
-            </Wrapper>
+                      </div>
+                    )}
+                  </DraggableDiv>
+                </Container>
+              </Wrapper>
+              <div>
+                <button
+                  onClick={handelUploadFiles}
+                  className="upload-image-files"
+                >
+                  Upload images
+                </button>
+              </div>
+            </div>
+            <Category handleClick={handleClickCategory} data={data} />
           </div>
-          <div className="addProductItem">
-            <label>Price</label>
-            <input
-              name="price"
-              type="number"
-              placeholder="100"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="addProductItem">
-            <label>Percentage discount</label>
-            <input
-              name="discountPercentage"
-              type="number"
-              placeholder="100"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="addProductItem">
-            <label>Gender</label>
-            <Select
-              defaultValue={selectedGender}
-              onChange={(values) => {
-                setSelectedGender(values.value);
-              }}
-              options={GenderOptions}
-            />
-            {/* <input
-              name="gender"
-              type="text"
-              placeholder="Men"
-              onChange={handleChange}
-            /> */}
-          </div>
-          <div className="addProductItem">
-            <label>Colors</label>
-            <Select
-              options={colorOptions}
-              onChange={handleColorChange}
-              getOptionLabel={(option) => (
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <div
-                    style={{
-                      backgroundColor: option.color,
-                      width: "20px",
-                      height: "20px",
-                      marginRight: "10px",
-                      borderRadius: "5px",
-                    }}
-                  ></div>
-                  {option.label}
-                </div>
-              )}
-              getOptionValue={(option) => {}}
-              styles={customStyles}
-            />
-          </div>
-          <div className="addProductItem">
-            <label>Size</label>
-            <Select
-              defaultValue={selectedSize}
-              onChange={(values) => {
-                setSelectedSize(values.map((option) => option.value));
-              }}
-              options={options}
-              isMulti
-            />
-          </div>
-          <div className="addProductItem">
-            <label>Categories</label>
-            <input
-              type="text"
-              placeholder="jeans,skirts"
-              value={data.categoryName}
-            />
-          </div>
-          <div className="addProductItem">
-            <label>Stock</label>
-            <select
-              defaultValue="yes"
-              name="inStock"
-              value={inputs.inStock}
-              onChange={handleChange}
-            >
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          </div>
-          <button onClick={handleClick} className="addProductButton">
-            Create
-          </button>
-        </form>
-      </div>
-      <Category handleClick={handleClickCategory} data={data} />
+        </div>
+      </form>
     </>
   );
 }
-
-const Category = ({ handleClick, data }) => {
-  const [categories, setCategories] = useState([]);
-  const [show, setShow] = useState(true);
-
-  const callApi = async () => {
-    const res = await axios.get(`http://localhost:8080/api/category`);
-    setCategories(res.data);
-  };
-  useEffect(() => {
-    callApi();
-  }, []);
-
-  // const handleInitial = () => {
-  //   setData(initialState);
-  // };
-
-  // const handleChange = (e) => {
-  //   setData({ ...data, name: e.target.value });
-  // };
-
-  return (
-    <>
-      {/* <Topbar /> */}
-
-      <div style={{ margin: "30px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <h2>Categories</h2>
-            <Tree categories={categories} handleClick={handleClick} />
-          </div>
-          <div>
-            {data.categoryName ? (
-              <div>
-                <span>Selected Category : </span>
-                <span style={{ textTransform: "capitalize" }}>
-                  {data.categoryName}
-                </span>
-              </div>
-            ) : null}
-
-            <div
-              style={{ display: "flex", flexDirection: "row", width: "500px" }}
-            ></div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-// const DraggableElement = styled.div``;
-
-const Tree = ({ categories, handleClick }) => {
-  return (
-    <MainContainer style={{ backgroundColor: "lightblue" }}>
-      <div className="d-tree">
-        <ul className="d-tree-container">
-          {categories.map((category) => (
-            <TreeNode category={category} handleClick={handleClick} />
-          ))}
-        </ul>
-      </div>
-    </MainContainer>
-  );
-};
-
-const TreeNode = ({ category, handleClick }) => {
-  const [childVisible, setChildVisiblity] = useState(false);
-
-  const hasChild = category?.children?.length > 0 ? true : false;
-
-  return (
-    <li style={{ textTransform: "capitalize" }}>
-      <div
-        className="modify"
-        onClick={(e) => {
-          setChildVisiblity((v) => !v);
-          handleClick(e, category._id, category.name);
-        }}
-      >
-        {hasChild && childVisible ? (
-          <ArrowRightTwoToneIcon />
-        ) : hasChild ? (
-          <ArrowDropDownTwoToneIcon />
-        ) : null}
-        <span>{category.name}</span>
-      </div>
-
-      {hasChild && childVisible && (
-        <ul className="d-flex d-tree-container flex-column">
-          <Tree categories={category.children} handleClick={handleClick} />
-        </ul>
-      )}
-    </li>
-  );
-};

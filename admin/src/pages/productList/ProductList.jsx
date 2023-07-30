@@ -31,8 +31,8 @@ export default function ProductList() {
           <div className="productListItem">
             <img
               className="productListImg"
-              src={params.row.images[0].url}
-              alt={params.row.images[0].name}
+              src={params?.row.images[0]?.url}
+              alt={params?.row.images[0]?.name}
             />
             {params.row.title}
           </div>
@@ -67,6 +67,12 @@ export default function ProductList() {
 
   return (
     <div className="productList">
+      <div>
+        <div className="newproduct">
+          <Link to={`/newproduct`}>Create New Product</Link>
+        </div>
+      </div>
+
       <DataGrid
         rows={products}
         disableSelectionOnClick
@@ -74,6 +80,7 @@ export default function ProductList() {
         getRowId={(row) => row._id}
         pageSize={15}
         checkboxSelection
+        className="dataGrid"
       />
     </div>
   );

@@ -8,9 +8,7 @@ exports.addItemToCart = async (req, res) => {
 
   try {
     let cart = await cartService.cart(userId);
-    console.log("cart", cart);
     let productDetails = await Product.findById(productId);
-    console.log("Product details", productDetails);
     if (!productDetails) {
       return res.status(500).json({
         type: "Not Found",
@@ -98,8 +96,6 @@ exports.addItemToCart = async (req, res) => {
 };
 
 exports.getCart = async (req, res) => {
-  console.log("request.user", req.user);
-  console.log("Calling Get cart");
   const userId = req.user.id;
   try {
     let cart = await cartService.cart(userId);
@@ -113,9 +109,9 @@ exports.getCart = async (req, res) => {
       return Math.round(
         preValue +
           (currentValue?.productId?.price -
-            currentValue.productId.price *
-              (currentValue.productId.discountPercentage / 100)) *
-            currentValue.quantity
+            currentValue.productId?.price *
+              (currentValue.productId?.discountPercentage / 100)) *
+            currentValue?.quantity
       );
     }, 0);
     console.log(totalMRP);
@@ -141,7 +137,6 @@ exports.emptyCart = async (req, res) => {
   try {
     let cart = await cartRepository.cart();
     cart.items = [];
-    // cart.subTotal = 0;
     let data = await cart.save();
     res.status(200).json({
       type: "success",

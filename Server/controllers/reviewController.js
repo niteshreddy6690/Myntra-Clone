@@ -166,14 +166,10 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
 
 exports.getAllReviewsForProduct = catchAsync(async (req, res) => {
   const { productId } = req.params;
-  console.log("Product Id", productId);
 
   const allReviews = await Review.find({ productId })
     .populate("user")
     .sort("-rating");
-
-  console.log("all reviews", allReviews);
-
   const ratingOccurrence = {};
   for (var i = 0; i < allReviews.length; i++) {
     var element = allReviews[i]?.rating;
@@ -183,8 +179,6 @@ exports.getAllReviewsForProduct = catchAsync(async (req, res) => {
       ratingOccurrence[element] = 1;
     }
   }
-
-  console.log(ratingOccurrence);
 
   // if (allReviews) {
   //   const ratingsArr = allReviews;

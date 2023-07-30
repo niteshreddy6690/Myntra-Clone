@@ -148,7 +148,11 @@ const WriteReview = ({
             <span className="write-ReviewText">Write Review</span>
           </div>
           <div className="write-reviewProductInfo">
-            <img className="write-reviewImage" src={product.images[0]} />
+            <img
+              className="write-reviewImage"
+              src={product.images[0].url}
+              alt={product.images[0].name}
+            />
             <div className="write-reviewProductDetails">
               <div className="productBrand">{product?.brand}</div>
               <div className="productDescription">{product?.description}</div>

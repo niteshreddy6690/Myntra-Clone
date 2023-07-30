@@ -572,7 +572,10 @@ const Checkout = () => {
           <div className="deliveryTitle">Delivery Estimates</div>
           {cartItems?.cart?.items?.map((item, i) => (
             <div className="deliveryItems">
-              <img src={item?.productId?.images[0]} style={{ width: "40px" }} />
+              <img
+                src={item?.productId?.images[0].url}
+                style={{ width: "40px" }}
+              />
               <div className="deliveryTime">
                 Estimated delivery by 20 june 2023
               </div>

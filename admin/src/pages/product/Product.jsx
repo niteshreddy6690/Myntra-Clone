@@ -18,9 +18,11 @@ import { Audio, Oval } from "react-loader-spinner";
 import { request } from "../../utils/api/axios";
 import Select from "react-select";
 import styled from "styled-components";
-
+import axios from "axios";
 import transparentFolderImage from "../../Assets/png/folder_icon_transparent.png";
 import closeIconSvg from "../../Assets/svg/CloseIcon.svg";
+
+import Category from "../../components/Category/Category";
 
 const Wrapper = styled.div`
   display: flex;
@@ -816,11 +818,6 @@ export default function Product() {
   const productId = location.pathname.split("/")[2];
 
   const [pStats, setPStats] = useState([]);
-  const [inputs, setInputs] = useState({});
-  const [file, setFile] = useState(null);
-  const [cat, setCat] = useState([]);
-  const [color, setColor] = useState([]);
-  const [size, setSize] = useState([]);
 
   const [product, setProduct] = useState(null);
   const [brand, setBrand] = useState(null);
@@ -829,11 +826,13 @@ export default function Product() {
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [previewImageFiles, setPreviewImageFiles] = useState([]);
-  const [ImgUrl, setImgUrl] = useState(null);
+  const [categoryData, setCategoryData] = useState(null);
   const dispatch = useDispatch();
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
   const IsLoading = useSelector((state) => state.product.isFetching);
+
+  const storage = getStorage(app);
 
   const options = [
     { value: "S", label: "S" },
@@ -869,7 +868,27 @@ export default function Product() {
 
   const callGetCategory = async () => {
     const res = await request.get(`/category`);
-    if (res) setCategory(res.data);
+    if (res) {
+      console.log(res.data);
+      // Function to merge all categories into one array
+      function getAllCategoriesData(categories) {
+        const allCategories = [];
+
+        categories.forEach((category) => {
+          allCategories.push(category);
+          if (category.children && category.children.length > 0) {
+            allCategories.push(...getAllCategoriesData(category.children));
+          }
+        });
+
+        return allCategories;
+      }
+
+      // Call the function and get all categories data into one array
+      const allCategoriesData = getAllCategoriesData(res.data);
+      console.log("allCategoriesData", allCategoriesData);
+      setCategory(res.data);
+    }
   };
   const callGetBrand = async () => {
     const res = await request.get("/brand");
@@ -877,20 +896,32 @@ export default function Product() {
   };
   const callGetProductApi = async () => {
     const { data } = await request.get(`/products/find/${productId}`);
-
     if (data) {
-      setCat(data?.cat);
       setProduct(data);
+      setSelectedGender(data?.gender);
+      setCategoryData({
+        ...categoryData,
+        categoryId: data?.categories?._id,
+        categoryName: data?.categories?.name,
+      });
+      setSelectedColor(data?.color);
+      setSelectedSize(data?.size);
       setPreviewImageFiles(data?.images);
     }
   };
 
-  console.log("size", selectedSize);
   useEffect(() => {
     callGetCategory();
     callGetBrand();
     callGetProductApi();
   }, []);
+
+  const handleClickCategory = (e, categoryId, categoryName) => {
+    e.stopPropagation();
+    // console.log("categoryClick");
+    // console.log(categoryId, categoryName);
+    setCategoryData({ ...categoryData, categoryId, categoryName });
+  };
 
   const handelSort = () => {
     let _previewFiles = [...previewImageFiles];
@@ -906,7 +937,6 @@ export default function Product() {
   };
 
   const handelImageFileChange = (e) => {
-    console.log("handelChangeTriggred");
     console.log(e.target.files);
     const selectedFiles = e.target.files;
     const selectedFileArray = Array.from(selectedFiles);
@@ -929,95 +959,90 @@ export default function Product() {
     });
   };
 
-  // const product = useSelector((state) =>
-  //   state.product.products.find((product) => product._id === productId)
-  // );
-  console.log("product from State", product);
-  const handleCat = (e) => {
-    setCat(e.target.value.split(","));
-  };
-  const handleColor = (e) => {
-    setColor(e.target.value.split(","));
-  };
-  const handleSize = (e) => {
-    setSize(e.target.value.split(","));
-  };
+  const uploadFiles = async (file) => {
+    console.log("File", file);
+    console.log("file Name", file?.name);
+    const ImageFile = file?.file;
+    console.log("Image File", ImageFile);
+    let retPromise;
+    if (ImageFile) {
+      retPromise = new Promise(function (resolve, reject) {
+        const storageRef = ref(
+          storage,
+          `/Myntra Clone Images/${ImageFile.name}`
+        );
+        const uploadTask = uploadBytesResumable(storageRef, ImageFile);
+        // promises.push(uploadTask);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const prog = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+          },
+          (error) => {
+            console.log(error);
+            reject(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((urls) => {
+              // setURLs((prevState) => [...prevState, urls]);
+              let url = urls.replace(
+                "https://firebasestorage.googleapis.com",
+                "https://ik.imagekit.io/utywuh2nq"
+              );
 
-  // useEffect(() => {
-  //   product?.img && setImgUrl(product?.img);
-  // }, [product]);
-
-  // useEffect(() => {
-  //   setInputs({
-  //     _id: product?._id,
-  //     desc: product?.desc,
-  //     title: product?.title,
-  //     price: product?.price,
-  //     inStock: product?.inStock,
-  //   });
-  //   setColor(product?.color);
-  //   setSize(product?.size);
-  //   setCat(product?.cat);
-  // }, []);
-  const handleClick = (e) => {
-    e.preventDefault();
-    if (file) {
-      console.log("contains a file");
-      const fileName = new Date().getTime() + file.name;
-      const storage = getStorage(app);
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-            default:
+              const data = { url: url, name: ImageFile.name };
+              console.log("data", data);
+              resolve(data);
+              console.log("File available at", url);
+              // return urls;
+            });
           }
-        },
-        (error) => {
-          // Handle unsuccessful uploads
-        },
-        () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setImgUrl(downloadURL);
-            console.log("Downloadurl", downloadURL);
-          });
-        }
-      );
+        );
+      });
+    } else {
+      retPromise = new Promise((resolve, reject) => {
+        resolve(file);
+      });
     }
+    return retPromise;
+  };
 
-    // const ImgUrl = product.img;
-    // console.log("ImgUrl", ImgUrl);
+  const uploadImageFiles = (e) => {
+    e.preventDefault();
+    console.log("calling uploadImageFiles......");
+    const status = previewImageFiles?.map((fileImages) =>
+      uploadFiles(fileImages)
+    );
+    console.log(status);
+    Promise.all(status)
+      .then((imageData) => {
+        setPreviewImageFiles(imageData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    // // Register three observers:
-    // // 1. 'state_changed' observer, called any time the state changes
-    // // 2. Error observer, called on failure
-    // // 3. Completion observer, called on successful completion
-
-    const product = {
-      ...inputs,
-      img: ImgUrl,
-      categories: cat,
-      color: color,
-      size: size,
-    };
-    selectedSize(product?.size);
+  const handleUpdateProduct = async () => {
+    console.log("product._id", product._id);
     console.log("product", product);
-    updateProduct(productId, product, dispatch);
+    const productUpdate = {
+      ...product,
+      gender: selectedGender,
+      images: previewImageFiles,
+      color: selectedColor,
+      categories: categoryData.categoryId,
+      size: selectedSize,
+    };
+    console.log("productUpdate", productUpdate);
+    const updateProduct = await request.put(
+      `/products/${productId}`,
+      productUpdate
+    );
+    console.log(productUpdate);
+    console.log("updateProduct", updateProduct);
   };
 
   const MONTHS = useMemo(
@@ -1038,25 +1063,25 @@ export default function Product() {
     []
   );
 
-  useEffect(() => {
-    const getStats = async () => {
-      try {
-        const res = await userRequest.get("orders/income?pid=" + productId);
-        const list = res.data.sort((a, b) => {
-          return a._id - b._id;
-        });
-        list.map((item) =>
-          setPStats((prev) => [
-            ...prev,
-            { name: MONTHS[item._id - 1], Sales: item.total },
-          ])
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getStats();
-  }, [productId, MONTHS]);
+  // useEffect(() => {
+  //   const getStats = async () => {
+  //     try {
+  //       const res = await userRequest.get("orders/income?pid=" + productId);
+  //       const list = res.data.sort((a, b) => {
+  //         return a._id - b._id;
+  //       });
+  //       list.map((item) =>
+  //         setPStats((prev) => [
+  //           ...prev,
+  //           { name: MONTHS[item._id - 1], Sales: item.total },
+  //         ])
+  //       );
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getStats();
+  // }, [productId, MONTHS]);
 
   return (
     <>
@@ -1075,11 +1100,10 @@ export default function Product() {
             <div className="productTopRight">
               <div className="productInfoTop">
                 <img
-                  src={product?.images[0].url}
-                  alt={product?.images[0].name}
+                  src={product?.images[0]?.url}
+                  alt={product?.images[0]?.name}
                   className="productInfoImg"
                 />
-
                 <span className="productName">{product?.title}</span>
               </div>
               <div className="productInfoBottom">
@@ -1108,20 +1132,13 @@ export default function Product() {
                     value={product?.brand}
                     onChange={handleChange}
                   >
-                    {brand.length > 0 &&
+                    {brand?.length > 0 &&
                       brand?.map((option, i) => (
                         <option key={i} value={option.name}>
                           {option.name}
                         </option>
                       ))}
                   </select>
-                  {/* <label>Title</label>
-                  <input
-                    name="title"
-                    type="text"
-                    placeholder={product?.brand}
-                    onChange={handleChange}
-                  /> */}
                 </div>
                 <div className="addProductItem">
                   <label>Description</label>
@@ -1139,15 +1156,17 @@ export default function Product() {
                     type="number"
                     value={product?.price}
                     onChange={handleChange}
+                    min={1}
                   />
                 </div>
                 <div className="addProductItem">
-                  <label>Percentage discount</label>
+                  <label>Discount Percentage</label>
                   <input
                     name="discountPercentage"
                     type="number"
                     value={product?.discountPercentage}
                     placeholder="100%"
+                    max="5"
                     onChange={handleChange}
                   />
                 </div>
@@ -1179,11 +1198,6 @@ export default function Product() {
                     getOptionValue={(option) => {}}
                     styles={customStyles}
                   />
-                  {/* <input
-                    type="text"
-                    placeholder={product?.color}
-                    onChange={handleColor}
-                  /> */}
                 </div>
                 <div className="addProductItem">
                   <label>Gender</label>
@@ -1211,40 +1225,54 @@ export default function Product() {
                     options={options}
                     isMulti
                   />
-                  {/* <input
-                    type="text"
-                    placeholder={product?.size}
-                    onChange={handleSize}
-                  /> */}
                 </div>
                 <div className="addProductItem">
                   <label>Categories</label>
                   <input
                     type="text"
-                    placeholder={product?.categories.name}
-                    onChange={handleCat}
+                    placeholder={
+                      categoryData?.categoryName
+                        ? categoryData?.categoryName
+                        : product?.categories.name
+                    }
                   />
                 </div>
                 <div className="addProductItem">
                   <label>Stock</label>
                   <select name="inStock" onChange={handleChange}>
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
+                    <option value={true}>Yes</option>
+                    <option value={false}>No</option>
                   </select>
                 </div>
+
+                <div className="addProductItem">
+                  <label>category</label>
+                  <select
+                    name="brand"
+                    // value={product?.brand}
+                    onChange={handleChange}
+                  >
+                    {category?.length > 0 &&
+                      category?.map((option, i) => (
+                        <option key={i} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                <button
+                  className="productUpdateButton"
+                  onClick={handleUpdateProduct}
+                >
+                  Update Product
+                </button>
               </div>
               <div className="productFormRight">
                 <div className="productUpload">
-                  {/* <img
-                    src={product?.images[0].url}
-                    alt={product?.images[0].name}
-                    className="productUploadImg"
-                  /> */}
                   <Wrapper>
                     <Container>
                       <h1>Upload Product Images</h1>
                       <p>Select multiple images upto 6 Images </p>
-
                       <DraggableDiv>
                         <Input
                           id="file-upload"
@@ -1256,7 +1284,7 @@ export default function Product() {
                         {previewImageFiles.length > 0 ? (
                           <>
                             {previewImageFiles?.map((img, i) => (
-                              <ImagePreViewWrapper>
+                              <ImagePreViewWrapper key={i}>
                                 <ImagePreview
                                   key={i}
                                   draggable
@@ -1267,7 +1295,7 @@ export default function Product() {
                                   onDragEnd={handelSort}
                                 >
                                   <Image
-                                    src={img.url}
+                                    src={img?.url}
                                     isLarge={i == 0 ? 1 : 0}
                                   />
                                   <div
@@ -1319,9 +1347,13 @@ export default function Product() {
                     </Container>
                   </Wrapper>
                 </div>
-                <button className="productButton" onClick={handleClick}>
-                  Update Product
+                <button className="productButton" onClick={uploadImageFiles}>
+                  Upload Images
                 </button>
+                <Category
+                  data={categoryData}
+                  handleClick={handleClickCategory}
+                />
               </div>
             </form>
           </div>

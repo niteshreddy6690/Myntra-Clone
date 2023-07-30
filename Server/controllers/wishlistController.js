@@ -20,13 +20,11 @@ const addItemToWishList = catchAsync(async (req, res) => {
 });
 
 const getWishlist = catchAsync(async (req, res) => {
-  console.log("callinfg get Wishlist");
-  const wishlistproducts = await WhishList.find().populate("wishlistProduct");
-  res.status(httpStatus.OK).send(wishlistproducts);
+  const wishlistProducts = await WhishList.find().populate("wishlistProduct");
+  res.status(httpStatus.OK).send(wishlistProducts);
 });
 
 const removeProductFromWishlist = catchAsync(async (req, res) => {
-  console.log("req.params.id", req.params.id);
   const removedProduct = await WhishList.findByIdAndDelete({
     _id: req.params.id,
   }).populate({ path: "wishlistProduct" });
@@ -38,8 +36,6 @@ const findProductInWishlist = catchAsync(async (req, res) => {
   const product = await WhishList.findOne({
     wishlistProduct: req.params.id,
   });
-
-  console.log(product);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, "Product not found in wishlist");
   }

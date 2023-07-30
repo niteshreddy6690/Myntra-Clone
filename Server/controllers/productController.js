@@ -7,6 +7,7 @@ const httpStatus = require("http-status");
 const getProductId = catchAsync(async (req, res) => {
   try {
     console.log("PID", req.params.id);
+    console.log("req.params.id", req.params.id);
     const product = await Product.findById(req.params.id).populate([
       "categories",
     ]);
@@ -18,9 +19,13 @@ const getProductId = catchAsync(async (req, res) => {
 
 // update the Product By Product Id
 const updateProductByProductId = catchAsync(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  console.log("Calling updateProductByProductId");
+  const product = await productService.getProductId(req.params.id);
   if (!product) throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
-  const updatedProduct = await productService.updateProductById(req.params.id);
+  const updatedProduct = await productService.updateProductById(
+    req.params.id,
+    req.body
+  );
   if (!updatedProduct)
     throw new ApiError(httpStatus.BAD_REQUEST, "failed to update the Product");
   res.status(httpStatus.OK).json(updatedProduct);

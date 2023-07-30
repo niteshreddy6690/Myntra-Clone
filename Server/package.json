@@ -24,6 +24,7 @@
     "nodemon": "^2.0.20",
     "otp-generator": "^4.0.0",
     "razorpay": "^2.8.6",
-    "slugify": "^1.6.5"
+    "slugify": "^1.6.5",
+    "string-similarity": "^4.0.4"
   }
 }

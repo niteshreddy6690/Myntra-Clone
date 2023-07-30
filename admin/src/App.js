@@ -16,6 +16,7 @@ import Product from "./pages/product/Product";
 import NewProduct from "./pages/newProduct/NewProduct";
 import Login from "./pages/login/Login";
 import VerifyOtp from "./pages/login/VerifyOtp";
+import CreateCategory from "./pages/CreateCategory/CreateCategory.jsx";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/products" element={<ProductList />} />
                 <Route path="/product/:productId" element={<Product />} />
                 <Route path="/newproduct" element={<NewProduct />} />
+                <Route path="/category" element={<CreateCategory />} />
               </Routes>
             </div>
           </div>

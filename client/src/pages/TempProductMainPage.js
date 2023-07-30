@@ -422,7 +422,13 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
               <ProductSliderContainer>
                 {product.images.map((image, i) => (
                   <SwiperSlide key={i}>
-                    <Image src={image.url} alt={image.name} loading="lazy" />
+                    <Image
+                      src={`${image.url}?tr=w-250,h-300`}
+                      alt={image.name}
+                      height="300"
+                      width="150"
+                      loading="lazy"
+                    />
                   </SwiperSlide>
                 ))}
               </ProductSliderContainer>

@@ -3,6 +3,9 @@ const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
 const ApiError = require("../utils/ApiError");
 const User = require("../models/User");
+
+
+
 const getUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   const user = await userService.getUserById(id);
@@ -30,10 +33,7 @@ const getUsers = catchAsync(async (req, res) => {
 
 const updateUser = catchAsync(async (req, res) => {
   const { id } = req.user;
-  // console.log("id", id);
-  console.log("req.body", req.body);
   const updatedUser = await userService.updateUserById(id, req.body);
-  console.log("updatedUser", updatedUser);
   res.status(httpStatus.OK).send(updatedUser);
 });
 
@@ -62,4 +62,5 @@ module.exports = {
   getUsers,
   updateUser,
   getUserStats,
+  getUserByPhoneNo,
 };

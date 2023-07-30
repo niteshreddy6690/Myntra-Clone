@@ -605,11 +605,21 @@ const TempProduct = () => {
   const [Gender, setGender] = useState([]);
   const [SortValue, setSort] = useState("");
   const [PageNo, setPageNo] = useState(1);
+  const [showAllColors, setShowAllColors] = useState(false);
+
+  // const showcasedColors = showAllColors ? colors : colors.slice(0, 7); // Get the first 7 colors or all colors based on the state
+  // const remainingColorsCount = colors.length - 7; // Calculate the number of remaining colors
+  // const remainingColorsMessage = `+${remainingColorsCount} more`;
   const refEle = useRef(null);
   const [scrollingX, setScrollingX] = useState({
     top: "0px",
     bottom: "auto",
   });
+
+  const handleShowAllColors = () => {
+    setShowAllColors(true);
+  };
+
   const [checkedValues, setCheckedValues] = useState([]);
   //   const location = useLocation();
   // console.log("params", params);
@@ -1184,6 +1194,10 @@ const TempProduct = () => {
   // }
 
   console.log("Colors", Colors);
+
+  const showcasedColors = showAllColors ? Colors : Colors.slice(0, 1); // Get the first 7 colors or all colors based on the state
+  const remainingColorsCount = Colors.length - 1; // Calculate the number of remaining colors
+  const remainingColorsMessage = `+${remainingColorsCount} more`;
   return (
     <div>
       <Navbar />
@@ -1272,8 +1286,6 @@ const TempProduct = () => {
                     </Ul>
                   </CategoriesDiv1>
                 </div>
-
-                {/* <Checkbox products={products} getProducts={getProducts} /> */}
                 <CategoriesDiv1>
                   <span className="vertical-filters-header">Price</span>
                   <Ul>
@@ -1307,8 +1319,8 @@ const TempProduct = () => {
                 <CategoriesDiv1>
                   <span className="vertical-filters-header">Color</span>
                   <Ul>
-                    {Colors?.length > 0 &&
-                      Colors?.map((color, i) => (
+                    {showcasedColors?.length > 0 &&
+                      showcasedColors?.map((color, i) => (
                         <>
                           {color && (
                             <Li>
@@ -1338,6 +1350,16 @@ const TempProduct = () => {
                           )}
                         </>
                       ))}
+                    <Li>
+                      {!showAllColors && remainingColorsCount > 0 && (
+                        <p
+                          onClick={handleShowAllColors}
+                          style={{ cursor: "pointer", color: "blue" }}
+                        >
+                          {remainingColorsMessage}
+                        </p>
+                      )}
+                    </Li>
                   </Ul>
                 </CategoriesDiv1>
                 <CategoriesDiv1>

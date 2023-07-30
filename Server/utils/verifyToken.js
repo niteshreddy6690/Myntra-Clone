@@ -6,9 +6,7 @@ const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    // console.log("token", token);
     jwt.verify(token, process.env.JWT_ACCESS_SECRET_KEY, (err, user) => {
-      // console.log("user", user);
       if (err) {
         return res.status(403).json("Token is invalid");
       }
@@ -22,9 +20,7 @@ const verifyToken = (req, res, next) => {
 
 // ignore this code
 const verifyTokenAndAuthorization = (req, res, next) => {
-  console.log("req.params", req.params);
   verifyToken(req, res, () => {
-    console.log("req.user.id", req.user?.id);
     if (req.user.id === req.params.id || req.user.isAdmin) {
       next();
     } else {
@@ -56,18 +52,9 @@ const authorize =
       roles = [roles];
     }
     verifyToken(req, res, () => {
-      console.log("req.user.id", req.user?.id);
-      console.log("roles.length", roles.length);
-      console.log(
-        "roles.includes(req.user.role)",
-        roles.length && !roles.includes(req.user.role)
-      );
-
-      console.log("Roles", roles);
       if (roles.length && !roles.includes(req.user.role)) {
         return res.status(403).json({ message: "Unauthorized" });
       }
-      console.log("calling next");
       next();
     });
   };

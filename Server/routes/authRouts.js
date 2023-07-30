@@ -1,5 +1,5 @@
 const router = require("express").Router();
-// const {isAuthenticateuser} = require('../Middelwares/authuser.js')
+const { authorize } = require("../middleware/verifyToken");
 const {
   register,
   optverify,

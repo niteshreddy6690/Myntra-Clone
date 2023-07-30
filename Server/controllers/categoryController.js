@@ -5,12 +5,16 @@ const mongoose = require("mongoose");
 const { resendOtp } = require("./authController");
 
 const createCategory = catchAsync(async (req, res) => {
+  console.log("req.body", req.body);
+  const { name, namepath, parentId, categoryTypes } = req.body;
   const categoryObject = {
-    name: req.body.name.toLowerCase(),
+    name: name.toLowerCase(),
+    namepath: namepath.toLowerCase(),
+    categoryTypes,
   };
   console.log("categoryObject", categoryObject);
-  if (req.body.parentId) {
-    categoryObject.parentId = mongoose.Types.ObjectId(req.body.parentId);
+  if (parentId) {
+    categoryObject.parentId = mongoose.Types.ObjectId(parentId);
   }
   let createdCategory;
   const categories = await Category.find({});
@@ -56,19 +60,19 @@ function nestedCategories(categories, parentId = null) {
   const categoryList = [];
   let category;
   if (parentId !== null && parentId !== "") {
-    console.log("calling if condition");
+    // console.log("calling if condition");
     category = categories.filter(
       (cat) => String(cat.parentId) == String(parentId)
     );
   } else {
-    console.log("calling else condition");
+    // console.log("calling else condition");
     category = categories.filter((cat) => cat.parentId == null);
   }
   for (let cate of category) {
     categoryList.push({
       _id: cate._id,
       name: cate.name,
-      slug: cate.slug,
+      namepath: cate.namepath,
       parentId: cate.parentId,
       categoryPath: cate?.categoryPath,
       children: nestedCategories(categories, cate._id),
@@ -79,6 +83,7 @@ function nestedCategories(categories, parentId = null) {
 
 const getCategory = catchAsync(async (req, res) => {
   const { parentId } = req.body;
+  console.log("64af04ad5e254e45e913930a");
   const category = await Category.find({ parentId });
   console.log("category", category);
 });

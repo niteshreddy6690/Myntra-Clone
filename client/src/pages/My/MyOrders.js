@@ -209,7 +209,7 @@ const MyOrders = () => {
                     >
                       <div className="orderItems">
                         <img
-                          src={orderItem.productId?.images[0]}
+                          src={orderItem.productId?.images[0].url}
                           className="ordersItemImage"
                         />
                         <div className="orderItemInfo">

@@ -1,10 +1,16 @@
 .newProduct {
-  flex: 4;
+  flex: 0;
+  display: flex;
+  justify-content: flex-start;
+  gap: 200px;
   margin-left: 100px;
 }
-
+.addProductTitle {
+  margin-bottom: 20px;
+}
 .addProductForm {
   margin-top: 10px;
+  width: 100%;
 }
 
 .addProductItem {
@@ -27,14 +33,32 @@
 .addProductItem > select {
   padding: 10px;
 }
+.upload-image-files {
+  font-family: Arial, Helvetica, sans-serif;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #ff3e6c;
+  color: #fff;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  float: right;
+  margin-right: 20px;
+}
 
 .addProductButton {
-  margin-top: 10px;
-  padding: 7px 10px;
+  width: 350px;
+  font-family: Arial, Helvetica, sans-serif;
   border: none;
-  border-radius: 10px;
-  background-color: darkblue;
-  color: white;
-  font-weight: 600;
+  padding: 10px 0px;
+  border-radius: 5px;
+  background-color: #ff3e6c;
+  color: #fff;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  font-size: 16px;
   cursor: pointer;
+  margin-top: 50px;
 }

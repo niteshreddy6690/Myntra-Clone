@@ -2,11 +2,6 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const ApiError = require("../utils/ApiError");
 
-// exports.userById = async (user_Id) => {
-//   const user = await User.findOne({ _id: user_Id });
-//   return user;
-// };
-
 const getAllUsers = async () => {
   return User.find().select({ password: 0 });
 };
@@ -16,7 +11,6 @@ const getUserById = async (id) => {
 };
 
 const getUserByPhoneNumber = async (phone) => {
-  console.log("Phone Number", phone);
   return User.findOne({ phonenumber: phone });
 };
 const getUserByEmail = async (email) => {
@@ -25,6 +19,9 @@ const getUserByEmail = async (email) => {
 
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError("404", "User not found");
+  }
   let hashedPassword = "";
   const { email, password, name, gender, dob, altPhone, hint, location } =
     updateBody;
@@ -32,9 +29,6 @@ const updateUserById = async (userId, updateBody) => {
     hashedPassword = await bcrypt.hash(password, 8);
   }
 
-  if (!user) {
-    throw new ApiError("404", "User not found");
-  }
   // if (email) {
   //   const userEmail = await getUserByEmail(email);
 
