@@ -54,13 +54,17 @@ import Beauty from "../SubMenu/Beauty";
 import { useNavigate, useLocation } from "react-router-dom";
 const NavItem = ({ to, color, name, children }) => {
   const [ishover, setHover] = useState(false);
+
+  const handleMouseHover = (booleanValue) => {
+    setHover(booleanValue);
+  };
   return (
     <>
       <NavbarLink
         to={to}
         color={color}
-        onMouseOver={() => setHover(true)}
-        onMouseOut={() => setHover(false)}
+        onMouseOver={() => handleMouseHover(true)}
+        onMouseOut={() => handleMouseHover(false)}
         $active={ishover}
       >
         {name}
@@ -81,6 +85,7 @@ const Navbar = () => {
   const [searchDropdownBrand, setSearchDropdownBrand] = useState(null);
   const [searchDropdownCategory, setSearchDropdownCategory] = useState(null);
   const [openMobileNavbar, setOpenMobileNavbar] = useState(false);
+  const [receivedData, setReceivedData] = useState(null);
 
   // const debouceSearchTerm = useDebounce(searchText, 300);
   const dispatch = useDispatch();
@@ -328,10 +333,10 @@ const Navbar = () => {
                 style={{ margin: "27px 16px 0 15px" }}
               />
               <>
-                {/* <a href="/studio" className="desktop-exploreStudioBtn">
+                <a href="/studio" className="desktop-exploreStudioBtn">
                   <span className="StudioLabel">Explore Studio</span>
                   <IoIosArrowForward style={{ color: "#282c3f" }} />
-                </a> */}
+                </a>
               </>
             </StdContainer>
           </StdNavbarLink>

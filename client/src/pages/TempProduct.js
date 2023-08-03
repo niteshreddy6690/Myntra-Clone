@@ -14,6 +14,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { omit } from "lodash";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { request } from "../api/axios";
+import LazyComponent from "../components/LazyComponent";
 import closeIconSvg from "../Assets/svg/CloseIcon.svg";
 import { height } from "@mui/system";
 
@@ -184,15 +185,22 @@ const Label = styled.label`
   overflow: hidden;
   text-overflow: ellipsis;
   min-height: 20px;
+  padding: 1px 0;
   color: #282c3f;
   font-family: Whitney Book;
   font-size: 14px;
+  span {
+    font-size: 15px;
+    letter-spacing: 0.1px;
+  }
 `;
 
 const BrandDiv = styled(CategoriesDiv)``;
 const BrandSpan = styled(CategoriesSpan)``;
 const ColorDiv = styled(CategoriesDiv)``;
 const ColorSpan = styled(CategoriesSpan)``;
+
+const validColors = ["white", "off white", "snow white", "snow"];
 const ColorDisplay = styled.span`
   display: inline-block;
   width: 15px;
@@ -201,6 +209,8 @@ const ColorDisplay = styled.span`
   background: ${({ color }) => (color ? color : "none")};
   border-radius: 50%;
   margin-right: 10px;
+  border: ${({ color }) =>
+    validColors.includes(color) ? "1px solid #d6d6d6" : "none"};
 `;
 
 const RightSearchResults = styled.div`
@@ -267,9 +277,8 @@ const Li1 = styled.li`
 const Input1 = styled.input`
   margin: 0 16px 0 0;
   position: relative;
-  top: 3px;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border: 1px solid #c3c2c9;
   background: #fff;
   border-radius: 2px;
@@ -283,8 +292,10 @@ const Label1 = styled.label`
   overflow: hidden;
   text-overflow: ellipsis;
   min-height: 17px;
+  font-size: 15px;
   color: #282c3f;
   font-family: Whitney Book;
+  letter-spacing: 0.1px;
 `;
 
 const SortByContainerWrapper = styled.div`
@@ -449,7 +460,7 @@ const ColorDisplayInChips = styled.span`
   display: inline-block;
   position: relative;
   top: 2px;
-  opacity: 0.8;
+  opacity: 0.9;
   box-sizing: border-box;
   width: 12px;
   height: 12px;
@@ -457,6 +468,9 @@ const ColorDisplayInChips = styled.span`
   display: inline-block;
   margin-right: 5px;
   background: ${({ color }) => (color ? color : "none")};
+  [data-colorhex="bisque"] {
+    border: 1px solid #d6d6d6;
+  }
 `;
 const ClosedIcon = styled(CloseRoundedIcon)`
   width: 15px;
@@ -772,7 +786,7 @@ const TempProduct = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [location.pathname]);
 
   const handelClick = (status) => {
     if (!open) {
@@ -897,7 +911,7 @@ const TempProduct = () => {
         const prices = [
           ...new Set(
             res2.data.products?.map((item) => {
-              return item?.price;
+              return item?.mrp;
             })
           ),
         ]
@@ -906,7 +920,7 @@ const TempProduct = () => {
           .filter(Boolean);
 
         const rangePrice = (data) => {
-          const noOfRanges = 3;
+          const noOfRanges = 5;
           // step 1
           const min = Math.min(...data);
           console.log("min", min);
@@ -1195,8 +1209,8 @@ const TempProduct = () => {
 
   console.log("Colors", Colors);
 
-  const showcasedColors = showAllColors ? Colors : Colors.slice(0, 1); // Get the first 7 colors or all colors based on the state
-  const remainingColorsCount = Colors.length - 1; // Calculate the number of remaining colors
+  const showcasedColors = showAllColors ? Colors : Colors.slice(0, 6); // Get the first 7 colors or all colors based on the state
+  const remainingColorsCount = Colors.length - 6; // Calculate the number of remaining colors
   const remainingColorsMessage = `+${remainingColorsCount} more`;
   return (
     <div>
@@ -1342,9 +1356,11 @@ const TempProduct = () => {
                                   )}
                                 />
                                 <ColorDisplay
-                                  color={color.color}
+                                  color={color.color.replace(" ", "")}
                                 ></ColorDisplay>
-                                {color.color} {`(${color.frequency})`}
+                                <span>
+                                  {color.color} {`(${color.frequency})`}
+                                </span>
                               </Label>
                             </Li>
                           )}
@@ -1552,7 +1568,7 @@ const TempProduct = () => {
                         <div className="filter-summary-filter">
                           <span>
                             <ColorDisplayInChips
-                              color={color}
+                              color={color.replace(" ", "")}
                             ></ColorDisplayInChips>
                             {color}
                           </span>

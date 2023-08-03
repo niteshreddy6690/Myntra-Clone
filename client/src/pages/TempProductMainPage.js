@@ -11,6 +11,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import FavoriteIcon from "@mui/icons-material/FavoriteBorderTwoTone";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { request } from "../api/axios";
+import LazyComponent from "../components/LazyComponent";
+import LazyImage from "../components/LazyImage";
 
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
@@ -54,11 +56,13 @@ const RLi = styled.li`
 const NavLink = styled(Link)`
   display: block;
   text-decoration: none;
+  width: inherit;
+  height: inherit;
 `;
 const ImageSliderContainer = styled.div`
   position: relative;
-  width: 210px;
-  height: 280px;
+  width: 250px;
+  height: 300px;
   /* background-color: white; */
 `;
 const ProductSliderContainer = styled.div`
@@ -69,19 +73,28 @@ const ProductSliderContainer = styled.div`
   display: block;
 `;
 const SwiperCarousel = styled(Swiper)`
+  width: 210px;
+  /* background-color: #ff3f6c; */
+  height: 350px;
+  /* position: relative; */
+
   .swiper-horizontal > .swiper-pagination-bullets,
   .swiper-pagination-bullets.swiper-pagination-horizontal,
   .swiper-pagination-custom,
   .swiper-pagination-fraction {
     bottom: 15px;
     left: 0;
-    width: 100%;
+    width: 210px;
+  }
+  .swiper-wrapper {
+    width: 210px;
+    height: 280px;
   }
 
   .swiper-pagination {
     z-index: 3;
     position: absolute;
-    top: 278px;
+    top: 275px;
     height: 30px;
     padding-bottom: 20px;
     left: 0;
@@ -185,7 +198,7 @@ const WishlistContainer = styled.div`
   position: absolute;
   z-index: 5;
   left: 0;
-  top: 275px;
+  top: 270px;
   background: #fff;
   width: 100%;
   height: 40px;
@@ -262,7 +275,7 @@ const RatingContainer = styled.div`
 `;
 const ProductMetaInfo = styled.div`
   position: relative;
-  z-index: 3;
+  z-index: 5;
   background: #fff;
   padding: 0 10px;
   padding-top: 10px;
@@ -422,12 +435,25 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
               <ProductSliderContainer>
                 {product.images.map((image, i) => (
                   <SwiperSlide key={i}>
-                    <Image
-                      src={`${image.url}?tr=w-250,h-300`}
-                      alt={image.name}
-                      height="300"
-                      width="150"
+                    {/* <LazyComponent key={`${image.name}-${i}`}>
+                      <Image
+                        data-src={`${image.url}&tr=w-250,h-320`}
+                        alt={image.name}
+                        height="320px"
+                        width="250px"
+                        loading="lazy"
+                        key={`${image.name}-${i}`}
+                      />
+                    </LazyComponent> */}
+                    <LazyImage
+                      src={`${image?.url}`}
+                      alt={image?.name}
+                      height="320px"
+                      width="250px"
                       loading="lazy"
+                      key={`${image?.name}-${i}`}
+                      placeholderSrc={`${image?.url}&tr=w-50,h-50,bl-20,q-50:w-250,h-320`}
+                      blurHashUrl={image?.blurHashUrl}
                     />
                   </SwiperSlide>
                 ))}
@@ -475,10 +501,7 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
               <ProductPriceContainer>
                 <span>
                   <ProductDiscountedPrice>
-                    {`Rs. ${Math.floor(
-                      product.price -
-                        product.price * (product.discountPercentage / 100)
-                    )}`}
+                    {`Rs. ${product.mrp}`}
                   </ProductDiscountedPrice>
                   <ProductOriginalPrice>{`Rs.${product.price}`}</ProductOriginalPrice>
                 </span>
@@ -487,6 +510,7 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
                 </ProductDiscountPercentage>
               </ProductPriceContainer>
             </ProductMetaInfo>
+            {/* </div> */}
           </SwiperCarousel>
         </NavLink>
 
@@ -534,60 +558,6 @@ const TempProductMainPage = ({
   handelClick,
   open,
 }) => {
-  //   const [products, setProducts] = useState([]);
-  //   const [open, setOpen] = useState(false);
-  //   const [wishlistProducts, setWishlistProducts] = useState(null);
-  //   const location = useLocation();
-  //   const category = location.pathname.split("/")[1];
-  //   const cat = category.split("-")[1];
-  let [searchParams, setSearchParams] = useSearchParams();
-  //   console.log("category", category, cat);
-
-  //   console.log("Location.........", location);
-
-  //   const handelClick = (status) => {
-  //     if (!open) {
-  //       // document.body.classList.add("removeScroll");
-  //       document.body.style.overflow = "hidden";
-  //     } else {
-  //       // document.body.classList.remove("removeScroll");
-  //       document.body.style.overflow = "unset";
-  //     }
-  //     setOpen(!status);
-  //   };
-
-  //   const getWishlistProducts = async () => {
-  //     const res = await axios.get("http://localhost:8080/api/wishlist/");
-  //     console.log("result", res);
-  //     setWishlistProducts([
-  //       ...res?.data?.map((item) => {
-  //         return item.wishlistProduct._id;
-  //       }),
-  //     ]);
-  //   };
-
-  //   console.log("seWishik", wishlistProducts);
-
-  //   const getProducts = async ({ params, category }) => {
-  //     const searchString = location.search;
-
-  //     try {
-  //       const res = await axios.get(
-  //         cat? `http://localhost:8080/api/products?category=${cat}`
-  //           : "http://localhost:8080/api/products"
-  //         // `http://localhost:8080/api/products${searchString}`
-  //       );
-
-  //       setProducts(res.data.products);
-  //       if (res) getWishlistProducts();
-  //       console.log(res.data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-
-  console.log("open Status", open);
-
   return (
     <div>
       <RUl>

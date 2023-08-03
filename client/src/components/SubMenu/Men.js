@@ -112,7 +112,8 @@ const NavSubLinks = styled(Link)`
     font-size: 15px;
   }
 `;
-const Men = () => {
+const Men = ({ handleMouseHover }) => {
+  console.log("handleMouseHover",handleMouseHover)
   return (
     <MainPane>
       <div className="desktop-categoryContainer">

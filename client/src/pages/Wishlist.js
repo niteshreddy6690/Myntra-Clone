@@ -294,11 +294,7 @@ const Wishlist = () => {
                       {`${item.wishlistProduct.brand} ${item.wishlistProduct.description}`}
                     </ProductTitle>
                     <div className="itemdetails-itemPricing">
-                      <span className="itemdetails-boldFont">{`Rs. ${Math.floor(
-                        item.wishlistProduct.price -
-                          item.wishlistProduct.price *
-                            (item.wishlistProduct.discountPercentage / 100)
-                      )}`}</span>
+                      <span className="itemdetails-boldFont">{`Rs. ${item.wishlistProduct.mrp}`}</span>
                       <span className="itemdetails-strike">{`Rs.${item.wishlistProduct.price}`}</span>
                       <span className="itemdetails-discountPercent">{`(${item.wishlistProduct.discountPercentage}%OFF)`}</span>
                     </div>

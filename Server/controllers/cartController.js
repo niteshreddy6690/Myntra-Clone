@@ -107,11 +107,7 @@ exports.getCart = async (req, res) => {
     }
     const totalMRP = cart.items.reduce((preValue, currentValue) => {
       return Math.round(
-        preValue +
-          (currentValue?.productId?.price -
-            currentValue.productId?.price *
-              (currentValue.productId?.discountPercentage / 100)) *
-            currentValue?.quantity
+        preValue + currentValue?.productId?.mrp * currentValue?.quantity
       );
     }, 0);
     console.log(totalMRP);

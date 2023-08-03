@@ -6,6 +6,9 @@ import { Publish } from "@material-ui/icons";
 import { useSelector } from "react-redux";
 import { userRequest } from "../../requestMethods";
 import { updateProduct } from "../../redux/apiCalls";
+import { encode } from "blurhash";
+
+import { encodeImageToBlurhash } from "../../utils/BlurhashEncoder";
 import {
   getStorage,
   ref,
@@ -949,7 +952,7 @@ export default function Product() {
       };
     });
     console.log("image array", imageArray);
-    setPreviewImageFiles((prev) => prev.concat(imageArray).slice(0, 6));
+    setPreviewImageFiles((prev) => prev.concat(imageArray).slice(0, 8));
     e.currentTarget.value = null;
   };
 
@@ -985,14 +988,19 @@ export default function Product() {
             reject(error);
           },
           () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((urls) => {
+            getDownloadURL(uploadTask.snapshot.ref).then(async (urls) => {
               // setURLs((prevState) => [...prevState, urls]);
               let url = urls.replace(
                 "https://firebasestorage.googleapis.com",
                 "https://ik.imagekit.io/utywuh2nq"
               );
-
-              const data = { url: url, name: ImageFile.name };
+              console.log("uel", url);
+              const blurhash = await encodeImageToBlurhash(url);
+              const data = {
+                url: url,
+                name: file.name,
+                blurHashUrl: blurhash,
+              };
               console.log("data", data);
               resolve(data);
               console.log("File available at", url);
@@ -1166,7 +1174,7 @@ export default function Product() {
                     type="number"
                     value={product?.discountPercentage}
                     placeholder="100%"
-                    max="5"
+                    max="100"
                     onChange={handleChange}
                   />
                 </div>
@@ -1184,8 +1192,8 @@ export default function Product() {
                         <div
                           style={{
                             backgroundColor: option.color
-                              ? option.color
-                              : product?.color,
+                              ? option?.color.replace(" ", "")
+                              : product?.color.replace(" ", ""),
                             width: "20px",
                             height: "20px",
                             marginRight: "10px",
@@ -1216,11 +1224,11 @@ export default function Product() {
                 <div className="addProductItem">
                   <label>Size</label>
                   <Select
-                    defaultValue={product?.size.map((size) => {
+                    defaultValue={product?.size?.map((size) => {
                       return { label: size, value: size };
                     })}
                     onChange={(values) => {
-                      setSelectedSize(values.map((option) => option.value));
+                      setSelectedSize(values.map((option) => option?.value));
                     }}
                     options={options}
                     isMulti
@@ -1315,7 +1323,7 @@ export default function Product() {
                                 </ImagePreview>
                               </ImagePreViewWrapper>
                             ))}
-                            {previewImageFiles.length < 6 &&
+                            {previewImageFiles.length < 8 &&
                             previewImageFiles.length !== 0 ? (
                               <label htmlFor="file-upload">
                                 <img
@@ -1325,7 +1333,7 @@ export default function Product() {
                                   alt="Upload"
                                 />
                                 <p>
-                                  Add {6 - previewImageFiles.length} more Photo
+                                  Add {8 - previewImageFiles.length} more Photo
                                 </p>
                               </label>
                             ) : null}

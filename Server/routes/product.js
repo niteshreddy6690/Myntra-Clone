@@ -86,25 +86,25 @@ router.get("/:combineCategory", async (req, res) => {
     } else {
       // If the category doesn't have associated product types, fetch all products of that category
       // products = await Product.find({ gender, category: category._id });
-      console.log("calling else conditioan");
-      const ChildrenCategories = await Category.find({
-        parentId: category._id,
-      });
-      console.log("ChildrenCategories", ChildrenCategories);
-      queryObject.categories = { $in: ChildrenCategories };
+      // console.log("calling else conditioan");
+      // const ChildrenCategories = await Category.find({
+      //   parentId: category._id,
+      // });
+      // console.log("ChildrenCategories", ChildrenCategories);
+      queryObject.categories = { $in: category._id };
     }
 
-    const result = await Category.find({
-      $or: [
-        {
-          categoryPath: {
-            $in: regexKeywords,
-          },
-        },
-        // { name: { $in: regexKeywords } },
-        // { namepath: { $in: regexKeywords } },
-      ],
-    });
+    // const result = await Category.find({
+    //   $or: [
+    //     {
+    //       categoryPath: {
+    //         $in: regexKeywords,
+    //       },
+    //     },
+    //     // { name: { $in: regexKeywords } },
+    //     // { namepath: { $in: regexKeywords } },
+    //   ],
+    // });
     // console.log(
     //   await Category.find({
     //     $or: [
@@ -211,10 +211,12 @@ router.get("/:combineCategory", async (req, res) => {
   if (price) {
     let priceArray = price?.split(",").map((p) => {
       let pri = p?.split("to");
+      console.log("Pri", pri);
       return {
-        price: { $gte: Number(pri[0]?.trim()), $lte: Number(pri[1]?.trim()) },
+        mrp: { $gte: Number(pri[0]?.trim()), $lte: Number(pri[1]?.trim()) },
       };
     });
+    console.log("PriceArray", priceArray[0]);
     tempObj = {
       $or: priceArray.map((p) => {
         return p;

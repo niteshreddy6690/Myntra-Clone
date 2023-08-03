@@ -1,3 +1,12 @@
+@keyframes moveToRight {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+
 .newProduct {
   flex: 0;
   display: flex;
@@ -33,21 +42,70 @@
 .addProductItem > select {
   padding: 10px;
 }
-.upload-image-files {
-  font-family: Arial, Helvetica, sans-serif;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  background-color: #ff3e6c;
-  color: #fff;
-  letter-spacing: 0.5px;
-  font-weight: 500;
-  font-size: 14px;
-  cursor: pointer;
+
+.upload-button-container {
+  height: 40px;
+  width: 200px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(170, 185, 200, 0.4);
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
   float: right;
-  margin-right: 20px;
+  transition: width 0.5s linear;
+}
+.upload-file-button {
+  border: none;
+  height: 40px;
+  width: 100%;
+  color: #fff;
+  background-color: #ff3e6c;
+  transition: width 0.5s linear;
+}
+.upload-file-button:hover {
+  cursor: pointer;
 }
 
+.circularLoader {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: #ff3e6c;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.circularLoader svg {
+  fill: #fff;
+  display: block;
+}
+
+.upload-button-container .progressbar {
+  height: 4px;
+  margin: 0px 0 0 0;
+  position: absolute;
+  top: 50%;
+  left: 50px;
+  right: 10px;
+  background: #d3d7e0;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.upload-button-container .progressbar span {
+  position: absolute;
+  background: #28e470;
+  height: 4px;
+  left: 0;
+  top: 0;
+  width: 0;
+  display: block;
+  border-radius: 2px;
+  width: 40%;
+  animation: moveToRight 1.5s infinite linear;
+  /* border-radius: 3%; */
+}
 .addProductButton {
   width: 350px;
   font-family: Arial, Helvetica, sans-serif;

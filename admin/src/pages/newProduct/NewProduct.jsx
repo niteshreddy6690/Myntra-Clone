@@ -21,6 +21,10 @@ import transparentFolderImage from "../../Assets/png/folder_icon_transparent.png
 import closeIconSvg from "../../Assets/svg/CloseIcon.svg";
 import { request } from "../../utils/api/axios";
 import Category from "../../components/Category/Category";
+import CircularLoader from "../../FramerMotionComponents/CircularLoader";
+import { encode } from "blurhash";
+
+import { encodeImageToBlurhash } from "../../utils/BlurhashEncoder";
 
 const MainContainer = styled.div`
   box-sizing: border-box;
@@ -124,6 +128,7 @@ const ImagePreview = styled.div`
     }
   }
 `;
+
 export const Colors = [
   {
     name: "Alice Blue",
@@ -877,10 +882,27 @@ export default function NewProduct() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [previewFiles, setPreviewFiles] = useState([]);
-  const [selectedImageFile, setSelectedImageSize] = useState(null);
+  const [selectedImageFile, setSelectedImageFiles] = useState(null);
+  const [percent, setPercents] = useState(0);
   const dispatch = useDispatch();
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
+
+  const [isLoading, setLoading] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
+
+  // const handleButtonClick = () => {
+  //   setLoading(true);
+
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //     setSuccess(true);
+
+  //     setTimeout(() => {
+  //       setSuccess(false);
+  //     }, 2000);
+  //   }, 2000);
+  // };
 
   const handelSort = () => {
     let _previewFiles = [...previewFiles];
@@ -908,7 +930,7 @@ export default function NewProduct() {
       };
     });
     console.log("image array", imageArray);
-    setPreviewFiles((prev) => prev.concat(imageArray).slice(0, 6));
+    setPreviewFiles((prev) => prev.concat(imageArray).slice(0, 8));
     e.currentTarget.value = null;
   };
 
@@ -944,7 +966,9 @@ export default function NewProduct() {
 
   const handleColorChange = (values) => {
     console.log(values);
-    setSelectedColor(values.label);
+    const colorName = values?.label.replace(" ", "");
+    console.log("colorName", colorName);
+    setSelectedColor(colorName);
   };
 
   const uploadFiles = async (file) => {
@@ -955,26 +979,58 @@ export default function NewProduct() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const prog = Math.round(
+          console.log("state_changed", snapshot);
+          setLoading(true);
+          const progress = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
+          setPercents(progress);
+          console.log("Prog", progress);
         },
         (error) => {
           console.log(error);
           reject(error);
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((urls) => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (urls) => {
             // setURLs((prevState) => [...prevState, urls]);
             let url = urls.replace(
               "https://firebasestorage.googleapis.com",
               "https://ik.imagekit.io/utywuh2nq"
             );
 
-            const data = { url: url, name: file.name };
+            // Generate Blurhash for the image
+            // const image = new Image();
+            // image.src = url;
+            // image.onload = async () => {
+            //   const canvas = document.createElement("canvas");
+            //   const context = canvas.getContext("2d");
+            //   canvas.width = image.width;
+            //   canvas.height = image.height;
+            //   context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            //   const imageData = context.getImageData(
+            //     0,
+            //     0,
+            //     canvas.width,
+            //     canvas.height
+            //   );
+            //   const blurhash = encode(
+            //     imageData.data,
+            //     canvas.width,
+            //     canvas.height,
+            //     4,
+            //     3
+            //   );
+
+            //   const data = { url: url, name: file.name, blurhash: blurhash };
+            //   resolve(data);
+            // };
+            const blurhash = await encodeImageToBlurhash(url);
+            const data = { url: url, name: file.name, blurHashUrl: blurhash };
+
             console.log("data", data);
             resolve(data);
-            console.log("File available at", url);
+            // console.log("File available at", url);
             // return urls;
           });
         }
@@ -990,7 +1046,16 @@ export default function NewProduct() {
     );
     Promise.all(status)
       .then((imageData) => {
-        setSelectedImageSize(imageData);
+        console.log(
+          "all the imagesare uploaded and generated the blurhash url"
+        );
+        setLoading(false);
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+          setLoading(false);
+        }, 2000);
+        setSelectedImageFiles(imageData);
       })
       .catch((err) => {
         console.log("error");
@@ -998,50 +1063,6 @@ export default function NewProduct() {
   };
   const handleClick = async (e) => {
     e.preventDefault();
-    // const status = previewFiles?.map((fileImages) =>
-    //   uploadFiles(fileImages.file)
-    // );
-    // //console.log(status);
-    // Promise.all(
-    //   // Array of "Promises"
-    //   status
-    // )
-    //   .then((imageData) => {
-    //     // console.log(url);
-    //     console.log("url", imageData);
-    //     console.log(`All success`);
-    //     // setURLs(url);
-
-    //     const product = {
-    //       ...inputs,
-    //       gender: selectedGender,
-    //       images: imageData,
-    //       color: selectedColor,
-    //       categories: data.categoryId,
-    //       size: selectedSize,
-    //     };
-    //     console.log("Product", product);
-    //     addProduct(product, dispatch);
-    //   })
-    //   .catch((error) => {
-    //     console.log(`Some failed: `, error.message);
-    //   });
-
-    // uploadCompleted
-    //   .then(() => {
-    //     console.log(urls);
-    //     const product = {
-    //       ...inputs,
-    //       img: urls,
-    //       categories: cat,
-    //       color: color,
-    //       size: size,
-    //     };
-    //     addProduct(product, dispatch);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
 
     if (selectedImageFile) {
       const product = {
@@ -1058,6 +1079,8 @@ export default function NewProduct() {
     }
   };
 
+  console.log("Preveimages", previewFiles);
+  console.log("selectedImageFile", selectedImageFile);
   return (
     <>
       <form className="addProductForm">
@@ -1202,18 +1225,24 @@ export default function NewProduct() {
                                 isLarge={i == 0 ? 1 : 0}
                               />
                               <div
-                                onClick={() =>
+                                onClick={() => {
                                   setPreviewFiles(
-                                    previewFiles.filter((e) => e != img)
-                                  )
-                                }
+                                    previewFiles?.filter((e) => e != img)
+                                  );
+
+                                  setSelectedImageFiles(
+                                    selectedImageFile?.filter(
+                                      (e) => e?.name != img?.file.name
+                                    )
+                                  );
+                                }}
                               >
                                 <img className="closeIcon" src={closeIconSvg} />
                               </div>
                             </ImagePreview>
                           </ImagePreViewWrapper>
                         ))}
-                        {previewFiles.length < 6 &&
+                        {previewFiles.length < 8 &&
                         previewFiles.length !== 0 ? (
                           <label htmlFor="file-upload">
                             <img
@@ -1222,7 +1251,7 @@ export default function NewProduct() {
                               style={{ width: "100px", height: "100px" }}
                               alt="Upload"
                             />
-                            <p>Add {6 - previewFiles.length} more Photo</p>
+                            <p>Add {8 - previewFiles.length} more Photo</p>
                           </label>
                         ) : null}
                       </>
@@ -1242,15 +1271,45 @@ export default function NewProduct() {
                   </DraggableDiv>
                 </Container>
               </Wrapper>
-              <div>
-                <button
-                  onClick={handelUploadFiles}
-                  className="upload-image-files"
-                >
-                  Upload images
-                </button>
+              <div className="upload-button-container">
+                {!isLoading && !isSuccess ? (
+                  <button
+                    onClick={handelUploadFiles}
+                    // onClick={handleButtonClick}
+                    className="upload-file-button"
+                  >
+                    <p>Upload Now</p>
+                  </button>
+                ) : null}
+
+                <div className="circularLoader">
+                  {isLoading ? <CircularLoader /> : null}
+                  {isSuccess ? (
+                    <svg
+                      className="check"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  ) : null}
+                </div>
+                {isLoading || isSuccess ? (
+                  <div className="progressbar">
+                    <span
+                      style={
+                        !isSuccess
+                          ? { width: `${percent}%` }
+                          : { animation: "none", width: "100%" }
+                      }
+                    ></span>
+                  </div>
+                ) : null}
               </div>
             </div>
+
             <Category handleClick={handleClickCategory} data={data} />
           </div>
         </div>

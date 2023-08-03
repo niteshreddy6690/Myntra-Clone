@@ -52,6 +52,10 @@ import { fetchProductById } from "../../redux/features/product/productSlice";
 import { addItemToBag } from "../../redux/features/cart/cartSlice";
 import Moment from "react-moment";
 import { request } from "../../api/axios";
+import LazyComponent from "../../components/LazyComponent";
+import LazyImage from "../LazyImage";
+import { Blurhash } from "react-blurhash";
+import BlurHashComponent from "../BlurHashComponent";
 // import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
@@ -217,12 +221,26 @@ const Product = () => {
             <ImageContainer>
               {product.images?.map((image, i) => (
                 <ImageContainer1 key={i}>
-                  <ImageContainer2>
-                    <Img
-                      src={image.url}
+                  <ImageContainer2 key={i}>
+                    {/* <LazyComponent>
+                      <Img
+                        data-src={image.url}
+                        loading="lazy"
+                        alt={image.name}
+                        // style={{ width: "550px", height: "720px" }}
+                      />
+                    </LazyComponent> */}
+
+                    <LazyImage
+                      key={`${image?.name}-${i}`}
+                      src={`${image?.url}&tr=q-70`}
+                      alt={image?.name}
+                      width="100%"
+                      height="100%"
                       loading="lazy"
-                      alt={image.name}
-                      // style={{ width: "550px", height: "720px" }}
+                      style={{ width: "420px", height: "580px" }}
+                      placeholderSrc={`${image?.url}&tr=w-50,h-50,bl-20,q-50:w-250,h-320`}
+                      blurHashUrl={image?.blurHashUrl}
                     />
                   </ImageContainer2>
                 </ImageContainer1>
@@ -268,10 +286,7 @@ const Product = () => {
                 <Div>
                   <DiscountedPriceContainer>
                     <DiscountedPriceSpan>
-                      {`₹${Math.round(
-                        product.price -
-                          product.price * (product.discountPercentage / 100)
-                      )}`}
+                      {`₹${product.mrp}`}
                     </DiscountedPriceSpan>
                     <OriginalPriceSpan>{`MRP ₹${product.price}`}</OriginalPriceSpan>
                     <PercentageOffSpan>{`(${product.discountPercentage}% OFF)`}</PercentageOffSpan>

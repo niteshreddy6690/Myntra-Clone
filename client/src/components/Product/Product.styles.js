@@ -39,8 +39,8 @@ export const ImageContainer1 = styled.div`
   }
 `;
 export const ImageContainer2 = styled.div`
-  height: 0;
-  padding-top: 133.33333333333331%;
+  width: 425px;
+  height: 580px;
   overflow: hidden;
   position: relative;
   border: 1px solid #f5f5f6;
@@ -48,6 +48,18 @@ export const ImageContainer2 = styled.div`
     cursor: crosshair;
     cursor: url(https://constant.myntassets.com/web/assets/img/6d2dbca4-700f-4822-9759-5c92b8280de21536988731120-Zoom-icon-1x.png),
       crosshair;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    transition: transform 0.4s;
+    &:hover {
+      transform: scale(1.04);
+    }
   }
 `;
 export const Img = styled.img`
@@ -154,7 +166,7 @@ export const DiscountedPriceContainer = styled.p`
 
 export const DiscountedPriceSpan = styled.span`
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
   cursor: pointer;
   color: #282c3f;

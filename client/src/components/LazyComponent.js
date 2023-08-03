@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Blurhash } from "react-blurhash";
+import { encodeImageToBlurhash } from "./encode";
 const config = {
   rootMargin: "500px 0px 0px 0px",
   threshold: 0,
 };
 
-function LazyComponent({ children }) {
+function LazyComponent({ children, blurHashUrl }) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [hashUrl, setHashUrl] = useState("");
   let ref = useRef();
   const loadImages = (image) => {
     image.src = image.dataset.src;
@@ -14,6 +16,7 @@ function LazyComponent({ children }) {
       setImageLoaded(true);
     };
   };
+
   useEffect(() => {
     let observer = new IntersectionObserver(function (entries, self) {
       console.log("entries", entries);
@@ -60,16 +63,16 @@ function LazyComponent({ children }) {
 
   return (
     <div>
-      {/* {!imageLoaded && (
+      {!imageLoaded && blurHashUrl && (
         <Blurhash
-          hash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
+          hash={blurHashUrl}
           width={"100%"}
           height={"100%"}
           resolutionX={32}
           resolutionY={32}
           punch={1}
         />
-      )} */}
+      )}
       {React.cloneElement(children, { style: imageStyle, ref })}
     </div>
   );
