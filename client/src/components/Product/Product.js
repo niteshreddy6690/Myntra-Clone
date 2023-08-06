@@ -288,8 +288,14 @@ const Product = () => {
                     <DiscountedPriceSpan>
                       {`₹${product.mrp}`}
                     </DiscountedPriceSpan>
-                    <OriginalPriceSpan>{`MRP ₹${product.price}`}</OriginalPriceSpan>
-                    <PercentageOffSpan>{`(${product.discountPercentage}% OFF)`}</PercentageOffSpan>
+
+                    {product.discountPercentage > 0 ? (
+                      <>
+                        <OriginalPriceSpan>{`MRP ₹${product.price}`}</OriginalPriceSpan>
+                        <PercentageOffSpan>{`(${product.discountPercentage}% OFF)`}</PercentageOffSpan>
+                      </>
+                    ) : null}
+
                     <TaxInfo>
                       <TaxInfoSpan>inclusive of all taxes</TaxInfoSpan>
                     </TaxInfo>

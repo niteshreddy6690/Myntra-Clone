@@ -9,7 +9,7 @@ const loadImage = async (src) =>
     img.crossOrigin = "Anonymous";
   });
 
-const getImageData = (image) => {
+const getImageData = async (image) => {
   const canvas = document.createElement("canvas");
   canvas.width = image.width;
   canvas.height = image.height;
@@ -23,7 +23,7 @@ const getImageData = (image) => {
 
 export const encodeImageToBlurhash = async (imageUrl) => {
   const image = await loadImage(imageUrl);
-  const imageData = getImageData(image);
+  const imageData = await getImageData(image);
   if (imageData)
     return encode(imageData.data, imageData.width, imageData.height, 4, 4);
   throw Error("There is no image data");

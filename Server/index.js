@@ -29,11 +29,6 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-app.use(
-  cors({
-    origin: "http://localhost:3001/*",
-  })
-);
 // app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header(
@@ -42,6 +37,13 @@ app.use(
 //   );
 //   next();
 // });
+
+app.use(
+  cors()
+  // cors({
+  //   origin: "*",
+  // })
+);
 
 app.use(express.json());
 app.use("/api/products", productRoute);

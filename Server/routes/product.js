@@ -19,7 +19,10 @@ router.get("/:combineCategory", async (req, res) => {
     const matches = InputDynamicString.match(/\b\w+\b/gi);
 
     if (!matches) {
-      return { genderData: null, remainingString: InputDynamicString };
+      return {
+        genderData: null,
+        remainingString: InputDynamicString.replace("-", " "),
+      };
     }
 
     const similarities = genderKeywords.map((keyword) =>
@@ -41,7 +44,10 @@ router.get("/:combineCategory", async (req, res) => {
       console.log("remaining string: " + remainingString);
       return { genderData: gender.toLowerCase(), remainingString };
     } else {
-      return { genderData: null, remainingString: InputDynamicString };
+      return {
+        genderData: null,
+        remainingString: InputDynamicString.replace("-", " "),
+      };
     }
   }
 
@@ -197,13 +203,20 @@ router.get("/:combineCategory", async (req, res) => {
   // // Assign the value to categoryPath
   // queryObject.categories.categoryPath = "hvjhbjhbhv";
 
-  if (brand) {
-    queryObject.brand = { $in: brand?.split(",") };
-  }
+  // console.log("ProductsWithoutAnyQueryParams", ProductsWithoutAnyQueryParams);
   if (gender || genderData) {
     queryObject.gender = gender;
     queryObject.gender = gender ? gender : genderData;
   }
+
+  var ProductsWithoutAnyQueryParams = await Product.find(queryObject).populate(
+    "categories"
+  );
+
+  if (brand) {
+    queryObject.brand = { $in: brand?.split(",") };
+  }
+
   if (colors) {
     queryObject.color = { $in: colors?.split(",") };
   }
@@ -231,6 +244,7 @@ router.get("/:combineCategory", async (req, res) => {
       $gte: Number(discount.split("%")[0].trim()),
     };
   }
+
   console.log("queryObject", queryObject);
   let apiData = Product.find(queryObject).populate("categories");
 
@@ -250,37 +264,134 @@ router.get("/:combineCategory", async (req, res) => {
     console.log("SortFix", sortFix);
   }
   let page = parseInt(req.query.p) - 1 || 0;
-  let limit = parseInt(req.query.limit);
+  let limit = parseInt(req.query.limit) || 30;
 
-  apiData = apiData.skip(10 * limit).limit(limit);
+  apiData = apiData.skip(page * limit).limit(limit);
   try {
     let products;
 
-    // qCategory = qCategory.split(",");
-
-    // if (qNew) {
-    //   products = await Product.find().sort({ createdAt: -1 }).limit(20);
-    // } else if (queryObject) {
-    //   // products = await Product.find({
-    //   //   categories: {
-    //   //     $in: [qCategory],
-    //   //   },
-    //   // }).sort({ createdAt: -1 });
-    //   console.log("calling filter");
-    //   products = await Product.find(queryObject);
-    // } else {
-    //   products = await Product.find();
-    // }
     products = await apiData;
-    // console.log("apidata", products);
-    // const toalP = await Product.countDocuments({ categories: qCategory });
-    // console.log("toalP", toalP);
     let totalProduct = await Product.find(queryObject);
+
+    // filter items
+    const colors = Object.entries(
+      ProductsWithoutAnyQueryParams?.map((item) => {
+        return item?.color;
+      })
+        .filter(Boolean)
+        .reduce(
+          (colorFrequency, color) => (
+            (colorFrequency[color] = (colorFrequency[color] || 0) + 1),
+            colorFrequency
+          ),
+          {}
+        )
+    )
+      .map(([color, frequency]) => ({ color, frequency }))
+      .filter(Boolean);
+
+    const prices = [
+      ...new Set(
+        ProductsWithoutAnyQueryParams?.map((item) => {
+          return item?.mrp;
+        })
+      ),
+    ]
+      .filter(Boolean)
+      ?.map((key) => key)
+      .filter(Boolean);
+
+    const rangePrice = (data) => {
+      const noOfRanges = 15;
+      const min = Math.min(...data);
+      const max = Math.max(...data);
+      const avg = Math.ceil((max - min) / noOfRanges);
+
+      const ranges = Array.from({ length: noOfRanges }, (_, i) => ({
+        min: min + avg * i,
+        max: min + avg * (i + 1),
+        numbers: [],
+      }));
+
+      data.forEach((number) => {
+        for (let i = 0; i < noOfRanges; i++) {
+          const range = ranges[i];
+          if (number >= range.min && number < range.max) {
+            range.numbers.push(number);
+            break;
+          }
+        }
+      });
+
+      // Remove ranges with no numbers
+      const filteredRanges = ranges.filter((range) => range.numbers.length > 0);
+
+      return filteredRanges;
+    };
+
+    const priceRanges = rangePrice(prices);
+
+    const discountRange = [
+      ...new Set(
+        ProductsWithoutAnyQueryParams?.map((item) => {
+          return item?.discountPercentage;
+        })
+      ),
+    ]
+      .filter(Boolean)
+      ?.map((key) => {
+        if (key % 10 == 0) return key;
+      })
+      .sort()
+      .filter(Boolean);
+
+    function filterUniqueBrandsWithFrequency(brandArray) {
+      const brandFrequency = {};
+      for (const brand of brandArray) {
+        if (brand in brandFrequency) {
+          brandFrequency[brand] += 1;
+        } else {
+          brandFrequency[brand] = 1;
+        }
+      }
+
+      const resultArray = [];
+      for (const brand in brandFrequency) {
+        resultArray.push({
+          brandName: brand,
+          frequency: brandFrequency[brand],
+        });
+      }
+
+      return resultArray;
+    }
+
+    const brandData = filterUniqueBrandsWithFrequency(
+      ProductsWithoutAnyQueryParams?.map((item) => {
+        return item.brand;
+      })
+    );
+
+    const gender = [
+      ...new Set(
+        ProductsWithoutAnyQueryParams?.map((item) => {
+          return item?.gender;
+        })
+      ),
+    ]
+      ?.filter(Boolean)
+      ?.map((key) => key)
+      .filter(Boolean);
+    console.log("Gender", gender);
+
     // Product.find(queryObject);
 
-    res
-      .status(200)
-      .json({ products, totalPages: Math.ceil(totalProduct.length / 20) });
+    res.status(200).json({
+      products,
+      filters: { gender, brandData, colors, priceRanges, discountRange },
+      ProductsWithoutAnyQueryParams,
+      totalPages: Math.ceil(totalProduct.length / limit),
+    });
   } catch (err) {
     res.status(500).json(err);
   }

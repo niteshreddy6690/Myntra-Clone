@@ -1096,7 +1096,7 @@ export default function NewProduct() {
               >
                 {brand?.length > 0 &&
                   brand?.map((option, i) => (
-                    <option key={i} value={option.name}>
+                    <option key={i} value={option?.name}>
                       {option.name}
                     </option>
                   ))}
@@ -1181,7 +1181,7 @@ export default function NewProduct() {
               <input
                 type="text"
                 placeholder="jeans"
-                value={data.categoryName}
+                value={data?.categoryName}
               />
             </div>
             <div className="addProductItem">

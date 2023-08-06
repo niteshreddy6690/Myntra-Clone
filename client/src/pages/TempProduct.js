@@ -7,13 +7,14 @@ import axios from "axios";
 import Similar from "../components/ViewSimilar/Similar";
 import TempProductMainPage from "./TempProductMainPage";
 import Footer from "./Footer";
-import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
+// import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 // import { Chip } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 // check Box Section
 import { omit } from "lodash";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { request } from "../api/axios";
+import Pagination from "../components/Pagination/Pagination";
 import LazyComponent from "../components/LazyComponent";
 import closeIconSvg from "../Assets/svg/CloseIcon.svg";
 import { height } from "@mui/system";
@@ -620,6 +621,9 @@ const TempProduct = () => {
   const [SortValue, setSort] = useState("");
   const [PageNo, setPageNo] = useState(1);
   const [showAllColors, setShowAllColors] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  // const totalPages = 30; // Total number of pages in your example
 
   // const showcasedColors = showAllColors ? colors : colors.slice(0, 7); // Get the first 7 colors or all colors based on the state
   // const remainingColorsCount = colors.length - 7; // Calculate the number of remaining colors
@@ -630,6 +634,9 @@ const TempProduct = () => {
     bottom: "auto",
   });
 
+  // const handlePageChange = (pageNumber) => {
+  //   setCurrentPage(pageNumber);
+  // };
   const handleShowAllColors = () => {
     setShowAllColors(true);
   };
@@ -781,7 +788,7 @@ const TempProduct = () => {
     // props?.getProducts({ params });
     getProducts({ params });
     params?.sort && setSort(sortDic[params?.sort]);
-    params?.p && setPageNo(parseInt(params?.p));
+    params?.p && setCurrentPage(parseInt(params?.p));
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -830,11 +837,11 @@ const TempProduct = () => {
     console.log("URL______: ", url);
     try {
       console.log("cat inside api call", category);
-      const res2 = await axios.get(
-        `http://localhost:8080/api/products/${category}`
-      );
+      // const res2 = await axios.get(
+      //   `http://localhost:8080/api/products/${category}`
+      // );
 
-      console.log("Res2", res2);
+      // console.log("Res2", res2);
       const res = await axios.get(
         // cat ? `http://localhost:8080/api/products?category=${cat}`
         //   : "http://localhost:8080/api/products"
@@ -843,7 +850,7 @@ const TempProduct = () => {
       );
 
       console.log("result??????????????????????", res);
-      if (res2) {
+      if (res) {
         // const brandData = [
         //   ...new Set(
         //     res2.data.products?.map((item) => {
@@ -852,32 +859,32 @@ const TempProduct = () => {
         //   ),
         // ]?.map((key) => ({ key: key, value: key }));
 
-        function filterUniqueBrandsWithFrequency(brandArray) {
-          const brandFrequency = {};
-          for (const brand of brandArray) {
-            if (brand in brandFrequency) {
-              brandFrequency[brand] += 1;
-            } else {
-              brandFrequency[brand] = 1;
-            }
-          }
+        // function filterUniqueBrandsWithFrequency(brandArray) {
+        //   const brandFrequency = {};
+        //   for (const brand of brandArray) {
+        //     if (brand in brandFrequency) {
+        //       brandFrequency[brand] += 1;
+        //     } else {
+        //       brandFrequency[brand] = 1;
+        //     }
+        //   }
 
-          const resultArray = [];
-          for (const brand in brandFrequency) {
-            resultArray.push({
-              brandName: brand,
-              frequency: brandFrequency[brand],
-            });
-          }
+        //   const resultArray = [];
+        //   for (const brand in brandFrequency) {
+        //     resultArray.push({
+        //       brandName: brand,
+        //       frequency: brandFrequency[brand],
+        //     });
+        //   }
 
-          return resultArray;
-        }
-        const brandData = filterUniqueBrandsWithFrequency(
-          res2.data.products?.map((item) => {
-            return item.brand;
-          })
-        );
-        console.log("result", brandData);
+        //   return resultArray;
+        // }
+        // const brandData = filterUniqueBrandsWithFrequency(
+        //   res.data.ProductsWithoutAnyQueryParams?.map((item) => {
+        //     return item.brand;
+        //   })
+        // );
+        // console.log("result", brandData);
 
         // const colors = [
         //   ...new Set(
@@ -890,118 +897,102 @@ const TempProduct = () => {
         //   ?.map((key) => ({ key: key, value: key }))
         //   .filter(Boolean);
 
-        const colors = Object.entries(
-          res2.data.products
-            ?.map((item) => {
-              return item?.color;
-            })
-            .filter(Boolean)
-            .reduce(
-              (colorFrequency, color) => (
-                (colorFrequency[color] = (colorFrequency[color] || 0) + 1),
-                colorFrequency
-              ),
-              {}
-            )
-        )
-          .map(([color, frequency]) => ({ color, frequency }))
-          .filter(Boolean);
+        // const colors = Object.entries(
+        //   res.data.ProductsWithoutAnyQueryParams?.map((item) => {
+        //     return item?.color;
+        //   })
+        //     .filter(Boolean)
+        //     .reduce(
+        //       (colorFrequency, color) => (
+        //         (colorFrequency[color] = (colorFrequency[color] || 0) + 1),
+        //         colorFrequency
+        //       ),
+        //       {}
+        //     )
+        // )
+        //   .map(([color, frequency]) => ({ color, frequency }))
+        //   .filter(Boolean);
 
-        console.log("Color", colors);
-        const prices = [
-          ...new Set(
-            res2.data.products?.map((item) => {
-              return item?.mrp;
-            })
-          ),
-        ]
-          .filter(Boolean)
-          ?.map((key) => key)
-          .filter(Boolean);
+        // console.log("Color", colors);
+        // const prices = [
+        //   ...new Set(
+        //     res.data.ProductsWithoutAnyQueryParams?.map((item) => {
+        //       return item?.mrp;
+        //     })
+        //   ),
+        // ]
+        //   .filter(Boolean)
+        //   ?.map((key) => key)
+        //   .filter(Boolean);
 
-        const rangePrice = (data) => {
-          const noOfRanges = 5;
-          // step 1
-          const min = Math.min(...data);
-          console.log("min", min);
-          const max = Math.max(...data);
-          console.log("max", max);
-          // step 2
-          const avg = Math.ceil((max - min) / noOfRanges);
-          console.log("avg", avg);
-          // step 3
-          const ranges = [];
-          for (var i = 0; i < noOfRanges; i++) {
-            ranges[i] = { min: min + avg * i, max: min + avg * (i + 1) };
-            ranges[i]["numbers"] = [];
-          }
+        // const rangePrice = (data) => {
+        //   const noOfRanges = 30;
+        //   // step 1
+        //   const min = Math.min(...data);
+        //   console.log("min", min);
+        //   const max = Math.max(...data);
+        //   console.log("max", max);
+        //   // step 2
+        //   const avg = Math.ceil((max - min) / noOfRanges);
+        //   console.log("avg", avg);
+        //   // step 3
+        //   const ranges = [];
+        //   for (var i = 0; i < noOfRanges; i++) {
+        //     ranges[i] = { min: min + avg * i, max: min + avg * (i + 1) };
+        //     ranges[i]["numbers"] = [];
+        //   }
 
-          // step 4
+        //   // step 4
 
-          data.forEach((number) => {
-            ranges.forEach((range, index) => {
-              if (number >= range.min && number < range.max) {
-                ranges[index]["numbers"].push(number);
-              }
-            });
-          });
+        //   data.forEach((number) => {
+        //     ranges.forEach((range, index) => {
+        //       if (number >= range.min && number < range.max) {
+        //         ranges[index]["numbers"].push(number);
+        //       }
+        //     });
+        //   });
 
-          return ranges;
-        };
+        //   return ranges;
+        // };
 
-        const priceRanges = rangePrice(prices);
+        // const priceRanges = rangePrice(prices);
 
-        console.log(
-          "result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-          priceRanges
-        );
+        // console.log(
+        //   "result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        //   priceRanges
+        // );
         // pages = new Array(Math.ceil(res2.data.products.length / 20))
         //   .fill(null)
         //   .map((i, v) => v + 1);
 
-        const discountRange = [
-          ...new Set(
-            res2.data.products?.map((item) => {
-              return item?.discountPercentage;
-            })
-          ),
-        ]
-          .filter(Boolean)
-          ?.map((key) => {
-            if (key % 10 == 0) return key;
-          })
-          .sort()
-          .filter(Boolean);
+        // const discountRange = [
+        //   ...new Set(
+        //     res.data.ProductsWithoutAnyQueryParams?.map((item) => {
+        //       return item?.discountPercentage;
+        //     })
+        //   ),
+        // ]
+        //   .filter(Boolean)
+        //   ?.map((key) => {
+        //     if (key % 10 == 0) return key;
+        //   })
+        //   .sort()
+        //   .filter(Boolean);
 
-        console.log("brandData", brandData);
-        setBrand(brandData);
-        setColor(colors);
-        setPriceRange(priceRanges);
-        setDiscountRange(discountRange);
-
-        console.log("colors-------------: ", colors);
+        // console.log("brandData", brandData);
+        setBrand(res?.data?.filters?.brandData);
+        setColor(res?.data?.filters?.colors);
+        setPriceRange(res?.data?.filters?.priceRanges);
+        setDiscountRange(res?.data?.filters?.discountRange);
       }
 
-      if (res) {
-        setProducts(res.data.products);
-        getWishlistProducts();
-        console.log("Products..............", [
-          ...new Set(
-            res.data.products?.map((item) => {
-              return item.brand;
-            })
-          ),
-        ]);
-      }
-
-      console.log(res.data);
+      setProducts(res?.data?.products);
+      setTotalPages(res?.data?.totalPages);
+      getWishlistProducts();
     } catch (err) {
       console.log(err);
     }
   };
-
-  console.log("open Status", open);
-
   /// Scroll on animation
 
   /// CheckBox
@@ -1194,7 +1185,7 @@ const TempProduct = () => {
       _params = { ...params, ...(p && { p }) };
       setSearchParams(p > 1 ? _params : omit(_params, "p"));
     }
-    setPageNo(parseInt(p));
+    setCurrentPage(parseInt(p));
     console.log("handle page", _params);
     getProducts({ params: _params });
   };
@@ -1632,35 +1623,14 @@ const TempProduct = () => {
                   />
                 </RSecttion>
               </RightSectionRowBase>
+
               <PaginationContainer>
-                {PageNo > 1 ? (
-                  <PreviousButton
-                    onClick={() => handelPagination(parseInt(PageNo - 1))}
-                  >
-                    Previous
-                  </PreviousButton>
-                ) : null}
-                {pages?.map((item, i) => (
-                  <button
-                    key={i.toString()}
-                    className="pageButtons"
-                    style={
-                      PageNo == item
-                        ? { backgroundColor: "black", color: "white" }
-                        : null
-                    }
-                    // href={`http://localhost:3000${location.pathname}${location.search}&p=${item}`}
-                    onClick={() => handelPagination(item)}
-                  >
-                    {item}
-                  </button>
-                ))}
-                {PageNo < 5 ? (
-                  <NextButton
-                    onClick={() => handelPagination(parseInt(PageNo + 1))}
-                  >
-                    Next
-                  </NextButton>
+                {totalPages > 1 ? (
+                  <Pagination
+                    onPageChange={handelPagination}
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                  />
                 ) : null}
               </PaginationContainer>
             </RightSearchResults>

@@ -1241,7 +1241,7 @@ export default function Product() {
                     placeholder={
                       categoryData?.categoryName
                         ? categoryData?.categoryName
-                        : product?.categories.name
+                        : product?.categories?.name
                     }
                   />
                 </div>

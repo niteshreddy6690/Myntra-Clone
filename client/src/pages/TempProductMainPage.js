@@ -26,8 +26,9 @@ const RUl = styled.ul`
   /* align-items: stretch;
   align-content: stretch; */
   margin: 0 -10px 0 3px;
+  column-gap: 2%;
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0px;
   list-style: none;
 `;
@@ -446,7 +447,7 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
                       />
                     </LazyComponent> */}
                     <LazyImage
-                      src={`${image?.url}`}
+                      src={`${image.url}&tr=w-250,h-320`}
                       alt={image?.name}
                       height="320px"
                       width="250px"
@@ -503,11 +504,15 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
                   <ProductDiscountedPrice>
                     {`Rs. ${product.mrp}`}
                   </ProductDiscountedPrice>
-                  <ProductOriginalPrice>{`Rs.${product.price}`}</ProductOriginalPrice>
                 </span>
-                <ProductDiscountPercentage>
-                  {`(${product.discountPercentage}%OFF)`}
-                </ProductDiscountPercentage>
+                {product.discountPercentage > 0 ? (
+                  <>
+                    <ProductOriginalPrice>{`Rs.${product.price}`}</ProductOriginalPrice>
+                    <ProductDiscountPercentage>
+                      {`(${product.discountPercentage}%OFF)`}
+                    </ProductDiscountPercentage>
+                  </>
+                ) : null}
               </ProductPriceContainer>
             </ProductMetaInfo>
             {/* </div> */}
@@ -570,8 +575,8 @@ const TempProductMainPage = ({
             wishlistProducts={wishlistProducts}
           />
         ))}
-        <RLi></RLi>
-        <RLi></RLi>
+        {/* <RLi></RLi>
+        <RLi></RLi> */}
       </RUl>
     </div>
   );
