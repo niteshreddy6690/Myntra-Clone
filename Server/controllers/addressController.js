@@ -4,7 +4,7 @@ const userService = require("../services/userServices");
 const catchAsync = require("../utils/catchAsync");
 const mongoose = require("mongoose");
 
-exports.addAddress = catchAsync(async (req, res) => {
+const addAddress = catchAsync(async (req, res) => {
   const {
     name,
     mobileNumber,
@@ -22,13 +22,10 @@ exports.addAddress = catchAsync(async (req, res) => {
   let address_data;
 
   const user = await userService.getUserById(id);
-  
 
   const addressUser = await Address.findOne({ userId: id });
-  
 
   if (!addressUser) {
-    
     const addressData = new Address({
       userId: user.id,
       address: [
@@ -49,7 +46,6 @@ exports.addAddress = catchAsync(async (req, res) => {
     address_data = await addressData.save();
     res.status(200).json({ addressData: address_data });
   } else {
-    
     addressUser.address.push({
       name,
       mobileNumber,
@@ -83,7 +79,7 @@ exports.addAddress = catchAsync(async (req, res) => {
   }
 });
 
-exports.editAddress = catchAsync(async (req, res) => {
+const editAddress = catchAsync(async (req, res) => {
   const {
     addressId,
     name,
@@ -97,8 +93,8 @@ exports.editAddress = catchAsync(async (req, res) => {
     landmark,
     isDefault,
   } = req.body;
-  
-  // 
+
+  //
   const { id } = req.user;
   let addr = await Address.findOne({ userId: id }).populate("address");
 
@@ -106,7 +102,7 @@ exports.editAddress = catchAsync(async (req, res) => {
     var addrIndex = addr?.address.findIndex(
       (address) => address._id == addressId
     );
-    
+
     if (addrIndex !== -1) {
       addr.address[addrIndex].name = name;
       addr.address[addrIndex].mobileNumber = mobileNumber;
@@ -122,7 +118,6 @@ exports.editAddress = catchAsync(async (req, res) => {
   }
 
   if (isDefault) {
-    
     Address.updateMany(
       { userId: id },
       { $set: { "address.$[elem].isDefault": false } },
@@ -132,29 +127,28 @@ exports.editAddress = catchAsync(async (req, res) => {
         ],
       }
     )
-      .then(async (result) => {
-      })
+      .then(async (result) => {})
       .catch((error) => {
         console.error(error);
         return res.status(400).send({ error });
       });
   }
   const savedAddr = await addr.save();
-  
+
   // res.send(addr?.address[addrIndex]);
   res.send(savedAddr);
 });
 
-exports.getAddress = catchAsync(async (req, res) => {
+const getAddress = catchAsync(async (req, res) => {
   const { id } = req.user;
   const addr = await Address.findOne({ userId: id }).populate("address");
-  // 
+  //
   res.send(addr);
 });
 
-exports.deleteAddress = catchAsync(async (req, res) => {
+const deleteAddress = catchAsync(async (req, res) => {
   const { addressId } = req.body;
-  
+
   const { id } = req.user;
   const removedAddress = await Address.findOneAndUpdate(
     { userId: id },
@@ -166,3 +160,5 @@ exports.deleteAddress = catchAsync(async (req, res) => {
 
   res.status(200).send(removedAddress);
 });
+
+module.exports = { addAddress, editAddress, getAddress, deleteAddress };
