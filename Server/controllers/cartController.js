@@ -3,7 +3,7 @@ const Product = require("../models/Product");
 
 exports.addItemToCart = async (req, res) => {
   const userId = req.user.id;
-  
+
   const { productId, size, quantity = 1, gId } = req.body;
 
   try {
@@ -21,7 +21,7 @@ exports.addItemToCart = async (req, res) => {
       const indexFound = cart.items.findIndex(
         (item) => item.productId.id == productId && item.size == size
       );
-      
+
       //------this removes an item from the the cart if the quantity is set to zero,We can use this method to remove an item from the list  -------
       if (indexFound !== -1 && quantity <= 0) {
         cart.items.splice(indexFound, 1);
@@ -42,7 +42,7 @@ exports.addItemToCart = async (req, res) => {
           // cart.items[indexFound].total =
           //   cart.items[indexFound].quantity * productDetails.price;
           cart.items[indexFound].price = productDetails.price;
-          // 
+          //
         } else {
           cart.items.push({
             productId: productId,
@@ -86,7 +86,6 @@ exports.addItemToCart = async (req, res) => {
       res.json(data);
     }
   } catch (err) {
-    
     res.status(400).json({
       type: "Invalid",
       msg: "Something Went Wrong",
@@ -118,7 +117,6 @@ exports.getCart = async (req, res) => {
     const discountedMRP = Math.round(actualTotal - totalMRP);
     res.status(200).json({ cart, totalMRP, actualTotal, discountedMRP });
   } catch (err) {
-    
     res.status(400).json({
       type: "Invalid",
       msg: "Something Went Wrong",
@@ -139,7 +137,6 @@ exports.emptyCart = async (req, res) => {
     });
     z;
   } catch (err) {
-    
     res.status(400).json({
       type: "Invalid",
       msg: "Something Went Wrong",
@@ -161,49 +158,49 @@ exports.deleteItemInCart = async (req, res) => {
       cart = await cart.save();
       if (cart.items.length > 0) {
         let deletedCart = await cartService.cart(cart.id);
-        
       }
     } else {
-      
     }
-  } catch (err) {
-    
-  }
-  
+  } catch (err) {}
 
   res.status(200).json({ deletedProduct });
 };
 
 exports.updateCartItemSizeAndQuantity = async (req, res) => {
-  const { productId, selectedSize, productGId ,productQnt} = req.body;
+  const { productId, selectedSize, productGId, productQnt } = req.body;
   const userId = req.user.id;
   var cart = await cartService.cart(userId);
 
   try {
     if (cart) {
-      const CartProductItemIndex=cart.items.findIndex((item) => item.id == productGId)
-    if(selectedSize ) {
-      const indexFoundForSameSelectedSize = cart.items.findIndex(
-        (item) => item.productId.id == productId && item.size == selectedSize
+      const CartProductItemIndex = cart.items.findIndex(
+        (item) => item.id == productGId
       );
-      if(indexFoundForSameSelectedSize > -1 && CartProductItemIndex>-1 && CartProductItemIndex!=indexFoundForSameSelectedSize){
-        cart.items[indexFoundForSameSelectedSize].size = selectedSize
-        cart.items[indexFoundForSameSelectedSize].quantity = cart.items[CartProductItemIndex].quantity + cart.items[indexFoundForSameSelectedSize].quantity
-        cart.items.splice(CartProductItemIndex, 1);
-      }
-      else{
-        cart.items[CartProductItemIndex].size = selectedSize 
-      }
+      if (selectedSize) {
+        const indexFoundForSameSelectedSize = cart.items.findIndex(
+          (item) => item.productId.id == productId && item.size == selectedSize
+        );
+        if (
+          indexFoundForSameSelectedSize > -1 &&
+          CartProductItemIndex > -1 &&
+          CartProductItemIndex != indexFoundForSameSelectedSize
+        ) {
+          cart.items[indexFoundForSameSelectedSize].size = selectedSize;
+          cart.items[indexFoundForSameSelectedSize].quantity =
+            cart.items[CartProductItemIndex].quantity +
+            cart.items[indexFoundForSameSelectedSize].quantity;
+          cart.items.splice(CartProductItemIndex, 1);
+        } else {
+          cart.items[CartProductItemIndex].size = selectedSize;
+        }
       }
 
-      if(productQnt){
+      if (productQnt) {
         cart.items[CartProductItemIndex].quantity = productQnt;
       }
 
-    let data = await cart.save();
-    res.status(200).json({ data });
+      let data = await cart.save();
+      res.status(200).json({ data });
     }
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 };
