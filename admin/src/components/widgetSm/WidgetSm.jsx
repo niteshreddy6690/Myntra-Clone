@@ -16,7 +16,7 @@ export default function WidgetSm() {
     getUsers();
   }, []);
 
-  console.log(users);
+  
   return (
     <div className="widgetSm">
       <span className="widgetSmTitle">New Join Members</span>

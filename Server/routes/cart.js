@@ -56,7 +56,7 @@
 //             currentValue.quantity
 //         );
 //       }, 0);
-//       console.log(total);
+//       
 //       return res.status(201).json({ cart, total });
 //     } else {
 //       //no cart for user, create new cart
@@ -80,7 +80,7 @@
 //       return res.status(201).send(newCart);
 //     }
 //   } catch (err) {
-//     console.log(err);
+//     
 //     res.status(500).json(err);
 //   }
 // });
@@ -90,7 +90,7 @@
 // router.get("/", async (req, res) => {
 //   try {
 //     const carts = await Cart.find();
-//     console.log(carts[0].products);
+//     
 
 //     let totalMRP = carts[0].products.reduce((preValue, currentValue) => {
 //       return Math.round(
@@ -105,9 +105,9 @@
 //     }, 0);
 
 //     const discountedMRP = Math.round(actualTotal - totalMRP);
-//     console.log("Discounted Price", discountedMRP);
-//     console.log("Final Total", totalMRP);
-//     // console.log(carts[0].products);
+//     
+//     
+//     // 
 //     res.status(200).json({ carts, actualTotal, totalMRP, discountedMRP });
 //   } catch (err) {
 //     res.status(500).json(err);
@@ -126,13 +126,13 @@
 //       cart.products.splice(itemIndex, 1);
 //       cart = await cart.save();
 //     } else {
-//       console.log("no product found");
+//       
 //     }
 //   } catch (err) {
-//     console.log(err);
+//     
 //   }
-//   console.log("cart", Cart);
-//   console.log("deletedProduct", deletedProduct);
+//   
+//   
 
 //   res.status(200).json({ deletedProduct });
 // });

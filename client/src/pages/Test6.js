@@ -140,9 +140,9 @@ const rs = products.map((item) => {
 const rs1 = rs.reduce((res, item) => [...res, ...item], []);
 
 uniq = [...new Set(rs1)];
-console.log("uniq", uniq);
 
-console.log([
+
+
   ...new Set(
     products.map((item) => {
       return item.brand;

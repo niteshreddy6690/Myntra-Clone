@@ -48,8 +48,13 @@ const StarComp = ({
       ? Number(userRatingForProduct[0]?.rating)
       : null
   );
-
+  const [commentValue,SetCommentValue] = useState("")
   const [showWriteReview, setShowWriteReview] = useState(false);
+
+
+  useEffect(()=>{
+    SetCommentValue(userRatingForProduct[0]?.comment? userRatingForProduct[0]?.comment: "")
+  },[])
 
   const mouseLeave = () => {
     setSelectedStars(
@@ -61,17 +66,16 @@ const StarComp = ({
 
   const handleStarClick = (num) => {
     setSelectedStars(num);
-    // getAllUserReviews();
+    SetCommentValue(userRatingForProduct[0]?.comment? userRatingForProduct[0]?.comment: "")
   };
   const callAddReview = (productId, ratingNo = 1, comment = "") => {
-    // console.log("Nostar", ratingNo);
     if (ratingNo) addReview(productId, ratingNo, comment);
   };
-  console.log(selectedStars);
-
   const handleShowModal = () => {
     setShowWriteReview(!showWriteReview);
   };
+
+ 
   return (
     <StartContainer>
       <div className="review-section">
@@ -91,7 +95,7 @@ const StarComp = ({
                   onMouseEnter={() => handleStarClick(num)}
                   // onMouseLeave={() => handleStarClick(selectedStars)}
                   className="starSelected"
-                  onClick={() => callAddReview(productId, selectedStars)}
+                  onClick={() => callAddReview(productId, selectedStars,commentValue)}
                 />
               )}
             </span>

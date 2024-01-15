@@ -25,6 +25,7 @@ import emptyBag from "../../Assets/Images/empty-bag.webp";
 
 import axios from "axios";
 import CartOverlay from "./CartOverlay";
+import CartQuantityOverlay from "./CartQuantityOverlay";
 
 const CartCmp = ({
   products,
@@ -38,19 +39,19 @@ const CartCmp = ({
   const [isSetQty, SetQty] = useState(false);
 
   const handelSetSize = (_product) => {
+    //
     setSelectedProduct(_product);
     SetSize(!isSetSize);
   };
-
   const handelSelectQty = (_product) => {
+    //
     setSelectedProduct(_product);
-    isSetQty(!isSetQty);
+    SetQty(!isSetQty);
   };
-
-  console.log("Products.. in cartcmp", products);
+  //
   return (
     <>
-      {products && products.cart?.items.length > 0 ? (
+      {products && products.cart?.items?.length > 0 ? (
         <Wrapper>
           <CartContainer>
             <LeftSection>
@@ -60,7 +61,14 @@ const CartCmp = ({
                     <CartItemContainer>
                       <div className="item-container">
                         <div className="leftItem">
-                          <NavLink to={"/"}>
+                          <NavLink
+                            target="_blank"
+                            to={`/${product?.productId?.gender?.toLowerCase()}/${product?.productId?.brand
+                              .replaceAll(" ", "-")
+                              .toLowerCase()}/${product?.productId?.description
+                              .replaceAll(" ", "-")
+                              .toLowerCase()}/${product?.productId._id}/buy`}
+                          >
                             <Img
                               src={product?.productId?.images[0]?.url}
                               alt={product?.productId?.images[0]?.name}
@@ -95,22 +103,22 @@ const CartCmp = ({
                               <span>{`Size: ${product?.size}`}</span>
                               <StyledArrowDropDownIcon
                                 style={{
-                                  height: "14px",
-                                  width: "14px",
-                                  fontSize: "16px",
+                                  height: "16px",
+                                  width: "16px",
+                                  fontSize: "18px",
                                 }}
                               />
                             </div>
                             <div
                               className="size-quantity"
-                              onClick={() => handelSelectQty()}
+                              onClick={() => handelSelectQty(product)}
                             >
                               <span>{`Qty: ${product?.quantity}`}</span>
                               <StyledArrowDropDownIcon
                                 style={{
-                                  height: "14px",
-                                  width: "14px",
-                                  fontSize: "16px",
+                                  height: "16px",
+                                  width: "16px",
+                                  fontSize: "18px",
                                 }}
                               />
                             </div>
@@ -120,7 +128,7 @@ const CartCmp = ({
                           className="clearIcon"
                           onClick={() => handelDelete(product._id)}
                         >
-                          <ClearIcon />
+                          <ClearIcon style={{ fontSize: "16px" }} />
                         </div>
                       </div>
                     </CartItemContainer>
@@ -133,8 +141,8 @@ const CartCmp = ({
                 <div className="priceBlock-base-priceHeader">
                   PRICE DETAILS
                   {products.length > 1
-                    ? `(${products?.length} items)`
-                    : `(${products?.length} item)`}
+                    ? `(${products?.cart?.items.length} items)`
+                    : `(${products?.cart?.items.length} item)`}
                 </div>
                 <div className="priceBreakUp-base-orderSummary">
                   <div className="priceDetail-base-row">
@@ -179,9 +187,17 @@ const CartCmp = ({
               handelSetSize={handelSetSize}
               product={selectedProduct}
               isSetSize={isSetSize}
-              isSetQty={isSetQty}
               handelUpdateSizeAndQuantity={handelUpdateSizeAndQuantity}
               // handelSelectSize={handelSelectSize}
+            />
+          ) : null}
+
+          {isSetQty ? (
+            <CartQuantityOverlay
+              isSetQty={isSetQty}
+              handelSelectQty={handelSelectQty}
+              product={selectedProduct}
+              handelUpdateSizeAndQuantity={handelUpdateSizeAndQuantity}
             />
           ) : null}
         </Wrapper>

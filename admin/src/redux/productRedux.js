@@ -28,7 +28,7 @@ export const productSlice = createSlice({
     },
     deleteProductSuccess: (state, action) => {
       state.isFetching = false;
-      console.log("action in apicalls", action.payload);
+      
       // state.products = action.payload;
       state.products.splice(
         state.products.findIndex((item) => item._id === action.payload),

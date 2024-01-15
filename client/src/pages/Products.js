@@ -679,14 +679,14 @@
 //   };
 //   // useEffect(() => {
 //   //   if (wishlistProducts && wishlistProducts?.includes(product._id)) {
-//   //     console.log("Product exist in wishlist");
+//   //     
 //   //     // setWishlist(true);
 //   //   }
 //   // });
 
 //   useEffect(() => {
 //     // swiperRef.current.autoplay.stop();
-//     // console.log(Swiper);
+//     // 
 //     swiperRef.current.params.autoplay.delay = 2000;
 //   }, []);
 
@@ -803,9 +803,9 @@
 //   const category = location.pathname.split("/")[1];
 //   const cat = category.split("-")[1];
 //   let [searchParams, setSearchParams] = useSearchParams();
-//   console.log("category", category, cat);
+//   
 
-//   console.log("Location.........", location);
+//   
 
 //   const handelClick = (status) => {
 //     if (!open) {
@@ -820,7 +820,7 @@
 
 //   const getWishlistProducts = async () => {
 //     const res = await axios.get("http://localhost:8080/api/wishlist/");
-//     console.log("result", res);
+//     
 //     setWishlistProducts([
 //       ...res?.data?.map((item) => {
 //         return item.wishlistProduct._id;
@@ -828,7 +828,7 @@
 //     ]);
 //   };
 
-//   console.log("seWishik", wishlistProducts);
+//   
 
 //   const getProducts = async ({ params, category }) => {
 //     const searchString = location.search;
@@ -843,13 +843,13 @@
 
 //       setProducts(res.data.products);
 //       if (res) getWishlistProducts();
-//       console.log(res.data);
+//       
 //     } catch (err) {
-//       console.log(err);
+//       
 //     }
 //   };
 
-//   console.log("open Status", open);
+//   
 
 //   return (
 //     <div>

@@ -184,6 +184,24 @@ const HeaderText = styled.h1`
   max-height: 5em;
   font-weight: 600;
   text-align: start;
+
+  @media screen and (max-width: 1200px) {
+     font-size: 1.6em;
+  }
+    @media screen and (max-width: 992px) {
+     font-size: 1.4em;
+     transition: all ease-in-out;
+     padding: 30px 0 30px 20px;
+  }
+  @media screen and (max-width: 768px) {
+     font-size: 1.2em;
+     padding: 30px 0 30px 10px;
+  }
+   @media screen and (max-width: 560px) {
+     font-size: 1em;
+     padding: 30px 0 30px 5px;
+  }
+
 `;
 const NavLink = styled(Link)`
   text-decoration: none;
@@ -1286,7 +1304,7 @@ const Home = () => {
         </BestOfMyntraContainer>
       </Div>
       <Banner />
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };

@@ -38,7 +38,7 @@ const MainPane = styled.div`
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
   animation: ${fade} 0.8s ease-in-out;
   .desktop-categoryContainer {
-    width: 1110px;
+    width: 100%;
     padding: 0 10px 10px 15px;
     transition: all 0.2s ease-out;
 
@@ -113,7 +113,7 @@ const NavSubLinks = styled(Link)`
   }
 `;
 const Men = ({ handleMouseHover }) => {
-  console.log("handleMouseHover",handleMouseHover)
+  
   return (
     <MainPane>
       <div className="desktop-categoryContainer">

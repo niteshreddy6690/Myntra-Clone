@@ -19,11 +19,11 @@ function LazyComponent({ children, blurHashUrl }) {
 
   useEffect(() => {
     let observer = new IntersectionObserver(function (entries, self) {
-      console.log("entries", entries);
-      console.log("self", self);
+      // 
+      // 
       // iterate over each entry
       entries.forEach((entry) => {
-        console.log("entries11", entries);
+        // 
         // process just the images that are intersecting.
         // isIntersecting is a property exposed by the interface
         if (entry.isIntersecting) {

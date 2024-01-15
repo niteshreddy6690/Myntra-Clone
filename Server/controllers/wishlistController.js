@@ -32,7 +32,7 @@ const removeProductFromWishlist = catchAsync(async (req, res) => {
 });
 
 const findProductInWishlist = catchAsync(async (req, res) => {
-  console.log(req.params.id);
+  
   const product = await WhishList.findOne({
     wishlistProduct: req.params.id,
   });

@@ -8,7 +8,7 @@ exports.cart = async (user) => {
       select: { __v: 0, createdAt: 0, updatedAt: 0 },
     });
     // .sort({ "items.createdAt": -1 });
-    //   console.log("Cart", carts[0]);
+    //   
     return carts[0];
   } catch (err) {}
 };

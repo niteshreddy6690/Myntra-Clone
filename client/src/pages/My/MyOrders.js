@@ -140,8 +140,6 @@ const OrderList = styled.div`
 
 // const OrdersContentPage = styled.div``;
 const MyOrders = () => {
-  const [orders, setOrders] = useState(null);
-
   const { isLoading, isError, orderItems } = useSelector((state) => ({
     ...state.order,
   }));
@@ -149,31 +147,25 @@ const MyOrders = () => {
 
   const dispatch = useDispatch();
   const getOrders = async () => {
-    // const allMyOrders = await request.get("/order/getOrders");
-    // setOrders(allMyOrders.data.orders);
-    // console.log("orders", allMyOrders);
     dispatch(fetchOrderItems());
   };
   const getAllUserReviews = async () => {
     const allUserReviews = await request.get("/review/getAllUser");
-    setAllUserReviews(allUserReviews.data.allReviews);
-    console.log("allUserReviews", allUserReviews);
+    if(allUserReviews){  setAllUserReviews(allUserReviews.data.allReviews);
+    }
   };
-
   const addReview = async (productId, ratingNo, comment = "") => {
-    // console.log("calling Add Review in MyOrded Page");
-    console.log("productId", productId, ratingNo, comment);
     const userReview = await request.post("/review", {
       productId,
       comment,
       ratingNo,
     });
-    if (userReview) getAllUserReviews();
+    if (userReview.status===200) {getAllUserReviews();}
   };
   useEffect(() => {
     getOrders();
     getAllUserReviews();
-  }, []);
+  }, [dispatch]);
 
   if (isLoading) return <LoadingSpinner loading={isLoading} />;
   return (
@@ -228,7 +220,7 @@ const MyOrders = () => {
                     {allUserReviews && (
                       <StarComp
                         userRatingForProduct={allUserReviews?.filter(
-                          (obj) => obj?.productId == orderItem?.productId?._id
+                          (obj) => obj?.productId === orderItem?.productId?._id
                         )}
                         productId={orderItem?.productId?._id}
                         product={orderItem?.productId}

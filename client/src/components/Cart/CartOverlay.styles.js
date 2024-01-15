@@ -143,7 +143,7 @@ export const NoSizeSpan = styled.span`
 `;
 
 export const SubmitSizeButton = styled.div`
-  width: 400px;
+  width: 100%;
   height: 40px;
   background-color: #ff3e6c;
   display: flex;
@@ -151,4 +151,5 @@ export const SubmitSizeButton = styled.div`
   align-items: center;
   margin-top: 20px;
   cursor: pointer;
+  font-weight: 700;
 `;

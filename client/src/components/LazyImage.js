@@ -51,7 +51,7 @@ const LazyImage = ({ src, alt, blurHashUrl, width, height }) => {
           height: "100%",
           filter: isLoaded ? "none" : "blur(0px)", // Apply blur effect if not loaded sice we are using BlurhashString we don't need any Blur effect
           opacity: isLoaded ? 1 : 0,
-          transition: "opacity 0.3s, filter 0.5s linear transform 0.4s;", // Smoothly transition opacity and filter
+          transition: "filter 0.5s linear transform 0.4s", // Smoothly transition opacity and filter
           position: "absolute",
           top: 0,
           left: 0,

@@ -167,7 +167,7 @@ const PreviewImg = () => {
     e.currentTarget.value = null;
   };
 
-  console.log(previewFiles);
+  
   return (
     <Layout>
       <h1>Add Product images</h1>

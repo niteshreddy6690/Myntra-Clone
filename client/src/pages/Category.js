@@ -90,9 +90,9 @@ const MainContainer = styled.div`
 
 //   const handleClick = (e, parentId, categoryName) => {
 //     e.stopPropagation();
-//     console.log("categoryName", categoryName);
-//     console.log("category_Id", parentId);
-//     console.log("show", show);
+//     
+//     
+//     
 //     setShow(!show);
 //     setData({ ...data, parentId: parentId, parentCategory: categoryName });
 //   };
@@ -101,9 +101,9 @@ const MainContainer = styled.div`
 //   };
 
 //   const handleSubmit = async () => {
-//     console.log("data", data);
+//     
 //     const res = await axios.post(`http://localhost:8080/api/category/`, data);
-//     console.log("res after adding data", res);
+//     
 //     if (res) {
 //       callApi();
 //     }
@@ -169,9 +169,9 @@ const Category = () => {
   };
   const handleClick = (e, parentId, categoryName) => {
     e.stopPropagation();
-    console.log("categoryName", categoryName);
-    console.log("category_Id", parentId);
-    console.log("show", show);
+    
+    
+    
     // setShow(!show);
     setData({ ...data, parentId: parentId, parentCategory: categoryName });
   };
@@ -180,9 +180,9 @@ const Category = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("data", data);
+    
     const res = await axios.post(`http://localhost:8080/api/category/`, data);
-    console.log("res after adding data", res);
+    
     if (res) {
       callApi();
     }

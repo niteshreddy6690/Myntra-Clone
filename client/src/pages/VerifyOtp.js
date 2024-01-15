@@ -107,18 +107,16 @@ const VerifyOtp = () => {
       next.focus();
     }
     const otp = inputsRef.current.map((item) => item?.value).join("");
-    console.log("oto", otp);
+
     if (otp.length == 4) {
-      console.log("otp", otp);
-      axios
-        .put(`http://localhost:8080/api/auth/otpverify/`, {
+      request
+        .put(`auth/otpverify/`, {
           otp: otp,
           phoneNumber,
         })
         .then((response) => {
-          console.log("res", response);
-          LocalStorageService.setToken(response.data);
-          localStorage.setItem("user", response?.data?.user);
+          LocalStorageService.setToken(response?.data);
+          localStorage.setItem("user", JSON.stringify(response?.data?.user));
           if (response.data.user.isExistingUser) {
             navigate("/");
           } else {
@@ -126,7 +124,7 @@ const VerifyOtp = () => {
           }
         })
         .catch((error) => {
-          console.log("error", error);
+          console.log("Error: " + error);
         });
     }
   };
@@ -152,7 +150,6 @@ const VerifyOtp = () => {
     setMobileNumber(localStorage.getItem("mobileNumber"));
   }, []);
 
-  console.log("mobileNumber", mobileNumber);
   const handleOnKeyDown = (idx) => (e) => {
     if (e.keyCode === BACKSPACE || e.key === "Backspace") {
       e.preventDefault();
@@ -197,20 +194,18 @@ const VerifyOtp = () => {
   }, []);
 
   const handelResendOtp = () => {
-    console.log("mobileNumber inside reSendOtp", mobileNumber);
     // setMobileNumber(localStorage.getItem("mobileNumber"));
     setDisplayTimer(true);
     setTimer(30);
-    axios
-      .post("http://localhost:8080/api/auth/registermobile", {
+    request
+      .post("/auth/registermobile", {
         phonenumber: mobileNumber,
       })
       .then((response) => {
-        console.log("otp", response.data.otp);
         LocalStorageService.setToken(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error: " + error);
       });
   };
 

@@ -7,7 +7,7 @@ export const data = [
         childrens: [
           {
             title: "T-shirt",
-            path: "/men-tshirt",
+            path: "/men-tshirts",
           },
           {
             title: "Casual Shirts",
@@ -65,7 +65,7 @@ export const data = [
         ],
       },
       {
-        title: "Bottomwear",
+        title: "Botpathmwear",
         childrens: [
           {
             title: "jeans",
@@ -184,22 +184,16 @@ export const data = [
     title: "Women",
     path: "/shop/women",
     childrens: [
-      {
-        title: "Login",
-        path: "/login",
-      },
-      {
-        title: "Register",
-        path: "/register",
-      },
-      {
-        title: "Forgot Password",
-        path: "/forgot-password",
-      },
-      {
-        title: "Reset Password",
-        path: "/reset-password",
-      },
+      { path: "/women-ethnic-wear", title: "Kurtas & Suits" },
+      { path: "/women", title: "Kurtis,Tunics & pathps" },
+      { path: "/sarees", title: "Sarees" },
+      { path: "/women-ethnic-wear", title: "Ethnic Wear" },
+      { path: "/women", title: "Leggins,Salwars & Churidars" },
+      { path: "/women", title: "Skirts & Pallazzos" },
+      { path: "/women", title: "Dress Materials" },
+      { path: "/lehenga-choli", title: "Lehenga Cholis" },
+      { path: "/women", title: "Dupattas & Shawls" },
+      { path: "/women-jackets", title: "Jackets" },
     ],
   },
   {
@@ -207,8 +201,8 @@ export const data = [
     path: "/shop/kids",
     childrens: [
       {
-        title: "Topwear",
-        path: "/men-topwear",
+        title: "pathpwear",
+        path: "/men-pathpwear",
         childrens: [
           {
             title: "T-shirt",
@@ -295,29 +289,5 @@ export const data = [
         ],
       },
     ],
-  },
-  {
-    title: "Advance",
-    icon: "bi-view-list",
-    childrens: [
-      {
-        title: "Search",
-        path: "/search",
-      },
-      {
-        title: "History",
-        path: "/history",
-      },
-    ],
-  },
-  {
-    title: "Support",
-    icon: "bi-question-circle-fill",
-    path: "/support",
-  },
-  {
-    title: "Report Bug",
-    icon: "bi-bug",
-    path: "/report-bug",
   },
 ];

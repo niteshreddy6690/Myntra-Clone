@@ -3,7 +3,10 @@ import styled from "styled-components";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
+import Picker from "emoji-picker-react";
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 
+import SmileEmoji from "../../../Assets/svg/emoji-smile.svg"
 const WriteReviewModalWrapper = styled.div`
   background: rgba(0, 0, 0, 0.69);
   height: 100%;
@@ -101,6 +104,10 @@ const WriteReviewModalContainer = styled.div`
     margin: 0;
     outline: none;
   }
+  .emoji-icon{
+    cursor: pointer;
+    color: #ff3e6c;
+  }
   .submit-buttonClass {
     display: flex;
     justify-content: center;
@@ -129,13 +136,21 @@ const WriteReview = ({
   userComment,
 }) => {
   const [comment, setComment] = useState(userComment);
+  const [showPicker, setShowPicker] = useState(false);
+
+
+  const onEmojiClick = (emojiObject) => {
+    setComment((prevInput) => prevInput + emojiObject.emoji);
+    setShowPicker(false);
+  };
+
+  
   useEffect(() => {
     document.body.style.overflowY = "hidden";
     return () => {
       document.body.style.overflowY = "scroll";
     };
   }, []);
-  console.log("comment", comment);
   return (
     <>
       <WriteReviewModalWrapper onClick={handleShowModal} />
@@ -184,6 +199,15 @@ const WriteReview = ({
                 setComment(e.target.value);
               }}
             ></textarea>
+            <img
+          className="emoji-icon"
+          alt="emoji"
+          src={SmileEmoji?SmileEmoji:"https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"}
+          onClick={() => setShowPicker((val) => !val)}
+        />
+        {showPicker && (
+          <Picker pickerStyle={{ width: "100%" }} onEmojiClick={onEmojiClick} />
+        )}
           </div>
           <div className="submit-buttonClass">
             <div

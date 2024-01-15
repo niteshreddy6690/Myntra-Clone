@@ -110,8 +110,9 @@ const Container = styled.div`
       height: 18px;
       position: relative;
       bottom: 1px;
-      margin: 0 5px;
+      margin: 0 10px;
       vertical-align: middle;
+      display: inline-block;
     }
   }
 `;
@@ -136,10 +137,9 @@ const AccountLink = () => {
             </div>
 
             <div className="signupContent">
-              <div className="linkPageHeading"></div>
               <Link className="linkPageCreate" to="/createaccount">
                 <img src={createAccount} alt="create Account" />
-                Create New Account
+                <span>Create New Account</span>
               </Link>
             </div>
           </Container>

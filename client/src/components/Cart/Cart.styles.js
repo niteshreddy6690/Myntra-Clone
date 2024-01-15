@@ -4,7 +4,11 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 export const Wrapper = styled.div`
-  margin: 75px auto;
+  margin: 35px auto;
+  text-align: left;
+  @media screen and (max-width: 796px) {
+    margin: 18px auto;
+  }
 `;
 
 export const CartContainer = styled.div`
@@ -14,6 +18,7 @@ export const CartContainer = styled.div`
   padding: 0 10px 16px;
   min-height: 320px;
   color: #282c3f;
+  min-width: 400px;
 `;
 export const LeftSection = styled.div`
   display: inline-block;
@@ -21,10 +26,18 @@ export const LeftSection = styled.div`
   width: 62%;
   border-right: 1px solid #eaeaec;
   max-height: 100vh;
-  /* overflow-y: scroll;
-  overflow-x: hidden; */
+  overflow-y: scroll;
+  overflow-x: hidden;
   ::-webkit-scrollbar {
     display: none;
+  }
+
+  @media screen and (max-width: 796px) {
+    max-height: none;
+    width: 100%;
+    display: block;
+    overflow-y: visible;
+    overflow-x: visible;
   }
 `;
 
@@ -107,7 +120,17 @@ export const RightSection = styled.div`
   vertical-align: top;
   display: inline-block;
   width: 32%;
-  padding: 24px 0 0 16px;
+  padding: 14px 0 0 16px;
+  background-color: #fff;
+  @media screen and (max-width: 796px) {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    margin: 5px 0 0 0;
+    position: sticky;
+    bottom: 0;
+    left: 0%;
+  }
 `;
 
 export const StyledArrowDropDownIcon = styled(ArrowDropDownIcon)`
@@ -115,7 +138,7 @@ export const StyledArrowDropDownIcon = styled(ArrowDropDownIcon)`
   cursor: pointer;
   margin-left: 1px;
   position: relative;
-  top: 2px;
+  top: 2%;
 `;
 export const PriceContainer = styled.div`
   display: block;
@@ -123,7 +146,7 @@ export const PriceContainer = styled.div`
 
   .priceBlock-base-priceHeader {
     font-family: "Whitney Semibold";
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     margin: 24px 0 16px;
     color: #535766;
@@ -173,6 +196,7 @@ export const PlaceOrderButton = styled.button`
   border-width: 0px;
   padding: 10px 16px;
   cursor: pointer;
+  text-align: center;
 `;
 
 export const SizeOverlayWrapper = styled.div`
@@ -275,6 +299,8 @@ export const EmptyBagWrapper = styled.div`
   .emptyCart-base-emptyBagImage {
     margin-bottom: 10px;
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
   }
   .emptyCart-base-emptyText {
     text-align: center;
@@ -298,6 +324,7 @@ export const EmptyBagWrapper = styled.div`
     cursor: pointer;
     border: 1px solid #ff3f6c;
     display: inline-block;
+    text-align: center;
   }
 
   .button-base-button {
@@ -307,7 +334,7 @@ export const EmptyBagWrapper = styled.div`
     padding: 10px;
     background: #ff3f6c;
     cursor: pointer;
-    text-align: center;
+    text-align: center !important;
     border: none;
     border-radius: 2px;
     text-transform: uppercase;

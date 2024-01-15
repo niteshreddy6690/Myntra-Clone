@@ -18,8 +18,6 @@ export default function ProductList() {
   const handleDelete = (id) => {
     deleteProduct(id, dispatch);
   };
-
-  console.log("product from State", products);
   const columns = [
     { field: "_id", headerName: "ID", width: 220 },
     {

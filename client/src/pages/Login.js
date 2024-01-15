@@ -3,8 +3,10 @@ import Navbar from "../components/Navbar/Navbar";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import LoginImage from "../Assets/Images/login.webp";
-import { color } from "@mui/system";
-import axios from "axios";
+import { request } from "../api/axios";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const FixedBackground = styled.div`
   position: fixed;
@@ -122,7 +124,6 @@ const MediaLinkDiv = styled.div`
   font-size: 14px;
   letter-spacing: 0.5px;
 `;
-
 const Button = styled.button`
   cursor: pointer;
   background-color: #ff3f6c;
@@ -143,32 +144,51 @@ const Login = () => {
 
   const handelLogin = async (e) => {
     e.preventDefault();
-    console.log(phoneNumber);
+
     localStorage.setItem("mobileNumber", phoneNumber);
     try {
       if (phoneNumber) {
-        const login = await axios.post(
-          "http://localhost:8080/api/auth/registermobile",
-          { phonenumber: phoneNumber }
-        );
-        console.log(login);
+        const login = await request.post("auth/registermobile", {
+          phonenumber: phoneNumber,
+        });
 
-        if (login) {
-          navigate("/verifyotp");
+        if (!login.data?.user?.isExistingUser) {
+          navigate("/createaccount");
+        } else {
+          console.log("Login -data", login);
+          toast(`OTP : ${login?.data?.otp}`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setTimeout(() => {
+            navigate("/verifyotp");
+          }, 3000);
         }
-        // if (!login.data?.user?.isExistingUser) {
-        //   navigate("/createaccount");
-        // } else {
-        //   navigate("/verifyotp");
-        // }
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <>
       <FixedBackground />
+      <ToastContainer
+        style={{ position: "absolute", top: "90px", right: "-100px" }}
+        toastStyle={{
+          backgroundColor: "#171830",
+          width: "120px",
+          height: "20px",
+          color: "white",
+          zIndex: "100",
+          fontSize: "18px",
+          fontWeight: "700",
+          letterSpacing: "0.5px",
+        }}
+      />
       <LoginContainer>
         <Navbar />
         <LoginWrapper>

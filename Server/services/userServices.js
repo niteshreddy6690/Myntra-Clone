@@ -38,7 +38,7 @@ const updateUserById = async (userId, updateBody) => {
   // }
 
   // const DOB = new Date(updateBody.DOB);
-  // console.log("dob", DOB);
+  // 
   if (user?.phonenumber) {
     Object.assign(user, {
       email,

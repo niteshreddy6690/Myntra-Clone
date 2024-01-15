@@ -381,8 +381,8 @@ const CreateAccount = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const phoneNumber = localStorage.getItem("mobileNumber");
-  console.log("PhoneNumber", phoneNumber);
+  const phoneNumber = localStorage?.getItem("mobileNumber");
+
   const handelChange = (e) => {
     // e.preventDefault();
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -390,13 +390,13 @@ const CreateAccount = () => {
 
   const createAccount = async () => {
     const useAccount = await request.put(
-      `http://localhost:8080/api/auth/createAccount/${phoneNumber}`,
+      `/createAccount/${phoneNumber}`,
       formData
     );
-    console.log("useAccount", useAccount);
+
     if (useAccount) navigate("/");
   };
-  console.log(formData);
+
   return (
     <>
       <Navbar />

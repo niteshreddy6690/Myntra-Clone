@@ -10,6 +10,7 @@ import AddAddressModal from "./Modals/AddAddressModal";
 import ConfirmAndDeleteAddrModal from "./Modals/ConfirmAndDeleteAddrModal";
 import EditAddressModal from "./Modals/EditAddressModal";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { isFulfilled } from "@reduxjs/toolkit";
 
 const AddressContainer = styled.div`
   background-color: white;
@@ -191,217 +192,7 @@ const EditAndRemoveContainer = styled.div`
   }
 `;
 
-// const ConfirmDeleteModalWrapper = styled.div`
-//   background: rgba(0, 0, 0, 0.69);
-//   height: 100%;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   z-index: 11;
-// `;
 
-// const ConfirmDeleteModalContainer = styled.div`
-//   position: fixed;
-//   top: 30%;
-//   left: 50%;
-//   height: 150px;
-//   width: 350px;
-//   transform: translate(-50%, -50%);
-//   background: #fff;
-//   z-index: 12;
-
-//   .dialog-title {
-//     padding: 20px 0 0 16px;
-//     font-size: 16px;
-//     font-weight: 700;
-//   }
-//   .dialog-content {
-//     margin: 10px 10px 35px 15px;
-//     word-wrap: break-word;
-//     font-size: 14px;
-//     color: #7e818c;
-//   }
-//   .dialog-buttonsContainer {
-//     border-top: 0.5px solid #eaeaec;
-//     position: relative;
-//   }
-//   .dialog-buttonBlock {
-//     cursor: pointer;
-//     text-transform: uppercase;
-//     display: inline-block;
-//     width: 50%;
-//     text-align: center;
-//     padding: 15px 0px;
-//   }
-//   .dialog-button1 {
-//     color: #ff3f6c;
-//   }
-
-//   .dialog-button {
-//     font-weight: 600;
-//     display: inline-block;
-//   }
-//   /* @media (min-width: 780px) {
-//     position: absolute;
-//     top: 35%;
-//     left: 38%;
-//     width: 350px;
-//   } */
-// `;
-
-// const EditContainerModalWrapper = styled.div`
-//   background: rgba(0, 0, 0, 0.69);
-//   height: 100%;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   z-index: 11;
-// `;
-// const EditContainerModal = styled.div`
-//   position: fixed;
-//   background-color: #f5f5f6;
-//   text-align: left;
-//   box-sizing: border-box;
-//   color: #535766;
-//   overflow-y: scroll;
-//   top: 50%;
-//   left: 50%;
-//   width: 450px;
-//   height: 80%;
-//   transform: translate(-50%, -50%);
-//   background: #fff;
-//   z-index: 12;
-//   input {
-//     accent-color: #ff3f6c;
-//     caret-color: #ff3f6c;
-//   }
-//   .addAddressModal-cardFields {
-//     overflow: auto;
-//     height: 84%;
-//   }
-//   .addAddressModal-card {
-//     margin: 10px 0px;
-//     background-color: white;
-//     padding: 20px;
-//     border: 0px;
-//   }
-
-//   .addAddressModal-modalHeading {
-//     background-color: white;
-//     font-weight: 700;
-//     padding: 15px;
-//     text-transform: uppercase;
-//     border-bottom: 1px solid #d4d5d9;
-//   }
-
-//   .myInput-inputRow {
-//     position: relative;
-//     margin: 40px 0px 0px 0px;
-//   }
-//   .myInput-inputRow .myInput-md {
-//     margin: 30px 0px 0px 0px;
-//   }
-
-//   .myInput-inputRow .myInput-labelTop {
-//     /* display: block; */
-//     position: absolute;
-//     font-size: 12px;
-//     top: -20px;
-//     left: 0px;
-//     pointer-events: none;
-//     color: #94969f;
-//   }
-
-//   .myInput-inputRow input[type="text"],
-//   .myInput-inputRow input[type="password"],
-//   .myInput-inputRow input[type="number"],
-//   .myInput-inputRow input[type="tel"] {
-//     width: 100%;
-//     border: 0px;
-//     border-bottom: 1px solid #d4d5d9;
-//     color: #282c3f;
-//     outline: none;
-//     padding-bottom: 5px;
-//     -webkit-transition: all 0.4s ease-in-out;
-//     -o-transition: all 0.4s ease-in-out;
-//     -moz-transition: all 0.4s ease-in-out;
-//     transition: all 0.4s ease-in-out;
-//   }
-//   .addAddressModal-pinCodeAndState {
-//     /* margin: 5px 0; */
-//     display: flex;
-//     flex-direction: row;
-//     justify-content: space-between;
-//     align-items: center;
-//   }
-
-//   .addAddressModal-horizontalSeparator {
-//     height: 1px;
-//     border-top: 1px solid #eaeaec;
-//     width: 100%;
-//     margin: 16px 0 16px;
-//   }
-//   .addAddressModal-buttons {
-//     position: absolute;
-//     left: 0;
-//     bottom: 0;
-//     width: 100%;
-//     border-top: 1px solid #d4d5d9;
-//     background-color: white;
-//   }
-//   .addAddressModal-buttons .addAddressModal-button {
-//     cursor: pointer;
-//     text-align: center;
-//     display: inline-block;
-//     width: 50%;
-//     padding: 15px;
-//     text-transform: uppercase;
-//     font-weight: 800;
-//   }
-
-//   .addAddressModal-buttons .addAddressModal-button:last-child {
-//     color: white;
-//     background-color: #ff3f6c;
-//   }
-
-//   .addAddressModal-buttons .addAddressModal-button {
-//     cursor: pointer;
-//     text-align: center;
-//     display: inline-block;
-//     width: 50%;
-//     padding: 15px;
-//     text-transform: uppercase;
-//     font-weight: 700;
-//   }
-// `;
-
-// const AddAddressWrapper = styled.div`
-//   background: rgba(0, 0, 0, 0.69);
-//   height: 100%;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   z-index: 11;
-// `;
-
-// const AddAddressContainer = styled.div`
-//   position: fixed;
-//   background-color: #f5f5f6;
-//   text-align: left;
-//   box-sizing: border-box;
-//   color: #535766;
-//   overflow-y: scroll;
-//   top: 50%;
-//   left: 50%;
-//   width: 450px;
-//   height: 80%;
-//   transform: translate(-50%, -50%);
-//   background: #fff;
-//   z-index: 12;
-// `;
 const MyAddress = () => {
   const [address, setAddress] = useState([]);
   const [currentAddr, setCurrentAddr] = useState(0);
@@ -443,7 +234,7 @@ const MyAddress = () => {
   //     });
   //   };
 
-  //   console.log("editedAddressModal", editedAddressModal);
+  //   
 
   //   return (
   //     <>
@@ -683,7 +474,7 @@ const MyAddress = () => {
   //   return myAddress;
   // };
   async function callApi() {
-    // console.log("calling get address API");
+    // 
     // const myAddress = await request.get("http://localhost:8080/api/address/");
     // setAddress(myAddress.data.address);
     dispatch(fetchUserAddress());
@@ -697,18 +488,19 @@ const MyAddress = () => {
   }, [userAddresses]);
 
   const addAddrApiCall = async (addAddress) => {
-    dispatch(addNewUserAddress({ addAddress }));
+    const action= await dispatch(addNewUserAddress({ addAddress }));
+    if(isFulfilled(action)){
     setShowAddAddressModal((showAddAddressModal) => !showAddAddressModal);
+  }
   };
   const callEditApi = async (data) => {
-    console.log("data", data);
+    
     const myAddress = await request.put("address/edit", data);
     if (myAddress) {
       handleShowEditModal();
       callApi();
     }
   };
-  // useEffect(() => {}, [address]);
   const defaultAddr = useMemo(
     () => address?.filter((data) => data.isDefault == true),
     [address]
@@ -723,14 +515,12 @@ const MyAddress = () => {
   };
 
   const callDeleteApi = async () => {
-    console.log("id", selectedAddress);
+    
     const deletedAddress = await request.put(
-      "http://localhost:8080/api/address/",
+      "address/",
       { addressId: selectedAddress }
     );
-    console.log("deletedAddress", deletedAddress);
     if (deletedAddress) {
-      // handleShowModal(false);
       setShowConfirmDeleteModal(false);
       setDeletedAddress(deletedAddress);
     }
@@ -740,7 +530,7 @@ const MyAddress = () => {
   };
 
   const handleShowModal = () => {
-    console.log("nsjnwjknk");
+    
     setShowConfirmDeleteModal(!showConfirmDeleteModal);
   };
   const handleShowEditModal = () => {
@@ -761,7 +551,7 @@ const MyAddress = () => {
       landmark,
     } = addr;
     const updatedAddress = await request.put(
-      "http://localhost:8080/api/address/edit",
+      "address/edit",
       {
         addressId: _id,
         name,
@@ -784,11 +574,8 @@ const MyAddress = () => {
   const handleShowAddAddressModal = () => {
     setShowAddAddressModal(!showAddAddressModal);
   };
-  console.log("defaultAddr", currentAddr);
-  console.log(address);
-
+  
   if (isLoading) return <LoadingSpinner loading={isLoading} />;
-
   return (
     <AddressContainer className="page-fullWidthComponent">
       <div style={{ padding: "15px" }}>

@@ -447,7 +447,22 @@ export const SearchDropDown = styled.div`
     font-weight: 700;
     font-size: 14px;
     opacity: 1;
+
   }
+.SearchDropdownResults{
+    /* margin: 8px 0; */
+    cursor: pointer;
+    padding: 10px 4px 10px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+       &:hover {
+    background-color: #f5f5f6;
+    cursor: pointer;
+    
+  }
+}
 
   /* div:nth-child(odd) {
     background: #eeeeee;
@@ -487,17 +502,10 @@ export const SearchButton = styled.button`
   height: inherit;
   width: 40px;
   text-align: center;
-  padding: 8px 0 2px;
+  padding: 0px;
   background: transparent;
 `;
 
-// export const GridItemThree = styled.div`
-//   display: flex;
-//   float: left;
-//   line-height: 0;
-//   height: 40px;
-//   margin: 20px 30px 0 10px;
-// `;
 export const SvgImageContainer1 = styled.div`
   box-sizing: content-box;
   margin: 0%;
@@ -521,7 +529,7 @@ export const SvgImageContainer1 = styled.div`
     left: 50%;
     transform: translate(-50%, -50%) !important;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     display: inline-block;
     padding-top: 10px;
     line-height: 6px;
@@ -555,7 +563,7 @@ export const SvgImageContainer = styled.div`
     left: 50%;
     transform: translate(-50%, -50%) !important;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     display: inline-block;
     padding-top: 10px;
     line-height: 6px;
@@ -657,32 +665,32 @@ export const SvgImageContainer = styled.div`
 
     .desktop-info {
       font-weight: 400;
-      font-size: 14px;
+      font-size: 16px;
       color: #515465;
     }
     .desktop-infoSection:hover {
       font-weight: 500;
       color: #000;
     }
-    .desktop-superscriptTag {
+    /* .desktop-superscriptTag {
       box-sizing: content-box;
       padding: 5px;
       width: 25px;
-      height: 15px;
+      height: 9px;
       background: #ff3f6c !important;
       border: 1px solid #ff3f6c !important;
       color: #fff;
       font-weight: 900;
-      margin: 0px 0 0px 5px;
+      margin: -6px 0 10px 10px;
       font-size: 12px;
       -webkit-transform: skewX(-10deg);
       transform: skewX(-10deg);
       display: inline-block;
       border-radius: 2px;
-    }
+    } */
   }
 
-  &:hover .profile-dropdown {
+ &:hover .profile-dropdown {
     visibility: visible;
     opacity: 1;
   }
@@ -737,3 +745,21 @@ export const BadgeNotification = styled(Badge)({
     right: "-2px",
   },
 });
+
+export const BannerAnnouncement=styled.div`
+width: 100%;
+padding: 10px 0;
+background-color: #ff3f6c;
+color: #fff;
+text-align: center;
+font-size: 10px;
+font-weight: 700;
+@media screen and (min-width: 720px) {
+  font-size: 12px;
+  padding: 10px 0;
+}
+@media screen and (min-width: 1024px) {
+  font-size: 14px;
+  padding: 10px 0;
+}
+`

@@ -110,9 +110,9 @@ const VerifyOtp = (separator) => {
       next.focus();
     }
     const otp = inputsRef.current.map((item) => item?.value).join("");
-    console.log("oto", otp);
+    
     if (otp.length == 4) {
-      console.log("otp", otp);
+      
       verifyOtp(dispatch, { otp, phoneNumber }, navigate);
       // axios
       //   .put(`http://localhost:8080/api/auth/otpverify`, {
@@ -120,7 +120,7 @@ const VerifyOtp = (separator) => {
       //     phoneNumber,
       //   })
       //   .then((response) => {
-      //     console.log("res", response);
+      //     
       //     //   LocalStorageService.setToken(response.data);
       //     localStorage.setItem("user", response?.data?.user);
       //     if (response.data.user.isExistingUser) {
@@ -130,7 +130,7 @@ const VerifyOtp = (separator) => {
       //     }
       //   })
       //   .catch((error) => {
-      //     console.log("error", error);
+      //     
       //   });
     }
   };
@@ -205,11 +205,11 @@ const VerifyOtp = (separator) => {
         phonenumber: mobileNumber,
       })
       .then((response) => {
-        console.log("otp", response.data.otp);
+        
         // LocalStorageService.setToken(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        
       });
   };
 

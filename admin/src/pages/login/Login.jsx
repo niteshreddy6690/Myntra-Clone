@@ -144,7 +144,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const handelLogin = async (e) => {
     e.preventDefault();
-    console.log(phoneNumber);
+    
 
     localStorage.setItem("mobileNumber", phoneNumber);
     try {
@@ -154,7 +154,7 @@ const Login = () => {
         //   "http://localhost:8080/api/auth/registermobile",
         //   { phonenumber: phoneNumber }
         // );
-        // console.log(login);
+        // 
 
         // if (login) {
         //   navigate("/verifyotp");
@@ -166,7 +166,7 @@ const Login = () => {
         // }
       }
     } catch (error) {
-      console.log(error);
+      
     }
   };
   return (

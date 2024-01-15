@@ -137,15 +137,15 @@ const paramsToObject = (entries) => {
   for (const [key, value] of entries) {
     result[key] = value;
   }
-  console.log("result", result);
+  
   return result;
 };
 const useSearchQuery = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchEntries = searchParams.entries();
-  console.log("SearchEntries", searchEntries);
+  
   const params = paramsToObject(searchEntries);
-  console.log("Prams In UseQuery", params);
+  
   return { params, setSearchParams };
 };
 
@@ -199,15 +199,15 @@ const Checkbox = (props) => {
   const refEle = useRef(null);
   const [checkedValues, setCheckedValues] = useState([]);
   const location = useLocation();
-  console.log("params", params);
-  console.log("Brand", Brand);
-  console.log("Params", params);
+  
+  
+  
 
   //   useEffect(() => {
   //     const searchKey = searchParams.get("Brand");
   //     if (searchKey) {
   //       setCheckedValues(searchKey.split(","));
-  //       console.log("Search Key", searchKey);
+  //       
   //     }
   //   }, [searchParams]);
 
@@ -218,9 +218,9 @@ const Checkbox = (props) => {
     // if (Gender.length > 0) {
     //   setSearchParams({ ...searchParams, Gender: Gender.toString() });
     // }
-    // console.log("params", params);
+    // 
 
-    console.log("slipptimng", params?.Brand?.split(","));
+    
     const brand = params?.Brand?.split(",");
     setBrand(brand);
   }, [searchParams]);*/
@@ -233,7 +233,7 @@ const Checkbox = (props) => {
   const handelChange = (e) => {
     const value = e.target.value;
     const checked = e.target.checked;
-    console.log("filterArray checked", checked);
+    
     if (checked) {
       let previous = params?.brands?.length ? params?.brands?.split(",") : "";
       const brands = previous
@@ -242,16 +242,16 @@ const Checkbox = (props) => {
       setSearchParams({ ...params, ...(brands && { brands }) });
     } else {
       const filterArray = params?.brands?.split(",").filter((e) => e !== value);
-      console.log("brands ar", filterArray);
+      
       const brands = filterArray?.length
         ? filterArray?.join(",")?.toString()
         : "";
-      console.log("brands", brands);
+      
       let _temp = { ...params, ...(brands && { brands }) };
       setSearchParams(brands ? _temp : omit(_temp, "brands"));
     }
 
-    // console.log(`Value ${value} checked ${checked}`);
+    // 
     // // setBrand(Brand.filter((e) => e !== value));
 
     // // -.compact
@@ -260,7 +260,7 @@ const Checkbox = (props) => {
 
   const handelChangeGender = (e) => {
     const value = e.target.value;
-    console.log("value", e.target?.value);
+    
 
     const _params = { ...params, ...(value && { gender: value }) };
     setSearchParams(_params);
@@ -270,14 +270,14 @@ const Checkbox = (props) => {
   const handelSort = (e) => {
     const value = e.target.value;
 
-    // console.log("Usre ref", refEle.current.innerText);
+    // 
 
     // let entries = Object.entries(sortObject);
     // let data = sortObject.filter((item) => {
     //   if (item.value == value) return item.label;
     //   return;
     // });
-    // console.log("datat...........", data[0].label);
+    // 
     setSort(sortDic[value]);
     const _params = { ...params, ...(value && { sort: value }) };
     setSearchParams(_params);

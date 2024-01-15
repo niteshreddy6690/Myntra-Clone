@@ -19,11 +19,12 @@ const ConfirmDeleteModalContainer = styled.div`
   position: fixed;
   top: 30%;
   left: 50%;
-  height: 150px;
+  height: 160px;
   width: 350px;
   transform: translate(-50%, -50%);
   background: #fff;
   z-index: 12;
+  padding: 5px;
 
   .dialog-title {
     padding: 20px 0 0 16px;

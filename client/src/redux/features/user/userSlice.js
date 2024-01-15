@@ -12,32 +12,30 @@ export const fetchUserById = createAsyncThunk(
   "user/userById",
   async ({ id }) => {
     try {
-      console.log("fetching user by id");
       const response = await api.getUserById({ id });
       return response.data;
     } catch (error) {
-      console.log(error);
+      
     }
   }
 );
 
-export const updateUserById = createAsyncThunk(
-  "user/userById",
-  async ({ id, data }) => {
-    try {
-    } catch (error) {}
-  }
-);
+// export const updateUserById = createAsyncThunk(
+//   "user/userById",
+//   async ({ id, data }) => {
+//     try {
+//     } catch (error) {}
+//   }
+// );
 
 export const logOutUser = createAsyncThunk(
   "user/logOutUser",
   async ({ refreshToken }) => {
     try {
-      console.log("Logout user");
       const response = await api.logOutUser({ refreshToken });
       return response.data;
     } catch (error) {
-      console.log(error);
+      
     }
   }
 );

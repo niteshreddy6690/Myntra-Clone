@@ -42,8 +42,14 @@ const MainPane = styled.div`
   background-color: #fff;
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
   animation: ${fade} 1s ease-in-out;
+  overflow: hidden;
+
+  @media (max-width: 1200px) {
+    font-size: 14px;
+    width: 100%;
+  }
   .desktop-categoryContainer {
-    width: 1110px;
+    width: 100%;
     padding: 0 10px 10px 15px;
     transition: all 0.2s ease-out;
 
@@ -83,6 +89,28 @@ const MainPane = styled.div`
       position: relative;
       height: 436px;
       padding-top: 4px;
+    }
+
+    /* @media (max-width: 1024px) {
+      font-size: 14px;
+      display: none !important;
+    } */
+  }
+
+  @media (max-width: 1200px) {
+    .desktop-categoryContainer {
+      /* width: 80%;
+      padding: 0 10px 10px 15px;
+      transition: all 0.2s ease-out; */
+      font-size: 12px;
+      width: 100%;
+    }
+    .desktop-navBlock {
+      width: 150px;
+    }
+    .desktop-hrLine {
+      width: 100px;
+      margin: 5px 0;
     }
   }
 `;

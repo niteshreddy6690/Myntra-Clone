@@ -183,41 +183,38 @@ const Wishlist = () => {
   const imgRef = useRef(null);
   const CallApi = async () => {
     const action = await dispatch(fetchWishListItems());
-    console.log("res", action);
-    if (isFulfilled(action)) {
-      console.log("isFullfilled", isFulfilled(action));
+    
+    if (isFulfilled(action)) {    
       setWishlistProducts(action.payload);
     }
 
     // const res = await axios.get("http://localhost:8080/api/wishlist/");
-    // console.log("result", res);
+    // 
   };
   const handelDelete = async (id) => {
-    console.log("deleteId", id);
+    
     const action = await dispatch(removeWishListItems({ id, toast }));
     //axios.delete(
     //   `http://localhost:8080/api/wishlist/${id}`
     // );
 
     if (isFulfilled(action)) {
-      console.log("isFullfilled", isFulfilled(action));
       // setWishlistProducts(action.payload);
       CallApi();
     }
 
-    // console.log("remove", res);
+    // 
     // if (res) {
     //   CallApi();
     // }
   };
   const handleDeleteWithoutNotify = async (id) => {
     const action = await dispatch(removeWishListItemWithOutNotify({ id }));
-    if (isFulfilled(action)) {
-      console.log("isFullfilled", isFulfilled(action));
+    if (isFulfilled(action)) 
       // setWishlistProducts(action.payload);
       CallApi();
     }
-  };
+
   const handelMoveToBag = async (pid, id) => {
     const cartProduct = await request.post(`carts/`, {
       productId: pid,
@@ -228,9 +225,6 @@ const Wishlist = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (wishListItems) setWishlistProducts(wishListItems);
-  // }, [wishListItems]);
   useEffect(() => {
     CallApi();
   }, []);
@@ -320,20 +314,5 @@ const Wishlist = () => {
       )}
     </Layout>
   );
-
-  // return (
-  //   <div className="App">
-  //     <Blurhash
-  //       hash="L69G{zR+%MD%~qofWCofNGM{WBxu"
-  //       width={400}
-  //       height={300}
-  //       resolutionX={32}
-  //       resolutionY={32}
-  //       punch={1}
-  //     />
-  //     {/* <img src="https://example.org/original.jpg" width={600} height={400} /> */}
-  //   </div>
-  // );
-};
-
+  }
 export default Wishlist;

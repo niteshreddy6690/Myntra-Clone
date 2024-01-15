@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;
@@ -13,10 +17,11 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-top: 80px;
+  padding-top: 120px;
   font-size: 13px;
   line-height: 1.42857143;
 }
+
 :not(input):not(textarea):not(button) {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -24,6 +29,7 @@ body {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+
 * {
   /* -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box; */
@@ -189,4 +195,42 @@ li {
   font-style: normal;
   font-weight: 500;
   src: local("whitneybook"), url("./fonts/whitneybook.ttf") format("truetype");
+} 
+
+
+@font-face {
+  font-family:Assistant;
+  font-style: normal;
+  font-weight: 500;
+  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family:Assistant SemiBold ;
+  font-style: normal;
+  font-weight: 500;
+  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-SemiBold.ttf") format("truetype");
+}
+@font-face {
+  font-family:Assistant Bold;
+  font-style: normal;
+  font-weight: 500;
+  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family:Assistant ExtraBold;
+  font-style: normal;
+  font-weight: 500;
+  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-ExtraBold.ttf") format("truetype");
+}
+@font-face {
+  font-family:Assistant Light;
+  font-style: normal;
+  font-weight: 500;
+  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-Light.ttf") format("truetype");
+}
+@font-face {
+  font-family:Assistant ExtraLight;
+  font-style: normal;
+  font-weight: 500;
+  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-ExtraLight.ttf") format("truetype");
 }

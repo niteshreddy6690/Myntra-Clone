@@ -6,6 +6,12 @@ import SideBar from "./SideBar";
 
 import CloseIcon from "@mui/icons-material/Close";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import { fetchUserById, logOutUser } from "../../redux/features/user/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { isFulfilled } from "@reduxjs/toolkit";
+import LocalStorageService from "../../api/localStorage";
+import { fetchCartItems } from "../../redux/features/cart/cartSlice";
+
 const Nav = styled.div`
   width: 100%;
 
@@ -68,6 +74,15 @@ const SideBarNav = styled.div`
   border-bottom: 1px solid #eaeaec;
   padding-bottom: 15px;
   margin-bottom: 5px;
+
+  .user-authentication{
+    font-size: 16px;
+    text-decoration: none;
+    color: #3e4152;
+    display: block;
+    padding:14px 20px;
+    cursor: pointer;
+  }
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -83,7 +98,16 @@ const Overlay = styled.div`
   width: 100%;
 `;
 const MobileNav = ({ handleMobileNav, openMobileNavbar }) => {
-  console.log("handleMobileNav", openMobileNavbar);
+  const dispatch = useDispatch();
+  const refreshToken = LocalStorageService.getRefreshToken();
+  const { currentUser } = useSelector((state) => ({ ...state.user }));
+  const handleLogout = async () => {
+    const action = await dispatch(logOutUser({ refreshToken }));
+    if(isFulfilled(action)) {
+      localStorage.clear();
+      dispatch(fetchCartItems());
+    }
+  };
   return (
     <Nav>
       <Overlay
@@ -118,6 +142,7 @@ const MobileNav = ({ handleMobileNav, openMobileNavbar }) => {
                 handleMobileNav={handleMobileNav}
               />
             ))}
+           {currentUser?<div className="user-authentication" onClick={()=>{handleLogout();handleMobileNav()}}>Logout</div> :<Link className="user-authentication" to="/login" onClick={() => handleMobileNav()}>Login</Link>}
           </SideBarNav>
         </SideBarcon>
       </AppNav>

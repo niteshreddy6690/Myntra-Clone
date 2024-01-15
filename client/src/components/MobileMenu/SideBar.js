@@ -11,6 +11,7 @@ const NaviContainer = styled.div`
     text-decoration: none;
     color: #3e4152;
     display: block;
+    cursor: pointer;
   }
   .rippleeffect {
     display: block;

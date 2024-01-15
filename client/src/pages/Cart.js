@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Navbar from "../components/Navbar/Navbar";
 import NavBarForCartAndPayment from "../components/Navbar/NavBarForCartAndPayment";
 import CartCmp from "../components/Cart/CartCmp";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,6 +8,7 @@ import { request } from "../api/axios";
 import {
   fetchCartItems,
   removeCartItem,
+  updateSizeAndQuantityOfProductInBag,
 } from "../redux/features/cart/cartSlice";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
@@ -35,74 +34,47 @@ const Cart = () => {
 
   const handelDelete = async (productId) => {
     dispatch(removeCartItem({ productId, toast }));
-    // try {
-    //   const deletedProduct = await request.post(
-    //     "http://localhost:8080/api/carts/delete",
-    //     { productId }
-    //   );
-    //   SetDeleteProduct(deletedProduct.data);
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
   };
 
-  // const handelMoveToWishlist = async (id) => {
-  //   const res = await axios.post("http://localhost:8080/api/wishlist/");
-  //   console.log("result", res);
-  // };
   const handelUpdateSizeAndQuantity = async (
     productId,
     selectedSize,
     productGId,
-    selectedQuantity
+    productQnt
   ) => {
     try {
-      console.log("Selected Size in cart Page", selectedSize);
-      console.log("Product Id", productId);
-      console.log("Product GID", productGId);
+      // const updatedSizeAndQuantity = await request.post(
+      //   "/carts/update",
+      //   { productId, selectedSize, productGId,productQnt}
 
-      if (selectedSize) {
-        const updatedsizeAndQuantity = await request.post(
-          "http://localhost:8080/api/carts/update",
-          { productId, selectedSize, productGId }
-        );
-        SetUpdatedSize(updatedsizeAndQuantity.data);
+      // );
+      // if(updatedSizeAndQuantity){
+      // getCart()
+      // }
+      // SetUpdatedSize(updatedSizeAndQuantity.data);
 
-        console.log(updatedsizeAndQuantity);
-      }
-
-      if (selectedQuantity) {
-      }
-      // setDisableSizeModal(true);
-    } catch (error) {
-      console.log(error);
-    }
+      //
+      dispatch(
+        updateSizeAndQuantityOfProductInBag({
+          productId,
+          selectedSize,
+          productGId,
+          productQnt,
+        })
+      ).then((res) => {
+        getCart();
+      });
+    } catch (error) {}
   };
 
-  // const handelUpdateQuantity = async (req, res) => {};
-
+  const getCart = async () => {
+    try {
+      dispatch(fetchCartItems());
+    } catch (error) {}
+  };
   useEffect(() => {
-    const getCart = async () => {
-      try {
-        dispatch(fetchCartItems());
-
-        // const cartProducts = await axios.get(
-        //   "http://localhost:8080/api/carts/"
-        // );
-
-        // console.log(cartProducts?.data?.cart?.items);
-
-        console.log("cartite", cartItems);
-        // setCartItems(cartItems?.data?.cart?.items);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getCart();
-
-    console.log("cart Products", cartItems);
-  }, []);
-  // }, [deleteProduct, updatedSizes]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (cartItem) {

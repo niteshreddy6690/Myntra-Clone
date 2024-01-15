@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { authorize } = require("../middleware/verifyToken");
 const {
   register,
-  optverify,
+  verifyOtp,
   resendOtp,
   createAccount,
   refreshToken,
@@ -11,7 +11,7 @@ const {
 } = require("../controllers/authController");
 
 router.post("/registermobile", register);
-router.put("/otpverify", optverify);
+router.put("/otpverify", verifyOtp);
 // router.post("/resendotp", resendOtp);
 router.put("/createAccount/:phone", createAccount);
 router.post("/refresh-tokens", refreshToken);

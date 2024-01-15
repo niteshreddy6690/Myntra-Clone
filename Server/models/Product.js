@@ -35,7 +35,7 @@ ProductSchema.pre("save", function (next) {
     this.mrp = Math.trunc(
       this.price - this.price * (this.discountPercentage / 100)
     );
-  console.log("this", this);
+  
   next();
 });
 

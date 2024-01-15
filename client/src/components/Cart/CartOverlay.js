@@ -14,10 +14,6 @@ import {
   SelectSizeButtonWrapper,
   SubmitSizeButton,
 } from "./CartOverlay.styles";
-
-const QuantityComponent = () => {
-  return <></>;
-};
 const PreDefinedSize = ["S", "L", "M", "XL", "XXL"];
 const SizeComponent = ({
   size,
@@ -26,7 +22,7 @@ const SizeComponent = ({
   handelSelectSize,
   handelSelectedSize,
 }) => {
-  if (activeSizes.includes(size)) {
+  if (activeSizes?.includes(size)) {
     return (
       <SelectSizeButtonContainer>
         <SelectSizeButtonContainer1>
@@ -58,7 +54,7 @@ const SizeComponent = ({
     );
   }
 };
-const actSize = ["M", "L", "S"];
+
 const CartOverlay = ({
   product,
   handelSetSize,
@@ -68,7 +64,6 @@ const CartOverlay = ({
 }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const handelSelectedSize = (size) => {
-    console.log("Sizeeee", size);
     setSelectedSize(size);
   };
 
@@ -76,8 +71,7 @@ const CartOverlay = ({
     setSelectedSize(product?.size);
   }, []);
 
-  // console.log("product", product);
-  console.log("selected Size", selectedSize);
+
   return (
     <div>
       <Overlay onClick={() => handelSetSize()} isSetSize={isSetSize}></Overlay>
@@ -132,13 +126,13 @@ const CartOverlay = ({
               ))}
             </SelectSizeButtonWrapper>
           ) : null}
-          {isSetQty ? <div>Hello</div> : ""}
           <SubmitSizeButton
             onClick={() => {
               handelUpdateSizeAndQuantity(
                 product?.productId?._id,
                 selectedSize,
-                product?._id
+                product?._id,
+                null
               );
               handelSetSize();
             }}

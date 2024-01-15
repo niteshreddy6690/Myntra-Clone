@@ -5,10 +5,10 @@ const catchAsync = require("../utils/catchAsync");
 const cartService = require("../services/cartServices");
 
 const createOrder = catchAsync(async (req, res) => {
-  console.log("calling add order");
+  
   const userId = req.user.id;
   let cart = await cartService.cart(userId);
-  console.log("cart", cart);
+  
   if (!cart || cart?.items.length < 1) {
     return res.status(404).send({
       message: "No Products Found in the cart or You have No active Cart",
@@ -36,7 +36,7 @@ const createOrder = catchAsync(async (req, res) => {
     // },
   ];
 
-  console.log("req.body", req.body);
+  
   const order = await Order.create({
     addressId,
     totalAmount,
@@ -67,14 +67,14 @@ const createOrder = catchAsync(async (req, res) => {
   //   };
   // });
 
-  // console.log("cart", cart);
+  // 
 });
 
 exports.addOrder = (req, res) => {
-  console.log("calling add order");
+  
 
   // Cart.deleteOne({ user: req.user._id }).exec((error, result) => {
-  //   console.log("req.user", req.user);
+  //   
   //   if (error) return res.status(400).json({ error });
   //   if (result) {
   //     req.body.user = req.user._id;

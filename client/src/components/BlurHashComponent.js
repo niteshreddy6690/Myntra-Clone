@@ -3,7 +3,7 @@ import { encodeImageToBlurhash } from "./encode";
 import { Blurhash } from "react-blurhash";
 
 const BlurHashComponent = ({ image, src, blurHashUrl }) => {
-  console.log("blurHashUrl components", blurHashUrl);
+  
   return (
     <div>
       {/* <h1>{blurHashUrl}</h1> */}

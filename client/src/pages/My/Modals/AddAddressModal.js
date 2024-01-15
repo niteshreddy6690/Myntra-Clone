@@ -30,12 +30,15 @@ const AddAddressContainer = styled.div`
   top: 50%;
   left: 50%;
   width: 450px;
-  height: 80%;
+  height:80%;
   transform: translate(-50%, -50%);
   background: #f5f5f6;
   z-index: 13;
   overflow: hidden;
 
+  @media screen and (min-width: 768px) {
+    height: 750px;
+  }
   .addAddressModal-heading {
     font-weight: 700;
     background: #fff;
@@ -45,8 +48,7 @@ const AddAddressContainer = styled.div`
     border-bottom: 1px solid #d4d5d9;
   }
   .addAddressModal-bodyContainer {
-    /* background: green; */
-    height: 82%;
+    height: 84%;
     overflow: auto;
   }
 
@@ -199,7 +201,7 @@ const AddAddressModal = ({
   }, []);
 
   // const addAddrApiCall = async () => {
-  //   console.log("addAddress inside Api call", addAddress);
+  //   
   //   dispatch(addNewUserAddress({ addAddress }));
 
   //   // const myAddress = await request.post("/address/add", addAddress);

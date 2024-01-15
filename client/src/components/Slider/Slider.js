@@ -19,6 +19,7 @@ const Img = styled.img`
   margin-top: 2rem;
   width: 100%;
   height: 85%;
+  object-fit: contain;
 `;
 const NavLink = styled(Link)`
   cursor: pointer;
@@ -26,12 +27,15 @@ const NavLink = styled(Link)`
 `;
 
 const SwiperCarousel = styled(Swiper)`
+  padding:0px 0px 30px 0px;
+
   .swiper-pagination-bullet {
     background: #d4d5d9;
     width: 5px;
     height: 5px;
     border-radius: 50%;
     opacity: 1;
+    
   }
 
   .swiper-pagination-bullet-active {
@@ -46,7 +50,7 @@ const Slider = ({ sliders }) => {
   return (
     <>
       <SwiperCarousel
-        style={{ height: "575px" }}
+        // style={{ height: "55px" }}
         spaceBetween={30}
         centeredSlides={true}
         autoplay={{

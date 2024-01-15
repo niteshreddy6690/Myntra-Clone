@@ -21,7 +21,7 @@ const getSimilarProduct = async (id) => {
     "reviews",
   ]);
 
-  console.log(product.categories._id);
+  
   const SimilarBrandProduct = await Product.find({
     _id: { $ne: product.id },
     categories: product.categories._id,

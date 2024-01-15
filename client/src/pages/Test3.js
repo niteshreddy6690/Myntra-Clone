@@ -107,17 +107,17 @@ const Test3 = () => {
     setPreviewFiles(_previewFiles);
   };
   // const handelDragStart = (e, i) => {
-  //   console.log("Drag Started", i);
+  //   
   // };
   // const handelDragEnter = (e, i) => {
-  //   console.log("Drag Entered", i);
+  //   
   // };
   // const handelDragEnd = (e) => {
-  //   console.log("drag Ended");
+  //   
   // };
   const handelChange = (e) => {
-    console.log("handelChangeTriggred");
-    console.log(e.target.files);
+    
+    
     const selectedFiles = e.target.files;
     const selectedFileArray = Array.from(selectedFiles);
     const imageArray = selectedFileArray?.map((file) => {
@@ -127,14 +127,14 @@ const Test3 = () => {
         imageType: file.type,
       };
     });
-    console.log("image array", imageArray);
+    
     setPreviewFiles((prev) => prev.concat(imageArray).slice(0, 6));
     e.currentTarget.value = null;
   };
 
   // useEffect(() => {}, [files]);
 
-  console.log(previewFiles);
+  
   return (
     <Wrapper>
       <Container>

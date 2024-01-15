@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 const ProfileEditCard = styled.div`
   background-color: white;
-  text-align: justify;
+  /* text-align: justify; */
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
   padding: 24px 0;
   width: 100%;
@@ -26,8 +26,8 @@ const ProfileEditCard = styled.div`
   }
   .mobileNumber-verifiedNumber {
     position: relative;
-    bottom: 4px;
     font-size: 16px;
+    height: 30px;
   }
   .mobileNumber-pmn {
     padding: 12px;
@@ -51,7 +51,9 @@ const ProfileEditCard = styled.div`
 
   .mobileNumber-pmn .mobileNumber-verifiedIcon {
     position: relative;
-    top: 7px;
+    top: -20px;
+    left: 80px;
+    font-size: 14px;
   }
   .mobileNumber-pmn > div {
     -webkit-box-flex: 1;
@@ -346,18 +348,6 @@ const ProfileEdit = () => {
     },
   });
 
-  // const { currentUser } = useSelector((state) => ({
-  //   ...state.user,
-  // }));
-  // const initialState = {
-  //   email: "",
-  //   gender: "",
-  //   name: "",
-  //   altPhone: "",
-  //   hint: "",
-  //   dob: "",
-  //   location: "",
-  // };
   const [formData, setFormData] = useState({});
 
   const handelChange = (e) => {
@@ -369,20 +359,20 @@ const ProfileEdit = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log("data", data);
+    
     const updateUser = await request.put("/user", data);
-    console.log("updateUser", updateUser);
+    
   };
 
-  const handleSubmiting = async (data) => {
-    console.log("data", data);
-    // e.preventDefault();
-    const updateUser = await request.put("/user", data);
-    console.log("updateUser", updateUser);
-  };
+  // const handleSubmiting = async (data) => {
+  //   
+  //   // e.preventDefault();
+  //   const updateUser = await request.put("/user", data);
+  //   
+  // };
 
   // useEffect(() => {
-  //   console.log("currentUser", currentUser);
+  //   
   //   currentUser &&
   //     setFormData({
   //       name: currentUser?.name,
@@ -408,7 +398,7 @@ const ProfileEdit = () => {
       });
   }, [currentUser]);
 
-  // console.log(
+  // 
   //   "moment(formData?.dob).format",
   //   moment("1998-06-29T00:00:00.000Z").format("DD/MM/YYYY")
   // );
@@ -435,8 +425,8 @@ const ProfileEdit = () => {
           <div className="mobileNumber-verifiedNumber">
             <span>9901145387</span>
             <svg
-              width="24px"
-              height="24px"
+              width="20px"
+              height="20px"
               viewBox="0 0 24 24"
               className="mobileNumber-verifiedIcon"
             >
@@ -453,8 +443,8 @@ const ProfileEdit = () => {
                     id="Rectangle"
                     x="0"
                     y="0"
-                    width="24"
-                    height="24"
+                    width="20"
+                    height="20"
                   ></rect>
                   <g
                     id="Group"

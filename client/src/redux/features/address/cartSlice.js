@@ -50,7 +50,7 @@ export const removeCartItem = createAsyncThunk(
         return response?.data;
       }
     } catch (error) {
-      console.log(error);
+      
     }
   }
 );
@@ -60,7 +60,7 @@ export const addItemToBag = createAsyncThunk(
   async ({ productId, size, toast }, { dispatch }) => {
     try {
       const response = await api.addItemToCart({ productId, size });
-      console.log("Added Item to bag", response);
+      
       if (response)
         toast("Added to bag", {
           position: "top-right",

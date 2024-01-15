@@ -7,6 +7,7 @@ import MyOrders from "./MyOrders";
 import OverView from "./OverView";
 import ProfileEdit from "./ProfileEdit";
 import MyAddress from "./MyAddress";
+import Profile from "./Profile";
 const MainContainerWrapper = styled.div`
   font-family: "Assistant";
 
@@ -94,7 +95,6 @@ const PageComponents = styled.div`
 const MyMainPage = () => {
   let location = useLocation();
 
-  console.log("location", location);
   return (
     <>
       <Navbar />
@@ -131,7 +131,7 @@ const MyMainPage = () => {
             <div className="segment-segment">
               <div className="segment-heading">CREDITS</div>
               <NavLink
-                to="/my/coupons"
+                to="/"
                 className={({ isActive }) =>
                   isActive ? "active segment-link" : "segment-link"
                 }
@@ -139,7 +139,7 @@ const MyMainPage = () => {
                 MynCash
               </NavLink>
               <NavLink
-                to="/my/myntracredit"
+                to="/"
                 className={({ isActive }) =>
                   isActive ? "active segment-link" : "segment-link"
                 }
@@ -147,7 +147,7 @@ const MyMainPage = () => {
                 Myntra Credit
               </NavLink>
               <NavLink
-                to="/my/myntrapoints"
+                to="/"
                 className={({ isActive }) =>
                   isActive ? "active segment-link" : "segment-link"
                 }
@@ -161,23 +161,23 @@ const MyMainPage = () => {
               <NavLink to="/my/profile" className="segment-link">
                 Profile
               </NavLink>
-              <NavLink to="/my/savedcards" className="segment-link">
+              <NavLink to="/" className="segment-link">
                 Saved Cards
               </NavLink>
-              <NavLink to="/my/savedvpa" className="segment-link">
+              <NavLink to="/" className="segment-link">
                 Saved VPA
               </NavLink>
               <NavLink to="/my/address" className="segment-link">
                 Addresses
               </NavLink>
-              <NavLink to="/myntrainsider?cache=false" className="segment-link">
+              <NavLink to="/" className="segment-link">
                 Myntra Insider
               </NavLink>
             </div>
             <div className="segment-segment">
               <div className="segment-heading">LEGAL</div>
               <NavLink
-                to="/termsofuse"
+                to="/"
                 className={({ isActive }) =>
                   isActive ? "active segment-link" : "segment-link"
                 }
@@ -185,7 +185,7 @@ const MyMainPage = () => {
                 Terms of Use
               </NavLink>
               <NavLink
-                to="/privacypolicy"
+                to="/"
                 className={({ isActive }) =>
                   isActive ? "active segment-link" : "segment-link"
                 }
@@ -199,6 +199,7 @@ const MyMainPage = () => {
             {location.pathname == "/my/dashboard" ? <OverView /> : null}
             {location.pathname == "/my/profile/edit" ? <ProfileEdit /> : null}
             {location.pathname == "/my/address" ? <MyAddress /> : null}
+            {location.pathname=="/my/profile"?<Profile /> : null}
           </PageComponents>
         </MainContainer>
       </MainContainerWrapper>

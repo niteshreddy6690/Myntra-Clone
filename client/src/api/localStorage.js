@@ -8,8 +8,8 @@ const LocalStorageService = (function () {
     return _service;
   }
   function _setToken(tokenObj) {
-    // console.log("AccessToken", tokenObj.AccessToken);
-    // console.log("RefreshToken", tokenObj.RefreshToken);
+    // 
+    // 
     window.localStorage.setItem("AccessToken", tokenObj.AccessToken);
     window.localStorage.setItem("RefreshToken", tokenObj.RefreshToken);
   }

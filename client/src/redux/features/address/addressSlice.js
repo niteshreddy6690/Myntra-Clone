@@ -29,9 +29,9 @@ export const addNewUserAddress = createAsyncThunk(
   "address/addNewAddress",
   async ({ addAddress }, { dispatch }) => {
     try {
-      console.log("calling in slice", addAddress);
+      
       const response = await api.addNewAddress({ addAddress });
-      console.log("response", response);
+      
       if (response) {
         dispatch(fetchUserAddress());
       }

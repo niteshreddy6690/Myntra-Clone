@@ -20,10 +20,14 @@ const EditContainerModal = styled.div`
   top: 50%;
   left: 50%;
   width: 450px;
-  height: 80%;
+  height: 75%;
   transform: translate(-50%, -50%);
   background: #fff;
   z-index: 12;
+
+  @media screen and (min-width: 768px) {
+    height: 750px;
+  }
   input {
     accent-color: #ff3f6c;
     caret-color: #ff3f6c;
@@ -152,7 +156,7 @@ const EditAddressModal = ({
     });
   };
 
-  console.log("editedAddressModal", editedAddressModal);
+  
 
   return (
     <>
@@ -197,7 +201,7 @@ const EditAddressModal = ({
                     <input
                       type="tel"
                       name="pinCode"
-                      value={editedAddressModal?.pinCode}
+                      value={editedAddressModal?.pinCode || ""}
                       maxLength="6"
                       onChange={handleChangeEditAddress}
                       className="input"
@@ -209,7 +213,7 @@ const EditAddressModal = ({
                 </div>
                 <div className="addAddressModal-eachBlock">
                   <div className="myInput-inputRow myInput-md addAddressModal-addressInput">
-                    <label for="state" className="myInput-labelTop">
+                    <label htmlFor="state" className="myInput-labelTop">
                       State *
                     </label>
                     <input

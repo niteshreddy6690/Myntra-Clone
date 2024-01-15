@@ -15,10 +15,6 @@ import {
   SearchButton,
   Input,
   Span,
-  StyledSubLinksContainer,
-  SubLinksGroup,
-  NavSubLinks,
-  GridItemThree,
   SvgImageContainer,
   SvgImageContainer1,
   SvgNavbarLink,
@@ -27,14 +23,13 @@ import {
   StdImg,
   Overlay,
   BadgeNotification,
+  BannerAnnouncement
 } from "./NavStyles";
-import { links } from "../Navbar/NavBardata";
 import SearchIcon from "@mui/icons-material/Search";
 import MyntraLogo from "../../Assets/Images/Myntra.png";
 import stdLogo from "../../Assets/Images/studio-logo-new.svg";
 import StudioImg from "../../Assets/Images/sudio-nav-banner.png";
 import { IoIosArrowForward } from "react-icons/io";
-import { Badge } from "@mui/material";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector, useDispatch } from "react-redux";
@@ -44,7 +39,6 @@ import { fetchUserById, logOutUser } from "../../redux/features/user/userSlice";
 import LocalStorageService from "../../api/localStorage";
 import jwt_decode from "jwt-decode";
 import { request } from "../../api/axios";
-
 import MobileNav from "../MobileMenu/MobileNav";
 import Men from "../SubMenu/Men";
 import Women from "../SubMenu/Women";
@@ -52,6 +46,9 @@ import Kids from "../SubMenu/Kids";
 import HomeLiving from "../SubMenu/HomeLiving";
 import Beauty from "../SubMenu/Beauty";
 import { useNavigate, useLocation } from "react-router-dom";
+
+
+
 const NavItem = ({ to, color, name, children }) => {
   const [ishover, setHover] = useState(false);
 
@@ -85,16 +82,14 @@ const Navbar = () => {
   const [searchDropdownBrand, setSearchDropdownBrand] = useState(null);
   const [searchDropdownCategory, setSearchDropdownCategory] = useState(null);
   const [openMobileNavbar, setOpenMobileNavbar] = useState(false);
-  const [receivedData, setReceivedData] = useState(null);
 
+  
   // const debouceSearchTerm = useDebounce(searchText, 300);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
   const refreshToken = LocalStorageService.getRefreshToken();
   const { currentUser } = useSelector((state) => ({ ...state.user }));
-  console.log(" inside navbar currentUser", currentUser);
   const cart = useSelector((state) => state.cart.cartItems);
 
   const noOfCartItems = cart?.cart?.items.reduce(
@@ -106,6 +101,7 @@ const Navbar = () => {
     const data = await request.get(
       `products/search/autosuggest?q=${searchText}`
     );
+    
     if (data?.data?.searchBrand.length > 0) {
       setSearchDropdownBrand(data?.data?.searchBrand);
     }
@@ -113,8 +109,6 @@ const Navbar = () => {
     if (data?.data?.searchCategory.length > 0) {
       setSearchDropdownCategory(data?.data?.searchCategory);
     }
-
-    console.log(data);
   };
   useEffect(() => {
     let handler;
@@ -133,55 +127,48 @@ const Navbar = () => {
   }, [searchText]);
 
   const apiCall = async (decoded) => {
-    console.log("calling fetch user by id in app.js");
-    const action = dispatch(fetchUserById({ id: decoded.id }));
-    if (isFulfilled(action)) {
-      console.log("Action fullfilled", isFulfilled(action));
+    const action = await dispatch(fetchUserById({ id: decoded.id }));
+    if ( localStorage.getItem("user")?._id || isFulfilled(action)) {
+      dispatch(fetchCartItems());
     }
-    dispatch(fetchCartItems());
   };
   useEffect(() => {
     const token = LocalStorageService.getAccessToken();
-
-    console.log("Token", token);
     if (token) {
       var decoded = jwt_decode(token);
       if (decoded) {
-        console.log("calling get use by id in useffect");
-        apiCall(decoded);
+        if(window.location.pathname !== "/login"){
+          apiCall(decoded);
+        }
+        
       }
     }
-  }, []);
+  }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(fetchCartItems());
-  // }, [dispatch]);
 
   const handleKeyPress = async (event) => {
     if (event?.key === "Enter") {
       const { name, value } = event?.target;
       const params = new URLSearchParams({ [name]: value });
       navigate({
-        pathname: value,
-        search: params.toString(),
+        pathname: "/"+value,
+        search: "rawQuery"+params.toString(),
       });
     }
   };
-  const onClickSearch = () => {
-    // const { name, value } = event?.target;
-    // const params = new URLSearchParams({ [name]: value });
-    // history.replace({
-    //   pathname: location.pathname,
-    //   search: params.toString(),
-    // });
+  const onClickSearch = (event) => {
+    const params = new URLSearchParams({ ['']:searchText});
+    navigate({
+      pathname: "/"+searchText,
+      search: "rawQuery"+params.toString(),
+    });
   };
   const handleLogout = async () => {
-    const action = dispatch(logOutUser({ refreshToken }));
-    localStorage.clear();
-    dispatch(fetchCartItems());
-
-    // const res = await request.post("/auth/logout", { refreshToken });
-    // if (res) localStorage.clear();
+    const action = await dispatch(logOutUser({ refreshToken }));
+    if(isFulfilled(action)) {
+      localStorage.clear();
+      dispatch(fetchCartItems());
+    }
   };
   const handleMobileNav = () => {
     setOpenMobileNavbar(!openMobileNavbar);
@@ -279,35 +266,6 @@ const Navbar = () => {
           <NavItem to={"/shop/women"} color="#0db7af" name="Beauty">
             <Beauty />
           </NavItem>
-          {/* {links?.map((link, i) => (
-            <NavItem
-              to={link?.to}
-              color={link?.color}
-              name={link?.name}
-              key={i}
-            >
-              <>
-                <StyledSubLinksContainer>
-                  {link?.subLinks?.map((item, i) => (
-                    <div key={i}>
-                      <SubLinksGroup to={item?.to} key={i} color={link?.color}>
-                        {item?.group}
-                      </SubLinksGroup>
-                      <>
-                        {item?.links?.map((link, i) => (
-                          <div key={i}>
-                            <NavSubLinks to={link?.to} key={i}>
-                              {link?.name}
-                            </NavSubLinks>
-                          </div>
-                        ))}
-                      </>
-                    </div>
-                  ))}
-                </StyledSubLinksContainer>
-              </>
-            </NavItem>
-          ))} */}
           <StdNavbarLink
             to={"/studio"}
             color={"#ff3f6c"}
@@ -345,7 +303,7 @@ const Navbar = () => {
         </GridItemOne>
         <SearchWrapper>
           <SearchContainer isFocus={isFocus}>
-            <SearchButton onClick={onClickSearch}>
+            <SearchButton onClick={(e)=>onClickSearch(e)}>
               <SearchIcon
                 style={{ color: "#6c6c6c", transform: "scale(.8)" }}
               />
@@ -355,15 +313,16 @@ const Navbar = () => {
               type="text"
               value={searchText}
               onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
+              onBlur={() => setTimeout(() => setFocus(false), 500)}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyPress={handleKeyPress}
+              tabIndex={1}
             />
           </SearchContainer>
           {searchDropdownCategory?.length > 0 ||
           searchDropdownBrand?.length > 0 ? (
-            <SearchDropDown isFocus={isFocus}>
-              {searchDropdownCategory?.length > 0 ? (
+            <SearchDropDown isFocus={isFocus} >
+              {searchDropdownCategory?.length > 0  ? (
                 <>
                   <div
                     className="CategorySection"
@@ -374,19 +333,21 @@ const Navbar = () => {
                     Categories
                   </div>
 
-                  {searchDropdownCategory.map((category) => (
-                    <div
-                      style={{
-                        padding: "5px 0 5px 10px",
-                        cursor: "pointer",
-                      }}
+                  {searchDropdownCategory?.map((category,i) => (
+                    <Link
+                     className="SearchDropdownResults"
+                      to={`/${category?.namepath}`}
+                      target="_blank"
+                      key={i}
+                      // onMouseDown={(e) => e.preventDefault()}
                     >
-                      {category?.name}
-                    </div>
+                      <div>{category?.namepath.replace("-", " ")}</div>
+                    </Link>
+                
                   ))}
                 </>
               ) : null}
-              {searchDropdownBrand?.length > 0 ? (
+              {searchDropdownBrand?.length > 0   ? (
                 <>
                   <div
                     className="CategorySection"
@@ -397,15 +358,16 @@ const Navbar = () => {
                     Brand
                   </div>
 
-                  {searchDropdownBrand.map((item) => (
-                    <div
-                      style={{
-                        padding: "5px 0 5px 10px",
-                        cursor: "pointer",
-                      }}
+                  {searchDropdownBrand?.map((brand,i) => (
+                    <Link
+                    className="SearchDropdownResults"
+                      to={`/${brand}?rawQuery=${brand}`}
+                      target="_blank"
+                      key={i}
+                      // onMouseDown={(e) => e.preventDefault()}
                     >
-                      {item?.brand}
-                    </div>
+                      {brand}
+                    </Link>
                   ))}
                 </>
               ) : null}
@@ -516,7 +478,7 @@ const Navbar = () => {
                   <div className="desktop-infoSection">Saved Address</div>
                 </a>
               </div>
-              {currentUser ? (
+              {(currentUser || JSON.parse(localStorage.getItem("user"))?._id) ? (
                 <div className="desktop-accActions">
                   <a
                     href="/my/profile/edit"
@@ -538,7 +500,7 @@ const Navbar = () => {
             </div>
           </SvgImageContainer>
 
-          {location?.pathname == "/wishlist" ? null : (
+          {location?.pathname === "/wishlist" ? null : (
             <SvgNavbarLink to={currentUser ? "/wishlist" : "/login"}>
               <SvgImageContainer1>
                 <svg
@@ -579,6 +541,7 @@ const Navbar = () => {
           </SvgNavbarLink>
         </GridItemTwo>
       </NavContainer>
+      <BannerAnnouncement ><h3>This Application built only Education Purpose only, All the credit go to Myntra © 2024 www.myntra.com. All rights reserved.</h3></BannerAnnouncement>
     </NavbarWrapper>
   );
 };

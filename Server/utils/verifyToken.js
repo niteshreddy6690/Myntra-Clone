@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const router = require("express").Router();
 
 const verifyToken = (req, res, next) => {
-  console.log("calling verify token");
+  
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
@@ -29,7 +29,6 @@ const verifyTokenAndAuthorization = (req, res, next) => {
   });
 };
 // ignore this piece of code
-
 const verifyTokenAndAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.isAdmin) {
@@ -45,7 +44,7 @@ const verifyTokenAndAdmin = (req, res, next) => {
 const authorize =
   (roles = []) =>
   (req, res, next) => {
-    console.log("calling Authorize");
+    
     // roles param can be a single role string (e.g. Role.User or 'User')
     // or an array of roles (e.g. [Role.Admin, Role.User] or ['Admin', 'User'])
     if (typeof roles === "string") {

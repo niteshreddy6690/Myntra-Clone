@@ -6,21 +6,20 @@ const otpGenerator = require("otp-generator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const userService = require("../services/userServices");
-const axios = require("axios");
 // const { sendMessage } = require("fast-two-sms");
-const TwoFactor = new (require("2factor"))(
-  "1ba23eeb-b77d-11ed-813b-0200cd936042"
-);
+// const TwoFactor = new (require("2factor"))(
+//   "1ba23eeb-b77d-11ed-813b-0200cd936042"
+// );
 const Token = require("../models/Token");
 
 // fast2sms.sendMessage(options).then((response) => {
-//   console.log(response);
+//   
 // });
 
 // exports.register = catchAsync(async (req, res) => {
 //   const { phonenumber } = req.body;
 
-//   console.log(phonenumber);
+//   
 //   const userr = await User.findOne({ phonenumber: phonenumber });
 
 //   if (!userr) {
@@ -54,17 +53,19 @@ const Token = require("../models/Token");
 //   //           message: `OTP Sent on ${user.phonenumber} Successfully`,
 //   //         });
 //   //       } else {
-//   //         console.log(response);
+//   //         
 //   //         res.status(400).json({
 //   //           success: false,
 //   //         });
 //   //       }
 //   //     })
 //   //     .catch((error) => {
-//   //       console.log(error);
+//   //       
 //   //     });
 // });
 
+
+// Register user
 const register = catchAsync(async (req, res) => {
   const { phonenumber } = req.body;
   const phoneRegEx = "^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$";
@@ -73,24 +74,19 @@ const register = catchAsync(async (req, res) => {
     specialChars: false,
     lowerCaseAlphabets: false,
   });
-  // let isNewUser = false;
   if (phonenumber.match(phoneRegEx)) {
-    console.log("it is  a phone number");
     var user = await User.findOne({ phonenumber: phonenumber });
-    console.log("User", user);
+    
     if (!user) {
-      console.log(
-        "No user is existed with this phone number so will create a new User"
-      );
       user = await User.create({
         phonenumber,
       });
-      console.log("User after create ", user);
+      
       // isNewUser = true;
     }
 
     //   Math.floor((1 + Math.random()) * 90000);
-    console.log(otp);
+    
     // let options = {
     //   authorization: process.env.Fast2SMS_API,
     //   message: ` Your Myntra otp ${otp}`,
@@ -98,7 +94,7 @@ const register = catchAsync(async (req, res) => {
     // };
     const userOtp = await Otp.deleteMany({ userId: user.id });
 
-    console.log("user otp schema", userOtp);
+    
 
     // if (userOtp) {
     //   await userOtp.deleteMany();
@@ -116,15 +112,15 @@ const register = catchAsync(async (req, res) => {
   //   template: "CLONE Myntra OTP",
   // }).then(
   //   (sessionId) => {
-  //     console.log(sessionId);
+  //     
   //   },
   //   (error) => {
-  //     console.log(error);
+  //     
   //   }
   // );
 
   //   fast2sms.sendMessage(options).then((response) => {
-  //     console.log(response);
+  //     
   //     if (response.return === true) {
   //       async function fun() {
   //         user.otp = otp;
@@ -138,7 +134,7 @@ const register = catchAsync(async (req, res) => {
   //         message: `OTP Sent on ${user.phonenumber} Successfully`,
   //       });
   //     } else {
-  //       console.log(response);
+  //       
   //       res.status(400).json({
   //         success: false,
   //       });
@@ -148,24 +144,22 @@ const register = catchAsync(async (req, res) => {
   res.status(200).json({ message: "success", otp: otp, user });
 });
 
-const optverify = async (req, res) => {
+// Verify otp
+const verifyOtp = async (req, res) => {
   const { otp, phoneNumber } = req.body;
-  const user = await User.findOne({ phonenumber: phoneNumber });
-  console.log("user from user Schema", user);
-  const otpUser = await Otp.findOne({ userId: user.id });
+  const user = await User.findOne({ phonenumber: phoneNumber },{createdAt:0,updatedAt:0});
+  const otpUser = await Otp.findOne({ userId: user?.id });
   if (!otpUser?.otp) {
     return res.status(401).json({
       message: "Your OTP has been expired",
     });
   }
   if (otp === otpUser?.otp) {
-    console.log("contains otp in otp");
+    
     user.verify = "verified";
     otpUser.otp = null;
     await user.save();
     await otpUser.save();
-
-    console.log("user is already existed so we need will generate auth token");
     const AccessToken = jwt.sign(
       {
         id: user._id,
@@ -184,21 +178,18 @@ const optverify = async (req, res) => {
       process.env.JWT_REFRESH_SECRET_KEY,
       { expiresIn: "30d" }
     );
+    // alternate code to remove the token from the Token Schema
+    // const userToken = await Token.findOne({ userId: user.id });
+    // if (userToken) {
+    //   await userToken.remove();
+    // }
 
-    const userToken = await Token.findOne({ userId: user.id });
-    if (userToken) {
-      await userToken.remove();
-    }
+     await Token.deleteMany({ userId: user.id})
     const token = await new Token({
       userId: user.id,
       token: RefreshToken,
     }).save();
-
-    console.log("AccessToken", AccessToken);
-    console.log("RefreshToken", RefreshToken);
-    return res.status(200).json({ AccessToken, RefreshToken, user });
-
-    return res.status(200).json({ message: "success", user: user });
+    return res.status(200).json({ AccessToken, RefreshToken:token?.token, user });
   } else {
     return res.status(403).json({
       message: "Invalid OTP",
@@ -206,12 +197,13 @@ const optverify = async (req, res) => {
   }
 };
 
+//Resend Otp
 const resendOtp = catchAsync(async (req, res) => {
-  console.log("calling otp callback", req.body);
+  
   const { phonenumber } = req.body;
-  console.log("phone number", phonenumber);
+  
   const user = await userService.getUserByPhoneNumber(phonenumber);
-  console.log("User", user);
+  
   const otpUser = await Otp.deleteMany({ userId: user.id });
 
   let otp = otpGenerator.generate(4, {
@@ -228,25 +220,22 @@ const resendOtp = catchAsync(async (req, res) => {
   }
   res.status(200).json({ message: "success Resend OTP", otp: otp });
 });
-
+// Create Account
 const createAccount = catchAsync(async (req, res) => {
-  console.log(req.body);
+  
   const user = await userService.updateUser(req.params.phone, req.body);
-  console.log("user", user);
+  
   res.send(user);
 });
 
 // REFRESH TOKEN
 const refreshToken = catchAsync(async (req, res) => {
   const refreshToken = req.body.refreshToken;
-  // console.log(refreshToken);
   if (!refreshToken)
     return res.status(401).json({ message: "Refresh token required" });
-
   const token = await Token.findOne({ token: refreshToken });
-
   if (!token)
-    return res.status(403).json({ message: "does not contain refresh token" });
+    return res.status(404).json({ message: "not found in DB" });
   jwt.verify(
     refreshToken,
     process.env.JWT_REFRESH_SECRET_KEY,
@@ -255,9 +244,6 @@ const refreshToken = catchAsync(async (req, res) => {
         return res
           .status(500)
           .json({ message: "error verifying refresh token" });
-
-      // console.log("payload :" + JSON.stringify(payload));
-
       const AccessToken = jwt.sign(
         {
           id: payload.id,
@@ -273,20 +259,21 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 // logout
-
 const logout = catchAsync(async (req, res) => {
+  
   const { refreshToken } = req.body;
+  
   if (!refreshToken)
     return res.status(401).json({ message: "Refresh token required" });
   const refreshTokenDoc = await Token.findOne({ token: refreshToken });
   if (!refreshTokenDoc)
-    return res.status(403).json({ message: "does not contain refresh token" });
+    return res.status(200).json({message: "User already logged out" });
   refreshTokenDoc.remove();
   return res.status(200).json({ message: "successfully logged out" });
 });
 module.exports = {
   register,
-  optverify,
+  verifyOtp,
   createAccount,
   resendOtp,
   refreshToken,

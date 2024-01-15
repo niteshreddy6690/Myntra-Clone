@@ -20,8 +20,6 @@ const Person = styled.div`
   margin-bottom: 35px;
   padding-bottom: unset;
   background-color: white;
-  box-sizing: border-box;
-
   .person-background {
     position: relative;
     background: #f5f5f6;
@@ -44,7 +42,6 @@ const PersonInfo = styled.div`
   width: auto;
   display: inline;
   position: absolute;
-  text-align: left;
   left: 180px;
   right: 30px;
   display: none;
@@ -103,9 +100,9 @@ const DashboardSquares = styled.div`
   }
 `;
 const LinkContent = styled.div`
-  .link-image {
+  .linkImage {
     width: 32px;
-    /* margin: auto; */
+    margin: auto;
   }
   .link-labels {
     width: 100%;
@@ -144,7 +141,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/orders">
             <LinkContent>
-              <img src={profileOrder} className="link-image" />
+              <img src={profileOrder} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Orders</div>
                 <div className="link-subLabel">Check your order status</div>
@@ -155,7 +152,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/wishlist">
             <LinkContent>
-              <img src={collectionWishlist} className="link-image" />
+              <img src={collectionWishlist} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Collection &amp; Wishlist</div>
                 <div className="link-subLabel">
@@ -168,7 +165,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/myntracredit">
             <LinkContent>
-              <img src={myntraCredit} className="link-image" />
+              <img src={myntraCredit} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Myntra Credit </div>
                 <div className="link-subLabel">
@@ -181,7 +178,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/myntrapoints">
             <LinkContent>
-              <img src={myntraCash} className="link-image" />
+              <img src={myntraCash} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">MynCash </div>
                 <div className="link-subLabel">
@@ -194,7 +191,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/savedcards">
             <LinkContent>
-              <img src={myntraSavedCards} className="link-image" />
+              <img src={myntraSavedCards} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Saved Cards</div>
                 <div className="link-subLabel">
@@ -207,7 +204,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/savedvpa">
             <LinkContent>
-              <img src={savedVpa} className="link-image" />
+              <img src={savedVpa} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Saved VPA</div>
                 <div className="link-subLabel">View your saved VPA</div>
@@ -218,7 +215,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/address">
             <LinkContent>
-              <img src={savedAddress} className="link-image" />
+              <img src={savedAddress} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Addresses</div>
                 <div className="link-subLabel">
@@ -231,7 +228,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/coupons">
             <LinkContent>
-              <img src={coupons} className="link-image" />
+              <img src={coupons} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Coupons</div>
                 <div className="link-subLabel">
@@ -244,7 +241,7 @@ const OverView = () => {
         <DashboardSquares>
           <NavLink to="/my/profile/edit">
             <LinkContent>
-              <img src={profileDetains} className="link-image" />
+              <img src={profileDetains} className="linkImage" />
               <div className="link-labels">
                 <div className="link-label">Profile Details</div>
                 <div className="link-subLabel">

@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import Men from "./pages/Men";
 import Products from "./pages/Products";
-import ProductPage from "./pages/ProductPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 import Test3 from "./pages/Test3";
 import Studio from "./pages/Studio";
 import Cart from "./pages/Cart";
@@ -25,75 +25,129 @@ import Test5 from "./pages/Test5";
 import Test1 from "./pages/Test";
 import PreviewImg from "./pages/PreviewImg";
 import Test8 from "./pages/Test8";
-import TempProduct from "./pages/TempProduct";
-import LazyComponent from "./components/LazyComponent";
+import ListOfProducts from "./pages/ListOfProducts";
 import Toast from "./pages/Toast";
-import Category from "./pages/Category";
 import MyMainPage from "./pages/My/MyMainPage";
 import MyOrders from "./pages/My/MyOrders";
 import OverView from "./pages/My/OverView";
 import ProfileEdit from "./pages/My/ProfileEdit";
 import Checkout from "./pages/Checkout";
 import MyAddress from "./pages/My/MyAddress";
-import Navbar from "./components/Navbar/Navbar";
-import NavText from "./pages/NavText";
-import MobileNav from "./components/MobileMenu/MobileNav";
 
-// import "./fonts/whitneybold.otf";
-import "./fonts/whitneybook.ttf";
-import "./fonts/whitneymedium.ttf";
-// import "./fonts/whitneylight.otf";
-import "./fonts/whitneysemibold.ttf";
-
-import "./fonts/RishgularTryttf.ttf";
-import "./fonts/whitneymedium.woff";
-
+import Profile from "./pages/My/Profile";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import "./fonts/MemphisRiver.otf";
 import LocalStorageService from "../src/api/localStorage";
-import { fetchUserById } from "../src/redux/features/user/userSlice";
+import {
+  fetchUserById,
+  logOutUser,
+} from "../src/redux/features/user/userSlice";
 import { isFulfilled } from "@reduxjs/toolkit";
+import jwt_decode from "jwt-decode";
+import { fetchCartItems } from "../src/redux/features/cart/cartSlice";
+
+// import "./fonts/whitneybold.otf";
+// import "./fonts/whitneybook.ttf";
+// import "./fonts/whitneymedium.ttf";
+// // import "./fonts/whitneylight.otf";
+// import "./fonts/whitneysemibold.ttf";
+// import "./fonts/RishgularTryttf.ttf";
+// import "./fonts/whitneymedium.woff";
+
+import "./fonts/Assistant/Assistant-Light.ttf";
+import "./fonts/Assistant/Assistant-Regular.ttf";
+import "./fonts/Assistant/Assistant-SemiBold.ttf";
+
+// const isAuthenticated = /* your authentication logic here */ true; // Replace with your actual authentication logic
+
 function App() {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => ({ ...state.user }));
+
+  const isAuthenticated =
+    currentUser || JSON.parse(localStorage.getItem("user"))?._id;
+  // console.log("Is authenticated",isAuthenticated);
+  // const PrivateRoute = ({ element, path }) => {
+  //   return isAuthenticated ? element : <Navigate to="/login" />;
+  // };
+
+  //   const apiCall = async (decoded) => {
+  //     const action = await dispatch(fetchUserById({ id: decoded.id }));
+  //     if ( JSON.parse(localStorage.getItem("user"))?._id || isFulfilled(action)) {
+  //       dispatch(fetchCartItems());
+  //     }
+  //   };
+
+  // useEffect(()=>{
+  //   const token = LocalStorageService.getAccessToken();
+  //   if (token) {
+  //     var decoded = jwt_decode(token);
+  //     if (decoded) {
+  //       if(window.location.pathname !== "/login"){
+  //         apiCall(decoded);
+  //       }
+
+  //     }
+  //   }
+  // },[])
+
   return (
     <div className="App">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+          />
           <Route path="/shop/:id" element={<Men />} />
-          <Route path="/:id" element={<TempProduct />} />
-          <Route path="/Mobile" element={<MobileNav />} />
-          {/* <Route path="/:id/" element={<Products />} /> */}
-
-          <Route path="/:id/:id/:id/:id/buy" element={<ProductPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/nav" element={<NavText />} />
-          <Route path="/accountlink" element={<AccountLink />} />
-          <Route path="/createaccount" element={<CreateAccount />} />
-          <Route path="/verifyotp" element={<VerifyOtp />} />
-          <Route path="/studio" element={<Studio />} />
-          <Route path="/checkout/cart" element={<Cart />} />
-          <Route path="/checkbox" element={<Checkbox />} />
+          <Route path="/:id" element={<ListOfProducts />} />
+          <Route path="/:id/:id/:id/:id/buy" element={<ProductDetailsPage />} />
+          <Route
+            path="/accountlink"
+            element={isAuthenticated ? <Navigate to="/" /> : <AccountLink />}
+          />
+          <Route
+            path="/createaccount"
+            element={isAuthenticated ? <Navigate to="/" /> : <CreateAccount />}
+          />
+          .
+          <Route
+            path="/verifyotp"
+            element={isAuthenticated ? <Navigate to="/" /> : <VerifyOtp />}
+          />
           <Route path="/similar" element={<Similar />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/category" element={<Category />} />
-
-          <Route path="/my/" element={<MyMainPage />}>
+          <Route
+            path="/wishlist"
+            element={isAuthenticated ? <Wishlist /> : <Navigate to="/login" />}
+          />
+          {/* <Route path="/category" element={<Category />} /> */}
+          <Route
+            path="/my/"
+            element={
+              isAuthenticated ? <MyMainPage /> : <Navigate to="/login" />
+            }
+          >
             <Route path="orders" element={<MyOrders />} />
             <Route path="dashboard" element={<OverView />} />
             <Route path="profile/edit" element={<ProfileEdit />} />
             <Route path="address" element={<MyAddress />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
-
-          <Route path="/test1" element={<Test1 />} />
+          {/* <Route path="/test1" element={<Test1 />} />
           <Route path="/test3" element={<Test3 />} />
           <Route path="/PreviewImg" element={<PreviewImg />} />
           <Route path="/addimages" element={<Test5 />} />
           <Route path="/radio" element={<Test8 />} />
-          <Route path="/toast" element={<Toast />} />
-          <Route path="/checkout/cart" element={<Cart />} />
-          <Route path="/checkout/payment" element={<Checkout />} />
+          <Route path="/toast" element={<Toast />} /> */}
+          <Route
+            path="/checkout/cart"
+            element={isAuthenticated ? <Cart /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/checkout/payment"
+            element={isAuthenticated ? <Checkout /> : <Navigate to="/login" />}
+          />
         </Routes>
       </Router>
     </div>

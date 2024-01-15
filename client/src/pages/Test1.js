@@ -25,7 +25,7 @@ const Test2 = (p) => {
   const handelClick = () => {
     setFirst(!first);
   };
-  console.log("p", p);
+  
   return (
     <>
       {/* <div>{p.name}</div>
@@ -34,29 +34,29 @@ const Test2 = (p) => {
   );
 };
 const Test1 = () => {
-  //   console.log();
+  //   
   // const result = testdata.items.map((item) => Object.entries(item));
-  // console.log(result);
+  // 
   const res = Object.entries(testdata.items);
-  console.log("res", res);
+  
 
   res.map((item) => {
-    console.log(item[1]);
+    
   });
   // result.map
   //   const buildArr = [];
   //   const result = testdata.items.map((item, i) => buildArr.push(item));
-  //   console.log(buildArr);
+  //   
 
   // const zoo = [{ name: "nite" }, { name: "abc" }];
 
-  // console.log(Object.keys(zoo));
+  // 
   // // ['lion', 'panda']
 
-  // console.log(Object.values(zoo));
+  // 
   // // ['🦁', '🐼']
 
-  // console.log(Object.entries(zoo));
+  // 
   // [ ['lion', '🦁'], ['panda', '🐼'] ]
   return (
     <></>

@@ -19,7 +19,7 @@ const CreateCategory = () => {
   const callGetCategory = async () => {
     const res = await request.get(`/category`);
     if (res) {
-      console.log(res.data);
+      
       // Function to merge all categories into one array
       function getAllCategoriesData(categories) {
         const allCategories = [];
@@ -37,15 +37,15 @@ const CreateCategory = () => {
       // Call the function and get all categories data into one array
       const allCategoriesData = getAllCategoriesData(res.data);
       SetCategoryOptions(allCategoriesData);
-      console.log("allCategoriesData", allCategoriesData);
+      
       setCategory(res.data);
     }
   };
   const handleClickCategory = (e, id, name) => {
     e.stopPropagation();
 
-    // console.log("categoryClick");
-    // console.log(categoryId, categoryName);
+    // 
+    // 
     setCategoryData({ ...categoryData, id, name });
   };
   const CategoryOption = CategoryOptions.map((category) => ({
@@ -54,21 +54,21 @@ const CreateCategory = () => {
     label: `${category.name}, ${category.namepath}, ${category.categoryPath}`,
   }));
 
-  //   console.log("CategoryOptions", CategoryOptions);
-  //   console.log("category", category);
-  //   console.log("input", input);
-  //   console.log("categoryTypes", CategoryTypes);
-  //   console.log("categoryData", categoryData);
+  //   
+  //   
+  //   
+  //   
+  //   
 
   const handleCreateCategory = () => {
     const response = request.post("/category/", {
       name: input?.name,
-      namepath: input?.namepath.split(" ").join("-"),
+      namepath: input?.namepath?.split(" ").join("-"),
       parentId: categoryData?.id,
       categoryType: CategoryTypes,
     });
     if (response) {
-      console.log("successfully created category");
+      
       callGetCategory();
     }
   };

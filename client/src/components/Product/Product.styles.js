@@ -1,49 +1,70 @@
 import styled, { keyframes, css } from "styled-components";
+import ClearIcon from "@mui/icons-material/Clear";
+import { Link } from "react-router-dom";
 
 export const TopDiv = styled.div`
   box-sizing: content-box;
-  max-height: 750px;
-  margin-top: 10px;
-  /* @media (min-width: 980px) {
-    margin-top: 50px;
-  } */
+  margin-top: 20px
 `;
 export const Div = styled.div``;
 export const Main = styled.main`
-  max-width: 1600px;
-  min-width: 1128px;
+  /* max-width: 1600px;
+  min-width: 1128px; */
   margin: 0 auto;
   position: relative;
-  min-height: 700px;
   padding-bottom: 15px;
   padding-left: 28px;
   padding-right: 28px;
-  /* background-color: green; */
+  display: flex;
+  max-width: 1600px;
+  @media screen and (max-width: 1024px) {
+    display: block;
+    width: 100%;
+    padding-left: 18px;
+  padding-right: 18px;
 
-  @media (min-width: 980px) {
-    min-height: 910px;
-    min-width: 980px;
-  }
+  } 
 `;
 export const ImageContainer = styled.div`
-  float: left;
   width: 58%;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    margin: 0 5px;
+  } 
+  
 `;
 export const ImageContainer1 = styled.div`
-  width: 49.5%;
   float: left;
+  overflow: hidden;
   margin-bottom: 1%;
   position: relative;
+  width:49%;
+  height: 610px;;
+  min-height: 350px;
+  min-width: 200px;
   &:nth-child(2n) {
     margin-left: 1%;
   }
+  @media screen and (max-width: 680px) {
+  height: 450px;
+  width: 49.5%
+  }
+  @media screen and (max-width: 530px) {
+    width: 100%;
+    height: 450px;
+    &:nth-child(2n) {
+    margin-left: 0%;
+  }
+  } 
+
 `;
 export const ImageContainer2 = styled.div`
-  width: 425px;
-  height: 580px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   position: relative;
   border: 1px solid #f5f5f6;
+
   &:hover {
     cursor: crosshair;
     cursor: url(https://constant.myntassets.com/web/assets/img/6d2dbca4-700f-4822-9759-5c92b8280de21536988731120-Zoom-icon-1x.png),
@@ -53,12 +74,29 @@ export const ImageContainer2 = styled.div`
     width: 100%;
     height: 100%;
     position: absolute;
+    object-fit: cover;
     top: 0;
     left: 0;
     z-index: 2;
     transition: transform 0.4s;
+    
     &:hover {
       transform: scale(1.04);
+    }
+    @media screen and (max-width:565px) {
+      object-fit: cover;
+     
+      &:hover {
+      transform: none;
+      cursor: default;
+    }
+    }
+    @media screen and (max-width:360px) {
+      object-fit:fill;
+      &:hover {
+      transform: none;
+      cursor: default;
+    }
     }
   }
 `;
@@ -78,15 +116,19 @@ export const DescriptionContainer = styled.div`
   text-align: start;
   font-family: "Whitney";
   font-size: 600;
-  @media (min-width: 980px) {
-    min-height: 820px;
-    width: 42%;
-    float: left;
+  padding-left: 30px;
+  clear: both;
+  @media (max-width: 1200px) {
+    min-width:350px;
+    width: 40%;
     padding: 0 0 0 30px;
-    box-sizing: border-box;
   }
-  @media (min-width: 600px) {
-    margin-top: 0;
+  @media screen and (max-width:1024px){
+    position: relative;
+    padding-top: 10px;
+    width: 100%;
+    padding-left: 5px;
+    /* padding:0; */
   }
 `;
 export const TitleAndPriceContainer = styled.div`
@@ -315,12 +357,11 @@ export const NoSizeSpan = styled.span`
 
 export const AddAndWhish = styled.div`
   display: flex;
-  width: 90%;
+  width: 100%;
   margin: 30px 10px 0 0;
 `;
 export const AddToBagButton = styled.button`
-  box-sizing: border-box;
-  border-radius: 0;
+  border-radius: 5px;
   padding: 12px 15px;
   display: inline-flex;
   align-items: center;
@@ -334,7 +375,7 @@ export const AddToBagButton = styled.button`
   color: #fff;
   flex: 3;
   text-align: center;
-  width: 100%;
+  /* width: 100%; */
   margin-right: 3%;
   text-transform: uppercase;
   @media (min-width: 980px) {
@@ -356,17 +397,18 @@ export const AddToBagButton = styled.button`
 export const WishListButton = styled.button`
   border-radius: 3px;
   outline: 0;
-  margin-top: 10px;
-  padding: 5px 30px;
+  margin:0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   font-size: 16px;
   min-height: 22px;
   border-radius: 0;
-  padding: 12px 15px;
+  padding: 15px 15px;
   font-weight: 600;
+  width: 300px;
   cursor: pointer;
+  border-radius: 4px;
   flex: 2;
   border: 1px solid #d4d5d9;
   background-color: ${({ productInWishlist }) =>
@@ -378,10 +420,10 @@ export const WishListButton = styled.button`
     text-align: center;
     padding: 15px 0;
   }
-  @media (min-width: 980px) {
+  /* @media (min-width: 980px) {
     margin-top: 0;
-    border-radius: 4px;
-  }
+    
+  } */
   @media (min-width: 360px) {
     min-width: 108px;
   }
@@ -533,9 +575,11 @@ export const DetailedReviewContainer = styled.div`
     width: 100%;
     padding-bottom: 7px;
     color: #282c3f;
+    display: inline-block;
   }
   .ugc-iconContainer {
     margin: 0 5px;
+    display: inline-block;
   }
   .index-flexRow {
     display: flex;
@@ -569,7 +613,7 @@ export const DetailedReviewContainer = styled.div`
   }
 
   .index-flexRow .index-averageRating .startIcon {
-    margin-left: 5px;
+    margin: 22px 0 0 10px;
   }
   .index-rating {
     display: flex;
@@ -637,5 +681,224 @@ export const DetailedReviewContainer = styled.div`
 
   progress::-webkit-progress-bar {
     background: #f5f5f6;
+  }
+`;
+
+
+
+
+
+
+export const Wrapper = styled.div`
+  position: relative;
+  background-color: #fff;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding:10px 20px;
+
+  .similar-heading{
+    padding:5px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0;
+    color: #282c3f;
+    margin: 25px 0  24px;
+
+
+    @media (min-width: 980px) {
+    padding-left: 0;
+    }
+}
+  
+`;
+
+export const SimilarContainer = styled.div`
+  position: relative;
+  width: 100%;
+
+  .results-similarItemContainer {
+    width: 100%;
+  }
+`;
+
+export const SimilarHeader = styled.div`
+  font-family: Whitney Semibold;
+  margin: 12px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #282c3f;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+`;
+export const Icon = styled.div`
+  position: absolute;
+  top: 37px;
+  right: 30px;
+  width: 14px !important;
+  height: 15px;
+  justify-content: center;
+  cursor: pointer;
+`;
+export const ClearIconX = styled(ClearIcon)``;
+
+export const Ul = styled.ul`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  align-content: stretch;
+  width: 100%;
+  margin: 0;
+  padding-left: 0;
+  justify-content: center;
+  column-gap: 4%;
+  list-style: none;
+  flex-wrap: wrap;
+  margin: 0 -10px 0 0px;
+  @media screen and (min-width:500px){
+    justify-content: flex-start;
+  }
+`;
+
+export const Li = styled.li`
+  display: block;
+  overflow: hidden;
+  margin: 0 0 30px;
+  width: 210px;
+
+  &:hover {
+    box-shadow: 0 2px 16px 4px rgb(40 44 63 / 7%);
+  }
+
+`;
+export const SimilarContent = styled.div`
+  padding: 0 24px 24px;
+`;
+export const SimilarHeaderContainer = styled.div`
+  padding: 20px;
+`;
+
+export const NavLink = styled(Link)`
+  list-style: none;
+  text-decoration: none;
+  color: #282c3f;
+  background-color: transparent;
+  cursor: pointer;
+  display: block;
+
+  .image-Container {
+    position: relative;
+    width: 210px;
+    height: 280px;
+  }
+`;
+
+export const Image = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
+export const ProductMetaInfo = styled.div`
+  position: relative;
+  z-index: 3;
+  background: #fff;
+  padding: 0 10px;
+  height: 100%;
+  margin-top: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+`;
+
+export const ProductHeader3 = styled.h3`
+  font-family: Whitney Semibold;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  color: #282c3f;
+  margin-bottom: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  /* display: ${({ isHover }) => (isHover ? "none" : "block")}; */
+`;
+export const ProductHeader4 = styled.h4`
+  color: #535766;
+  font-family: Whitney Book;
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 0;
+  margin-top: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 400;
+  display: block;
+`;
+export const ProductPriceContainer = styled.div`
+  font-family: Whitney Semibold;
+  font-size: 16px;
+  line-height: 15px;
+  margin: 10px 0 6px;
+  white-space: nowrap;
+  font-size: 14px;
+  color: #282c3f;
+  font-weight: 500;
+`;
+export const ProductDiscountedPrice = styled.span`
+  font-size: 14px;
+  font-family: Whitney Semibold;
+  font-size: 16px;
+  color: #282c3f;
+  font-weight: 500;
+`;
+export const ProductOriginalPrice = styled.span`
+  text-decoration: line-through;
+  color: #7e818c;
+  font-weight: 400;
+  margin-left: 5px;
+  font-size: 12px;
+`;
+export const ProductDiscountPercentage = styled.span`
+  color: #ff905a;
+  font-family: Whitney Book;
+  font-weight: 500;
+  font-size: 12px;
+  margin-left: 5px;
+`;
+export const IndexCrossLinkContainer=styled.div`
+    display: inline-block;
+    margin: 35px 0 50px;
+    width: 100%;
+    text-align: center;
+`
+
+export const MoreProductsNavLink = styled(Link)`
+display: inline-block;
+  list-style: none;
+  text-decoration: none;
+  padding: 15px 25px;
+  cursor: pointer;
+  color: #ff3e6c;
+  font-size: 14px;
+  font-weight: 700;
+  margin-right: 16px;
+  text-transform: uppercase;
+  border: 1px solid #7e818c;;
+  border-radius:25px;
+  &:hover{
+    border: 1px solid #ff3e6c;
+  }
+  .index-arrow {
+  display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 10px;
+    border: solid #ff3e6c;
+    border-width: 2px 2px 0 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    margin-bottom: 1px;
   }
 `;

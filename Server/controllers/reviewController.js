@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema.Types;
 
 exports.addReviewToProduct = catchAsync(async (req, res) => {
-  console.log("calling add review");
+  
   const userId = req.user.id;
   const { productId, comment, ratingNo } = req.body;
   let product = await productService.getProductId(productId);
@@ -36,7 +36,7 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
     );
   // res.status(httpStatus.ALREADY_REPORTED).send(alreadyReviewedByUser);
   else if (product && user) {
-    console.log("adding a new review");
+    
     const review = await Review.create({
       productId,
       rating: ratingNo,
@@ -52,7 +52,7 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
         new: true,
       }
     ).populate("reviews");
-    console.log("rateProd", rateProd);
+    
     // res.status(httpStatus.CREATED).send(review);
   }
   product = await productService.getProductId(productId);
@@ -61,15 +61,6 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
     .map((review) => review.rating)
     .reduce((prev, curr) => prev + curr, 0);
   let actualProductRating = Math.round((ratingSum / totalRatings) * 10) / 10;
-  console.log("-------totalRatings-----------", totalRatings);
-  console.log(
-    "********************************ratingSum****************",
-    ratingSum
-  );
-  console.log(
-    "-----------------actualProductRating-------------:",
-    actualProductRating
-  );
   const updatedProduct = await Product.findByIdAndUpdate(
     productId,
     {
@@ -79,15 +70,15 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
     { new: true }
   );
 
-  console.log("updatedProduct", updatedProduct);
+  
   res.status(200).send(updatedProduct);
 });
 
 // test
 // exports.addReviewToProduct = catchAsync(async (req, res) => {
-//   console.log("calling add review");
+//   
 //   const { productId, userId, comment, ratingNo } = req.body;
-//   console.log("productId", productId);
+//   
 
 //   const product = await productService.getProductId(productId);
 
@@ -115,7 +106,7 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
 //       comment,
 //       user: user,
 //     });
-//     console.log("Review", review._id);
+//     
 //     const rateProd = await Product.findByIdAndUpdate(
 //       productId,
 //       {
@@ -128,8 +119,8 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
 
 //     const getAllRatings = await Product.findById(productId);
 //     let totalRatings = getAllRatings.reviews.length;
-//     // console.log("Review", review);
-//     // console.log("rateProd", rateProd);
+//     // 
+//     // 
 
 //     const avgrate = await Product.aggregate([
 //       // { $match: { $expr: { $eq: [`$_id`, `$${productId}`] } } },
@@ -159,7 +150,7 @@ exports.addReviewToProduct = catchAsync(async (req, res) => {
 //       // },
 //     ]);
 
-//     console.log("avgrate", avgrate);
+//     
 //     res.status(httpStatus.CREATED).send(review);
 //   }
 // });
@@ -182,7 +173,7 @@ exports.getAllReviewsForProduct = catchAsync(async (req, res) => {
 
   // if (allReviews) {
   //   const ratingsArr = allReviews;
-  //   console.log("all Reviews", ratingsArr);
+  //   
   // }
 
   res.send({ allReviews, ratingOccurrence });
@@ -191,7 +182,7 @@ exports.getAllReviewsForProduct = catchAsync(async (req, res) => {
 
 exports.getAllReviewForUser = catchAsync(async (req, res) => {
   const { id } = req.user;
-  console.log("id", id);
+  
   const allReviewsOfUser = await Review.find({
     user: id,
   });
@@ -203,7 +194,7 @@ exports.getAllReviewForUser = catchAsync(async (req, res) => {
   return res.status(200).json({ allReviews: allReviewsOfUser });
 });
 exports.likeReview = catchAsync(async (req, res) => {
-  console.log("req.user", req.user);
+  
 
   const { reviewId } = req.body;
   const review = await Review.findById({ _id: reviewId });
@@ -211,7 +202,7 @@ exports.likeReview = catchAsync(async (req, res) => {
   if (review) {
     var indexFound = review.like.findIndex((userId) => userId == req.user.id);
   }
-  console.log("indexFound", indexFound);
+  
   if (indexFound == -1) {
     var like = await Review.findByIdAndUpdate(
       req.body.reviewId,
@@ -230,7 +221,7 @@ exports.likeReview = catchAsync(async (req, res) => {
 });
 
 exports.unLikeReview = catchAsync(async (req, res) => {
-  console.log("req.user", req.user);
+  
   const { reviewId } = req.body;
   const review = await Review.findById({ _id: reviewId });
 
@@ -238,7 +229,7 @@ exports.unLikeReview = catchAsync(async (req, res) => {
     var indexFound = review.unlike.findIndex((userId) => userId == req.user.id);
   }
 
-  console.log("indexFound", indexFound);
+  
   if (indexFound == -1) {
     var unlike = await Review.findByIdAndUpdate(
       req.body.reviewId,

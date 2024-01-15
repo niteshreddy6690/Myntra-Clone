@@ -1,23 +1,36 @@
 import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
-import Navbar from "../components/Navbar/Navbar";
+import moment from "moment";
 import NavBarForCartAndPayment from "../components/Navbar/NavBarForCartAndPayment";
 import { useSelector, useDispatch } from "react-redux";
 import { request } from "../api/axios";
 import {
   fetchCartItems,
-  removeCartItem,
 } from "../redux/features/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
-import { fetchUserAddress } from "../redux/features/address/addressSlice";
+
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 import styled from "styled-components";
 
+import {
+  fetchUserAddress,
+  addNewUserAddress,
+} from "../redux/features/address/addressSlice";
+import AddAddressModal from "./My/Modals/AddAddressModal";
+import EditAddressModal from "./My/Modals/EditAddressModal";
+import { isFulfilled } from "@reduxjs/toolkit";
+
 const AddressContainer = styled.div`
-  max-width: 1000px;
-  margin: 0 auto 24px;
+  box-sizing: border-box;
+  max-width: 980px;
+  padding: 0 24px;
   display: flex;
   justify-content: flex-start;
+  min-width: 400px;
+  @media screen and (max-width:796px){
+  width: 100%;
+  display: block;
+padding: 24px;
+  }
 `;
 
 const AddressLeftSection = styled.div`
@@ -25,6 +38,10 @@ const AddressLeftSection = styled.div`
   vertical-align: top;
   padding-right: 35px;
   padding-top: 12px;
+  @media screen and (max-width:796px){
+ width: 100%;
+padding: 12px 0 0 0 ;
+  }
 
   .addressList-base-titleContainer {
     margin-bottom: 12px;
@@ -128,6 +145,56 @@ const AddressLeftSection = styled.div`
   input {
     outline: none;
   }
+
+  .addressInnerBlock .addressBlock-base-btns{
+    position: relative;
+    margin: 16px 0;
+  }
+  .addressInnerBlock .addressBlock-base-btns button{
+   border: 1px solid black;
+   padding: 5px 10px;
+  }
+  .addressInnerBlock .addressBlock-base-btns-none{
+display: none;
+  }
+  .addressInnerBlock .addressBlock-base-btns .addressBlock-base-remove{
+    color: #282c3f;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .5px;
+    background: transparent;
+    cursor: pointer;
+    border: 1px solid #282c3f;
+    border-radius: 4px;
+    padding: 6.5px 16px;
+  }
+
+  .addressInnerBlock .addressBlock-base-btns .addressBlock-base-edit{
+    color: #282c3f;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .5px;
+    background: transparent;
+    cursor: pointer;
+    border: 1px solid #282c3f;
+    border-radius: 4px;
+    padding: 6.5px 16px;
+    margin-left: 16px;
+  }
+  .bottom-add-newAddress{
+    width: 100%;
+    border: 1px dashed #d4d5d9;
+    box-shadow: 0 0 4px rgba(40,44,63,.08);
+    cursor: pointer;
+  }
+  .bottom-add-newAddress .addNewAddress-text{
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff3f6c;
+  }
 `;
 
 const AddressCenterSection = styled.div`
@@ -139,10 +206,18 @@ const AddressRightSection = styled.div`
   width: 32.5%;
   vertical-align: top;
   padding-top: 8px;
+  position: relative;
+  @media screen and (max-width:796px){
+    margin: 0;
+      width: 100%;
+      display: block;
+  }
   .deliveryTitle {
     margin: 20px 0px;
     text-transform: uppercase;
     font-weight: 700;
+
+
   }
   .deliveryItems {
     border-bottom: 1px dashed #eaeaec;
@@ -156,8 +231,18 @@ const AddressRightSection = styled.div`
   }
 
   .priceContainer {
-    margin-top: 30px;
-    /* text-transform: uppercase; */
+    margin: 30px 0px;
+    padding: 12px 0 0 0 ;
+    background-color: #fff;
+    text-transform: uppercase;
+
+    @media screen and (max-width:796px){
+    margin: 0;
+      width: 100%;
+     position: sticky;
+     bottom: 0;
+     left: 0;
+  }
   }
   .priceContainer .price-heading {
     text-transform: uppercase;
@@ -206,6 +291,7 @@ const AddressRightSection = styled.div`
     text-transform: uppercase;
     letter-spacing: 1px;
   }
+  
 `;
 
 const Checkout = () => {
@@ -214,6 +300,10 @@ const Checkout = () => {
     ...state.cart,
   }));
 
+  const today = new Date();
+    const weekFromNow = new Date();
+    weekFromNow.setDate(today.getDate() + 7);
+
   const { isLoading, isError, userAddresses, userAddress } = useSelector(
     (state) => ({
       ...state.address,
@@ -221,9 +311,11 @@ const Checkout = () => {
   );
 
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [showAddAddressModal, setShowAddAddressModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editedAddress, setEditedAddress] = useState({});
+  const [currentAddr, setCurrentAddr] = useState(0);
 
-  console.log(cartItems);
-  console.log(userAddresses);
   const [prices, setPrices] = useState({
     actualTotal: 0,
     totalMRP: 0,
@@ -232,27 +324,18 @@ const Checkout = () => {
 
   const dispatch = useDispatch();
 
+  const getCart = async () => {
+    try {
+      dispatch(fetchCartItems());
+      dispatch(fetchUserAddress());
+    } catch (error) {
+      
+    }
+  };
+
   useEffect(() => {
-    const getCart = async () => {
-      try {
-        dispatch(fetchCartItems());
-        dispatch(fetchUserAddress());
-
-        // const cartProducts = await axios.get(
-        //   "http://localhost:8080/api/carts/"
-        // );
-
-        // console.log(cartProducts?.data?.cart?.items);
-
-        console.log("cartite", cartItems);
-        // setCartItems(cartItems?.data?.cart?.items);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  
     getCart();
-
-    console.log("cart Products", cartItems);
   }, []);
 
   useEffect(() => {
@@ -274,12 +357,22 @@ const Checkout = () => {
     [userAddresses]
   );
 
+
+  const addAddrApiCall = async (addAddress) => {
+    const action= await dispatch(addNewUserAddress({ addAddress }));
+    if(isFulfilled(action)){
+    setShowAddAddressModal((showAddAddressModal) => !showAddAddressModal);
+  }
+}
+
   useEffect(() => {
     setSelectedAddress(defaultAddr ? defaultAddr[0]?._id : null);
   }, [defaultAddr]);
+
+
   const orderItems = useMemo(
     () =>
-      cartItems?.cart?.items.map((item) => {
+      cartItems?.cart?.items?.map((item) => {
         return {
           productId: item?.productId._id,
           payablePrice: item?.productId.price,
@@ -289,7 +382,7 @@ const Checkout = () => {
       }),
     [cartItems]
   );
-  console.log("Default Address", defaultAddr);
+
   function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -304,48 +397,6 @@ const Checkout = () => {
     });
   }
 
-  //   const initPayment = (data) => {
-  //     const options = {
-  //       key: "YOUR_RAZORPAY_KEY",
-  //       amount: data.amount,
-  //       currency: data.currency,
-  //       name: "nitesh S",
-  //       description: "Test Transaction",
-  //       order_id: data.id,
-  //       handler: async (response) => {
-  //         try {
-  //           const verifyUrl = "http://localhost:8080/api/payment/verify";
-  //           const { data } = await axios.post(verifyUrl, response);
-  //           console.log(data);
-  //         } catch (error) {
-  //           console.log(error);
-  //         }
-  //       },
-  //     };
-  //     const rzp1 = new window.Razorpay(options);
-  //     rzp1.open();
-  //   };
-
-  //   const handlePayment = async () => {
-  //     try {
-  //       const res = await loadScript(
-  //         "https://checkout.razorpay.com/v1/checkout.js"
-  //       );
-
-  //       if (!res) {
-  //         alert("Razorpay SDK failed to load. Are you online?");
-  //         return;
-  //       }
-
-  //       const orderUrl = "http://localhost:8080/api/payment/orders";
-  //       const { data } = await axios.post(orderUrl, { amount: 2000 });
-  //       console.log(data);
-  //       initPayment(data.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
   async function displayRazorpay() {
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
@@ -356,8 +407,8 @@ const Checkout = () => {
       return;
     }
 
-    const result = await axios.post(
-      "http://localhost:8080/api/payment/orders",
+    const result = await request.post(
+      "/payment/orders",
       { amount: prices.totalMRP }
     );
 
@@ -366,7 +417,7 @@ const Checkout = () => {
       return;
     }
 
-    console.log("result.data", result.data.data);
+    
     const { amount, id: order_id, currency } = result.data.data;
 
     const options = {
@@ -389,14 +440,13 @@ const Checkout = () => {
           razorpay_signature: response.razorpay_signature,
         };
 
-        const result = await axios.post(
-          "http://localhost:8080/api/payment/verify",
+        const result = await request.post(
+          "payment/verify",
           data
         );
-        console.log("result", result);
         if (result) {
-          const createdOrder = await request.post(
-            "http://localhost:8080/api/order/addOrder",
+          const orderCreated = await request.post(
+            "/order/addOrder",
             {
               addressId: selectedAddress,
               totalAmount: prices?.totalMRP,
@@ -405,7 +455,8 @@ const Checkout = () => {
               paymentId: result?.paymentId,
             }
           );
-          console.log("createdOrder", createdOrder);
+          
+          if(orderCreated) navigate("/my/orders")
         }
 
         // alert(result.data.msg);
@@ -419,24 +470,71 @@ const Checkout = () => {
     paymentObject.open();
   }
 
+  const handleClick = (index) => {
+    setCurrentAddr(index);
+  };
+
   const handleClickAddress = (id) => {
     setSelectedAddress(id);
   };
-  console.log("selectedAddress", selectedAddress);
 
+  const handleShowEditModal = () => {
+    setShowEditModal(!showEditModal);
+  };
+  const handleSetEditAddress = (addr) => {
+    setEditedAddress({
+      addressId: addr?._id,
+      name: addr?.name,
+      mobileNumber: addr?.mobileNumber,
+      pinCode: addr?.pinCode,
+      locality: addr?.locality,
+      streetAddress: addr?.streetAddress,
+      city: addr?.city,
+      state: addr?.state,
+      landmark: addr?.landmark,
+      addressType: addr?.addressType,
+      isDefault: addr?.isDefault,
+    });
+  }
+
+  const callEditApi = async (data) => {
+
+    const myAddress = await request.put("address/edit", data);
+    if (myAddress) {
+      handleShowEditModal();
+      getCart()
+    }
+  };
+  const callDeleteApi = async () => {
+    const deletedAddress = await request.put(
+      "address/",
+      { addressId: selectedAddress }
+    );
+    if (deletedAddress) {
+     getCart()
+    }
+  };
+  const handleShowAddAddressModal = ()=>{
+    setShowAddAddressModal(!showAddAddressModal)
+  }
+  if(isLoading){
+    return (<LoadingSpinner loading={isLoading} />)
+  }
   if (cartItems?.cart?.items <= 0 || !cartItems) {
     return navigate("/");
   }
+  
   return (
     <div>
       <NavBarForCartAndPayment />
+      <div style={{display:"flex", justifyContent:"center",alignItems:"center"}}>
       <AddressContainer>
         <AddressLeftSection>
           <div className="addressList-base-titleContainer">
             <div className="addressList-base-title">
               Select Delivery Address
             </div>
-            <div className="addressList-base-addAddressButton">
+            <div className="addressList-base-addAddressButton" onClick={handleShowAddAddressModal}>
               Add New Address
             </div>
           </div>
@@ -449,7 +547,7 @@ const Checkout = () => {
                     </div>
                     <div
                       className="defaultAddressBlock"
-                      onClick={() => handleClickAddress(addr?._id)}
+                      onClick={() => {handleClickAddress(addr?._id);  handleClick(index)}}
                     >
                       <div className="addressInnerBlock">
                         {Boolean(selectedAddress == addr?._id) ? (
@@ -495,6 +593,7 @@ const Checkout = () => {
                           <div className="addressDetails-base-mobile">
                             Mobile: <span>{addr?.mobileNumber}</span>
                           </div>
+                          <div className={currentAddr==index?"addressBlock-base-btns":"addressBlock-base-btns-none"}> <button className="addressBlock-base-remove" onClick={callDeleteApi}>Remove</button> <button className="addressBlock-base-edit" onClick={()=>{handleShowEditModal();handleSetEditAddress(addr)}}>Edit</button></div>
                         </div>
                       </div>
                     </div>
@@ -509,7 +608,7 @@ const Checkout = () => {
                   <>
                     <div
                       className="defaultAddressBlock"
-                      onClick={() => handleClickAddress(addr?._id)}
+                      onClick={() => {handleClickAddress(addr?._id);handleClick(index+1)}}
                     >
                       <div className="addressInnerBlock">
                         {Boolean(selectedAddress == addr?._id) ? (
@@ -555,6 +654,7 @@ const Checkout = () => {
                           <div className="addressDetails-base-mobile">
                             Mobile: <span>{addr?.mobileNumber}</span>
                           </div>
+                          <div className={(currentAddr==index+1)?"addressBlock-base-btns":"addressBlock-base-btns-none"}> <button className="addressBlock-base-remove" onClick={callDeleteApi}>Remove</button> <button className="addressBlock-base-edit" onClick={()=>{handleShowEditModal();handleSetEditAddress(addr)}}>Edit</button></div>
                         </div>
                       </div>
                     </div>
@@ -562,10 +662,9 @@ const Checkout = () => {
                 ))
               : null}
           </>
-
-          {/* <button className="App-link" onClick={displayRazorpay}>
-            Pay ₹500
-          </button> */}
+          <div className="bottom-add-newAddress" onClick={handleShowAddAddressModal}>
+            <div className="addNewAddress-text"> + Add New Address</div>
+          </div>
         </AddressLeftSection>
         <AddressCenterSection />
         <AddressRightSection>
@@ -575,9 +674,11 @@ const Checkout = () => {
               <img
                 src={item?.productId?.images[0].url}
                 style={{ width: "40px" }}
+                alt={item?.productId?.images[0].url}
               />
               <div className="deliveryTime">
-                Estimated delivery by 20 june 2023
+                {`
+                Estimated delivery by  ${ moment(((today.getTime()+1) + Math.random() * (weekFromNow.getTime() - today.getTime()))).format("Do MMM YYYY")}`}
               </div>
             </div>
           ))}
@@ -618,8 +719,23 @@ const Checkout = () => {
               <div className="button-base-button">Continue</div>
             </div>
           </div>
+         
         </AddressRightSection>
+        {showEditModal && (
+        <EditAddressModal
+          handleShowEditModal={handleShowEditModal}
+          editedAddress={editedAddress}
+          callEditApi={callEditApi}
+        />
+      )}
+        {showAddAddressModal && (
+        <AddAddressModal
+          handleShowAddAddressModal={handleShowAddAddressModal}
+          addAddrApiCall={addAddrApiCall}
+        />
+      )}
       </AddressContainer>
+      </div>
     </div>
   );
 };
