@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const reviewController = require("../Controllers/reviewController");
+const reviewController = require("../controllers/reviewController");
 
 const { authorize } = require("../middleware/verifyToken");
 
