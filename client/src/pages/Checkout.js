@@ -3,9 +3,7 @@ import moment from "moment";
 import NavBarForCartAndPayment from "../components/Navbar/NavBarForCartAndPayment";
 import { useSelector, useDispatch } from "react-redux";
 import { request } from "../api/axios";
-import {
-  fetchCartItems,
-} from "../redux/features/cart/cartSlice";
+import { fetchCartItems } from "../redux/features/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
@@ -26,10 +24,10 @@ const AddressContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   min-width: 400px;
-  @media screen and (max-width:796px){
-  width: 100%;
-  display: block;
-padding: 24px;
+  @media screen and (max-width: 796px) {
+    width: 100%;
+    display: block;
+    padding: 24px;
   }
 `;
 
@@ -38,9 +36,9 @@ const AddressLeftSection = styled.div`
   vertical-align: top;
   padding-right: 35px;
   padding-top: 12px;
-  @media screen and (max-width:796px){
- width: 100%;
-padding: 12px 0 0 0 ;
+  @media screen and (max-width: 796px) {
+    width: 100%;
+    padding: 12px 0 0 0;
   }
 
   .addressList-base-titleContainer {
@@ -146,23 +144,23 @@ padding: 12px 0 0 0 ;
     outline: none;
   }
 
-  .addressInnerBlock .addressBlock-base-btns{
+  .addressInnerBlock .addressBlock-base-btns {
     position: relative;
     margin: 16px 0;
   }
-  .addressInnerBlock .addressBlock-base-btns button{
-   border: 1px solid black;
-   padding: 5px 10px;
+  .addressInnerBlock .addressBlock-base-btns button {
+    border: 1px solid black;
+    padding: 5px 10px;
   }
-  .addressInnerBlock .addressBlock-base-btns-none{
-display: none;
+  .addressInnerBlock .addressBlock-base-btns-none {
+    display: none;
   }
-  .addressInnerBlock .addressBlock-base-btns .addressBlock-base-remove{
+  .addressInnerBlock .addressBlock-base-btns .addressBlock-base-remove {
     color: #282c3f;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 12px;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
     background: transparent;
     cursor: pointer;
     border: 1px solid #282c3f;
@@ -170,12 +168,12 @@ display: none;
     padding: 6.5px 16px;
   }
 
-  .addressInnerBlock .addressBlock-base-btns .addressBlock-base-edit{
+  .addressInnerBlock .addressBlock-base-btns .addressBlock-base-edit {
     color: #282c3f;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 12px;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
     background: transparent;
     cursor: pointer;
     border: 1px solid #282c3f;
@@ -183,13 +181,13 @@ display: none;
     padding: 6.5px 16px;
     margin-left: 16px;
   }
-  .bottom-add-newAddress{
+  .bottom-add-newAddress {
     width: 100%;
     border: 1px dashed #d4d5d9;
-    box-shadow: 0 0 4px rgba(40,44,63,.08);
+    box-shadow: 0 0 4px rgba(40, 44, 63, 0.08);
     cursor: pointer;
   }
-  .bottom-add-newAddress .addNewAddress-text{
+  .bottom-add-newAddress .addNewAddress-text {
     padding: 15px 25px;
     font-size: 16px;
     font-weight: 700;
@@ -207,17 +205,15 @@ const AddressRightSection = styled.div`
   vertical-align: top;
   padding-top: 8px;
   position: relative;
-  @media screen and (max-width:796px){
+  @media screen and (max-width: 796px) {
     margin: 0;
-      width: 100%;
-      display: block;
+    width: 100%;
+    display: block;
   }
   .deliveryTitle {
     margin: 20px 0px;
     text-transform: uppercase;
     font-weight: 700;
-
-
   }
   .deliveryItems {
     border-bottom: 1px dashed #eaeaec;
@@ -232,17 +228,17 @@ const AddressRightSection = styled.div`
 
   .priceContainer {
     margin: 30px 0px;
-    padding: 12px 0 0 0 ;
+    padding: 12px 0 0 0;
     background-color: #fff;
     text-transform: uppercase;
 
-    @media screen and (max-width:796px){
-    margin: 0;
+    @media screen and (max-width: 796px) {
+      margin: 0;
       width: 100%;
-     position: sticky;
-     bottom: 0;
-     left: 0;
-  }
+      position: sticky;
+      bottom: 0;
+      left: 0;
+    }
   }
   .priceContainer .price-heading {
     text-transform: uppercase;
@@ -291,7 +287,6 @@ const AddressRightSection = styled.div`
     text-transform: uppercase;
     letter-spacing: 1px;
   }
-  
 `;
 
 const Checkout = () => {
@@ -301,8 +296,8 @@ const Checkout = () => {
   }));
 
   const today = new Date();
-    const weekFromNow = new Date();
-    weekFromNow.setDate(today.getDate() + 7);
+  const weekFromNow = new Date();
+  weekFromNow.setDate(today.getDate() + 7);
 
   const { isLoading, isError, userAddresses, userAddress } = useSelector(
     (state) => ({
@@ -328,13 +323,10 @@ const Checkout = () => {
     try {
       dispatch(fetchCartItems());
       dispatch(fetchUserAddress());
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
-  
     getCart();
   }, []);
 
@@ -357,18 +349,16 @@ const Checkout = () => {
     [userAddresses]
   );
 
-
   const addAddrApiCall = async (addAddress) => {
-    const action= await dispatch(addNewUserAddress({ addAddress }));
-    if(isFulfilled(action)){
-    setShowAddAddressModal((showAddAddressModal) => !showAddAddressModal);
-  }
-}
+    const action = await dispatch(addNewUserAddress({ addAddress }));
+    if (isFulfilled(action)) {
+      setShowAddAddressModal((showAddAddressModal) => !showAddAddressModal);
+    }
+  };
 
   useEffect(() => {
     setSelectedAddress(defaultAddr ? defaultAddr[0]?._id : null);
   }, [defaultAddr]);
-
 
   const orderItems = useMemo(
     () =>
@@ -407,17 +397,15 @@ const Checkout = () => {
       return;
     }
 
-    const result = await request.post(
-      "/payment/orders",
-      { amount: prices.totalMRP }
-    );
+    const result = await request.post("/payment/orders", {
+      amount: prices.totalMRP,
+    });
 
     if (!result) {
       alert("Server error. Are you online?");
       return;
     }
 
-    
     const { amount, id: order_id, currency } = result.data.data;
 
     const options = {
@@ -440,23 +428,17 @@ const Checkout = () => {
           razorpay_signature: response.razorpay_signature,
         };
 
-        const result = await request.post(
-          "payment/verify",
-          data
-        );
+        const result = await request.post("payment/verify", data);
         if (result) {
-          const orderCreated = await request.post(
-            "/order/addOrder",
-            {
-              addressId: selectedAddress,
-              totalAmount: prices?.totalMRP,
-              items: orderItems,
-              paymentStatus: "completed",
-              paymentId: result?.paymentId,
-            }
-          );
-          
-          if(orderCreated) navigate("/my/orders")
+          const orderCreated = await request.post("/order/addOrder", {
+            addressId: selectedAddress,
+            totalAmount: prices?.totalMRP,
+            items: orderItems,
+            paymentStatus: "completed",
+            paymentId: result?.paymentId,
+          });
+
+          if (orderCreated) navigate("/my/orders");
         }
 
         // alert(result.data.msg);
@@ -495,246 +477,313 @@ const Checkout = () => {
       addressType: addr?.addressType,
       isDefault: addr?.isDefault,
     });
-  }
+  };
 
   const callEditApi = async (data) => {
-
     const myAddress = await request.put("address/edit", data);
     if (myAddress) {
       handleShowEditModal();
-      getCart()
+      getCart();
     }
   };
   const callDeleteApi = async () => {
-    const deletedAddress = await request.put(
-      "address/",
-      { addressId: selectedAddress }
-    );
+    const deletedAddress = await request.put("address/", {
+      addressId: selectedAddress,
+    });
     if (deletedAddress) {
-     getCart()
+      getCart();
     }
   };
-  const handleShowAddAddressModal = ()=>{
-    setShowAddAddressModal(!showAddAddressModal)
-  }
-  if(isLoading){
-    return (<LoadingSpinner loading={isLoading} />)
+  const handleShowAddAddressModal = () => {
+    setShowAddAddressModal(!showAddAddressModal);
+  };
+  if (isLoading) {
+    return <LoadingSpinner loading={isLoading} />;
   }
   if (cartItems?.cart?.items <= 0 || !cartItems) {
     return navigate("/");
   }
-  
+
   return (
     <div>
       <NavBarForCartAndPayment />
-      <div style={{display:"flex", justifyContent:"center",alignItems:"center"}}>
-      <AddressContainer>
-        <AddressLeftSection>
-          <div className="addressList-base-titleContainer">
-            <div className="addressList-base-title">
-              Select Delivery Address
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <AddressContainer>
+          <AddressLeftSection>
+            <div className="addressList-base-titleContainer">
+              <div className="addressList-base-title">
+                Select Delivery Address
+              </div>
+              <div
+                className="addressList-base-addAddressButton"
+                onClick={handleShowAddAddressModal}
+              >
+                Add New Address
+              </div>
             </div>
-            <div className="addressList-base-addAddressButton" onClick={handleShowAddAddressModal}>
-              Add New Address
-            </div>
-          </div>
-          <div>
-            {defaultAddr?.length > 0
-              ? defaultAddr?.map((addr, index) => (
-                  <>
-                    <div className="addressList-base-defaultTitle">
-                      Default Address
-                    </div>
-                    <div
-                      className="defaultAddressBlock"
-                      onClick={() => {handleClickAddress(addr?._id);  handleClick(index)}}
-                    >
-                      <div className="addressInnerBlock">
-                        {Boolean(selectedAddress == addr?._id) ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            className="addressBlocks-base-radioIcon"
-                          >
-                            <g fillRule="evenodd">
-                              <path d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"></path>
-                              <path d="M8 3.429a4.571 4.571 0 1 0 0 9.143 4.571 4.571 0 0 0 0-9.143"></path>
-                            </g>
-                          </svg>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            className="addressBlocks-base-radioIconNotSelected"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"
-                            ></path>
-                          </svg>
-                        )}
-                        <div htmlFor="defaultAddress">
-                          <div className="addressDetails-base-desktopAddressTitle">
-                            <div className="addressDetails-base-name">
-                              {addr?.name}
+            <div>
+              {defaultAddr?.length > 0
+                ? defaultAddr?.map((addr, index) => (
+                    <>
+                      <div className="addressList-base-defaultTitle">
+                        Default Address
+                      </div>
+                      <div
+                        className="defaultAddressBlock"
+                        onClick={() => {
+                          handleClickAddress(addr?._id);
+                          handleClick(index);
+                        }}
+                      >
+                        <div className="addressInnerBlock">
+                          {Boolean(selectedAddress == addr?._id) ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 16 16"
+                              className="addressBlocks-base-radioIcon"
+                            >
+                              <g fillRule="evenodd">
+                                <path d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"></path>
+                                <path d="M8 3.429a4.571 4.571 0 1 0 0 9.143 4.571 4.571 0 0 0 0-9.143"></path>
+                              </g>
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 16 16"
+                              className="addressBlocks-base-radioIconNotSelected"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"
+                              ></path>
+                            </svg>
+                          )}
+                          <div htmlFor="defaultAddress">
+                            <div className="addressDetails-base-desktopAddressTitle">
+                              <div className="addressDetails-base-name">
+                                {addr?.name}
+                              </div>
+                              <div className="addressDetails-base-addressType">
+                                {addr?.addressType}
+                              </div>
                             </div>
-                            <div className="addressDetails-base-addressType">
-                              {addr?.addressType}
+                            <div className="addressBlocks-base-addressDetail">
+                              {addr?.streetAddress}
+                            </div>
+                            <span>{`${addr?.city},${addr?.state} - ${addr?.pinCode}`}</span>
+                            <div className="addressDetails-base-mobile">
+                              Mobile: <span>{addr?.mobileNumber}</span>
+                            </div>
+                            <div
+                              className={
+                                currentAddr == index
+                                  ? "addressBlock-base-btns"
+                                  : "addressBlock-base-btns-none"
+                              }
+                            >
+                              {" "}
+                              <button
+                                className="addressBlock-base-remove"
+                                onClick={callDeleteApi}
+                              >
+                                Remove
+                              </button>{" "}
+                              <button
+                                className="addressBlock-base-edit"
+                                onClick={() => {
+                                  handleShowEditModal();
+                                  handleSetEditAddress(addr);
+                                }}
+                              >
+                                Edit
+                              </button>
                             </div>
                           </div>
-                          <div className="addressBlocks-base-addressDetail">
-                            {addr?.streetAddress}
-                          </div>
-                          <span>{`${addr?.city},${addr?.state} - ${addr?.pinCode}`}</span>
-                          <div className="addressDetails-base-mobile">
-                            Mobile: <span>{addr?.mobileNumber}</span>
-                          </div>
-                          <div className={currentAddr==index?"addressBlock-base-btns":"addressBlock-base-btns-none"}> <button className="addressBlock-base-remove" onClick={callDeleteApi}>Remove</button> <button className="addressBlock-base-edit" onClick={()=>{handleShowEditModal();handleSetEditAddress(addr)}}>Edit</button></div>
                         </div>
                       </div>
-                    </div>
-                  </>
-                ))
-              : null}
-          </div>
-          <div className="addressList-base-defaultTitle">Other Address</div>
-          <>
-            {otherAddr?.length > 0
-              ? otherAddr?.map((addr, index) => (
-                  <>
-                    <div
-                      className="defaultAddressBlock"
-                      onClick={() => {handleClickAddress(addr?._id);handleClick(index+1)}}
-                    >
-                      <div className="addressInnerBlock">
-                        {Boolean(selectedAddress == addr?._id) ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            className="addressBlocks-base-radioIcon"
-                          >
-                            <g fillRule="evenodd">
-                              <path d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"></path>
-                              <path d="M8 3.429a4.571 4.571 0 1 0 0 9.143 4.571 4.571 0 0 0 0-9.143"></path>
-                            </g>
-                          </svg>
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            className="addressBlocks-base-radioIconNotSelected"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"
-                            ></path>
-                          </svg>
-                        )}
-                        <div htmlFor="defaultAddress">
-                          <div className="addressDetails-base-desktopAddressTitle">
-                            <div className="addressDetails-base-name">
-                              {addr.name}
+                    </>
+                  ))
+                : null}
+            </div>
+            <div className="addressList-base-defaultTitle">Other Address</div>
+            <>
+              {otherAddr?.length > 0
+                ? otherAddr?.map((addr, index) => (
+                    <>
+                      <div
+                        className="defaultAddressBlock"
+                        onClick={() => {
+                          handleClickAddress(addr?._id);
+                          handleClick(index + 1);
+                        }}
+                      >
+                        <div className="addressInnerBlock">
+                          {Boolean(selectedAddress == addr?._id) ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 16 16"
+                              className="addressBlocks-base-radioIcon"
+                            >
+                              <g fillRule="evenodd">
+                                <path d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"></path>
+                                <path d="M8 3.429a4.571 4.571 0 1 0 0 9.143 4.571 4.571 0 0 0 0-9.143"></path>
+                              </g>
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 16 16"
+                              className="addressBlocks-base-radioIconNotSelected"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M8 14.933A6.941 6.941 0 0 1 1.067 8 6.941 6.941 0 0 1 8 1.067 6.941 6.941 0 0 1 14.933 8 6.941 6.941 0 0 1 8 14.933M8 0C3.589 0 0 3.589 0 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8"
+                              ></path>
+                            </svg>
+                          )}
+                          <div htmlFor="defaultAddress">
+                            <div className="addressDetails-base-desktopAddressTitle">
+                              <div className="addressDetails-base-name">
+                                {addr.name}
+                              </div>
+                              <div className="addressDetails-base-addressType">
+                                {addr.addressType}
+                              </div>
                             </div>
-                            <div className="addressDetails-base-addressType">
-                              {addr.addressType}
+                            <div className="addressBlocks-base-addressDetail">
+                              {addr.streetAddress}
+                            </div>
+                            <span>{`${addr.city},${addr.state} - ${addr.pinCode}`}</span>
+                            <div className="addressDetails-base-mobile">
+                              Mobile: <span>{addr?.mobileNumber}</span>
+                            </div>
+                            <div
+                              className={
+                                currentAddr == index + 1
+                                  ? "addressBlock-base-btns"
+                                  : "addressBlock-base-btns-none"
+                              }
+                            >
+                              {" "}
+                              <button
+                                className="addressBlock-base-remove"
+                                onClick={callDeleteApi}
+                              >
+                                Remove
+                              </button>{" "}
+                              <button
+                                className="addressBlock-base-edit"
+                                onClick={() => {
+                                  handleShowEditModal();
+                                  handleSetEditAddress(addr);
+                                }}
+                              >
+                                Edit
+                              </button>
                             </div>
                           </div>
-                          <div className="addressBlocks-base-addressDetail">
-                            {addr.streetAddress}
-                          </div>
-                          <span>{`${addr.city},${addr.state} - ${addr.pinCode}`}</span>
-                          <div className="addressDetails-base-mobile">
-                            Mobile: <span>{addr?.mobileNumber}</span>
-                          </div>
-                          <div className={(currentAddr==index+1)?"addressBlock-base-btns":"addressBlock-base-btns-none"}> <button className="addressBlock-base-remove" onClick={callDeleteApi}>Remove</button> <button className="addressBlock-base-edit" onClick={()=>{handleShowEditModal();handleSetEditAddress(addr)}}>Edit</button></div>
                         </div>
                       </div>
-                    </div>
-                  </>
-                ))
-              : null}
-          </>
-          <div className="bottom-add-newAddress" onClick={handleShowAddAddressModal}>
-            <div className="addNewAddress-text"> + Add New Address</div>
-          </div>
-        </AddressLeftSection>
-        <AddressCenterSection />
-        <AddressRightSection>
-          <div className="deliveryTitle">Delivery Estimates</div>
-          {cartItems?.cart?.items?.map((item, i) => (
-            <div className="deliveryItems">
-              <img
-                src={item?.productId?.images[0].url}
-                style={{ width: "40px" }}
-                alt={item?.productId?.images[0].url}
-              />
-              <div className="deliveryTime">
-                {`
-                Estimated delivery by  ${ moment(((today.getTime()+1) + Math.random() * (weekFromNow.getTime() - today.getTime()))).format("Do MMM YYYY")}`}
-              </div>
+                    </>
+                  ))
+                : null}
+            </>
+            <div
+              className="bottom-add-newAddress"
+              onClick={handleShowAddAddressModal}
+            >
+              <div className="addNewAddress-text"> + Add New Address</div>
             </div>
-          ))}
-
-          <div className="priceContainer">
-            <div className="price-heading">{`PRICE DETAILS (${cartItems?.cart?.items?.length} Items)`}</div>
-            <div className="priceInnerContainer">
-              <div className="priceDetail-base-row">
-                <span>Total MRP </span>
-                <span className="priceDetail-base-value">
-                  ₹{prices?.actualTotal}
-                </span>
-              </div>
-              <div className="priceDetail-base-row">
-                <span>Discount on MRP</span>
-                <span className="priceDetail-base-discount">
-                  {prices.discountedMRP > 0 ? `-₹${prices.discountedMRP}` : "0"}
-                </span>
-              </div>
-              <div className="priceDetail-base-row">
-                <span>Convenience Fee</span>
-                <span className="priceDetail-base-value">
-                  <span className="priceDetail-base-striked">₹99</span>
-                  <span className="priceDetail-base-discount">FREE</span>
-                </span>
-              </div>
-              <div className="priceDetail-base-total">
-                <span>Total Amount</span>
-                <div className="priceDetail-base-value">
-                  ₹{prices?.totalMRP}
+          </AddressLeftSection>
+          <AddressCenterSection />
+          <AddressRightSection>
+            <div className="deliveryTitle">Delivery Estimates</div>
+            {cartItems?.cart?.items?.map((item, i) => (
+              <div className="deliveryItems">
+                <img
+                  src={item?.productId?.images[0].url}
+                  style={{ width: "40px" }}
+                  alt={item?.productId?.images[0].url}
+                />
+                <div className="deliveryTime">
+                  {`
+                Estimated delivery by  ${moment(
+                  today.getTime() +
+                    1 +
+                    Math.random() * (weekFromNow.getTime() - today.getTime())
+                ).format("Do MMM YYYY")}`}
                 </div>
               </div>
+            ))}
+
+            <div className="priceContainer">
+              <div className="price-heading">{`PRICE DETAILS (${cartItems?.cart?.items?.length} Items)`}</div>
+              <div className="priceInnerContainer">
+                <div className="priceDetail-base-row">
+                  <span>Total MRP </span>
+                  <span className="priceDetail-base-value">
+                    ₹{prices?.actualTotal}
+                  </span>
+                </div>
+                <div className="priceDetail-base-row">
+                  <span>Discount on MRP</span>
+                  <span className="priceDetail-base-discount">
+                    {prices.discountedMRP > 0
+                      ? `-₹${prices.discountedMRP}`
+                      : "0"}
+                  </span>
+                </div>
+                <div className="priceDetail-base-row">
+                  <span>Convenience Fee</span>
+                  <span className="priceDetail-base-value">
+                    <span className="priceDetail-base-striked">₹99</span>
+                    <span className="priceDetail-base-discount">FREE</span>
+                  </span>
+                </div>
+                <div className="priceDetail-base-total">
+                  <span>Total Amount</span>
+                  <div className="priceDetail-base-value">
+                    ₹{prices?.totalMRP}
+                  </div>
+                </div>
+              </div>
+              <div
+                className="addressDesktop-base-continueBtn"
+                onClick={displayRazorpay}
+              >
+                <div className="button-base-button">Continue</div>
+              </div>
             </div>
-            <div
-              className="addressDesktop-base-continueBtn"
-              onClick={displayRazorpay}
-            >
-              <div className="button-base-button">Continue</div>
-            </div>
-          </div>
-         
-        </AddressRightSection>
-        {showEditModal && (
-        <EditAddressModal
-          handleShowEditModal={handleShowEditModal}
-          editedAddress={editedAddress}
-          callEditApi={callEditApi}
-        />
-      )}
-        {showAddAddressModal && (
-        <AddAddressModal
-          handleShowAddAddressModal={handleShowAddAddressModal}
-          addAddrApiCall={addAddrApiCall}
-        />
-      )}
-      </AddressContainer>
+          </AddressRightSection>
+          {showEditModal && (
+            <EditAddressModal
+              handleShowEditModal={handleShowEditModal}
+              editedAddress={editedAddress}
+              callEditApi={callEditApi}
+            />
+          )}
+          {showAddAddressModal && (
+            <AddAddressModal
+              handleShowAddAddressModal={handleShowAddAddressModal}
+              addAddrApiCall={addAddrApiCall}
+            />
+          )}
+        </AddressContainer>
       </div>
     </div>
   );
