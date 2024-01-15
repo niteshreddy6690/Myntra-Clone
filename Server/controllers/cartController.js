@@ -1,7 +1,7 @@
 const cartService = require("../services/cartServices");
 const Product = require("../models/Product");
 
-exports.addItemToCart = async (req, res) => {
+const addItemToCart = async (req, res) => {
   const userId = req.user.id;
 
   const { productId, size, quantity = 1, gId } = req.body;
@@ -94,7 +94,7 @@ exports.addItemToCart = async (req, res) => {
   }
 };
 
-exports.getCart = async (req, res) => {
+const getCart = async (req, res) => {
   const userId = req.user.id;
   try {
     let cart = await cartService.cart(userId);
@@ -125,7 +125,7 @@ exports.getCart = async (req, res) => {
   }
 };
 
-exports.emptyCart = async (req, res) => {
+const emptyCart = async (req, res) => {
   try {
     let cart = await cartRepository.cart();
     cart.items = [];
@@ -145,7 +145,7 @@ exports.emptyCart = async (req, res) => {
   }
 };
 
-exports.deleteItemInCart = async (req, res) => {
+const deleteItemInCart = async (req, res) => {
   const userId = req.user.id;
   const { productId } = req.body;
   let cart = await cartService.cart(userId);
@@ -166,7 +166,7 @@ exports.deleteItemInCart = async (req, res) => {
   res.status(200).json({ deletedProduct });
 };
 
-exports.updateCartItemSizeAndQuantity = async (req, res) => {
+const updateCartItemSizeAndQuantity = async (req, res) => {
   const { productId, selectedSize, productGId, productQnt } = req.body;
   const userId = req.user.id;
   var cart = await cartService.cart(userId);
@@ -203,4 +203,12 @@ exports.updateCartItemSizeAndQuantity = async (req, res) => {
       res.status(200).json({ data });
     }
   } catch (error) {}
+};
+
+module.exports = {
+  addItemToCart,
+  updateCartItemSizeAndQuantity,
+  deleteItemInCart,
+  emptyCart,
+  getCart,
 };
