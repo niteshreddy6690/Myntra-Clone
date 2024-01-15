@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const { roles } = require("../utils/Constants");
-const cartController = require("../Controllers/cartController");
+const cartController = require("../controllers/cartController");
 const { authorize } = require("../middleware/verifyToken");
 
 router.post("/", authorize(), cartController.addItemToCart);
