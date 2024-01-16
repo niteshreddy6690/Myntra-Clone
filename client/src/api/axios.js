@@ -8,7 +8,7 @@ const axiosInstance = (port) => {
   return axios.create({
     baseURL: isLocal
       ? `http://localhost:${port}/api/`
-      : `${window.location.origin}/api/`,
+      : `https://myntra-clone-a6xl.onrender.com/api/`,
     responseType: "json",
   });
 };
@@ -23,7 +23,7 @@ const interceptorsRequest = (domainInstance, port) => {
         /* eslint-disable no-unused-expressions */
         (config.baseURL = isLocal
           ? `http://localhost:${port}/api/`
-          : `${window.location.origin}/api/`),
+          : `https://myntra-clone-a6xl.onrender.com/api/`),
           (config.headers.Authorization = `Bearer ${accessToken}`);
         return config;
       }
@@ -65,7 +65,9 @@ const ErrorResponse = async (error) => {
     } catch (e) {
       const authUrl = isLocal
         ? "http://localhost:3000/login"
-        : `${window.location.origin}/login`;
+        : `https://myntra-clone-a6xl.onrender.com/api/login`;
+
+      // : `${window.location.origin}/login`;
       window.location.href = authUrl;
       return Promise.reject(error);
     }
