@@ -13,6 +13,8 @@ import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { request } from "../api/axios";
 import LazyComponent from "../components/LazyComponent";
 import LazyImage from "../components/LazyImage";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
@@ -32,7 +34,7 @@ const RUl = styled.ul`
   padding: 0px;
   list-style: none; */
 
-  display: -webkit-box;
+  /* display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: horizontal;
@@ -56,40 +58,64 @@ const RUl = styled.ul`
     display: flex;
     align-items: center;
     justify-content: center;
+  } */
+
+  list-style: none;
+  padding: 0;
+  overflow: hidden;
+  clear: both;
+
+  .item:nth-child(odd) {
+    clear: left;
+    border-right: 0.5px solid #d4d5d9;
+  }
+
+  @media screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    align-content: stretch;
+    margin: 0 -5px 0 3px;
+    width: 100%;
+    justify-content: space-between;
+
+    .item {
+      clear: both;
+      border: none !important;
+    }
   }
 `;
 
-const RLi = styled.li`
-  width: 210px;
-  height: 360px;
+const ProductContainer = styled.div`
   position: relative;
-  text-align: left;
-  vertical-align: top;
-  overflow: hidden;
-  display: inline-block;
-  box-sizing: border-box;
-  margin: 0 10px 30px;
-  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  height: 365px;
+`;
 
-  /* &:hover .wishlistContainer {
-    display: block;
-    height: 50px;
-  } */
+const RLi = styled.li`
+  border-bottom: 0.5px solid #d4d5d9;
+  float: left;
+  width: 50%;
+  margin: 0;
+  overflow: hidden;
   transition: all 0.2s ease-in-out;
 
-  @media (min-width: 326px) {
-    width: 200px;
-    height: 350px;
-  }
-
-  @media screen and (min-width: 856px) {
-    width: 260px;
-    height: 440px;
-  }
-
-  @media (min-width: 1028px) {
+  @media screen and (min-width: 768px) {
     width: 210px;
-    height: 360px;
+    height: 365px;
+    /* width: 210px;
+    height: 365px; */
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+    overflow: hidden;
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0 5px 30px;
+    cursor: pointer;
+    border: none;
   }
 
   &:hover {
@@ -183,6 +209,7 @@ const ViewSimilar = styled.div`
   color: #000;
   font-size: 12px;
   line-height: 28px;
+  display: none;
 
   .myntraweb-sprite {
     background: url(https://constant.myntassets.com/web/assets/img/MyntraWebSprite_27_01_2021.png);
@@ -228,6 +255,10 @@ const ViewSimilar = styled.div`
       margin-left: 10px;
       font-size: 12px;
     }
+  }
+
+  @media screen and (min-width: 768px) {
+    display: block;
   }
 `;
 const WishlistContainer = styled.div`
@@ -398,18 +429,25 @@ const ProductDiscountPercentage = styled.span`
 `;
 
 const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
+  const { currentUser } = useSelector((state) => ({ ...state.user }));
   const [isHover, setHover] = useState(false);
   const [isWishlist, setWishlist] = useState(false);
   const swiperRef = React.useRef([]);
+  const navigate = useNavigate();
+
   const onInit = function (Swiper) {
     swiperRef.current = Swiper;
   };
 
   const handelAddToWishlist = async (id) => {
-    const res = await request.post("/wishlist/", {
-      id,
-    });
-    if (res) setWishlist(true);
+    if (currentUser) {
+      const res = await request.post("/wishlist/", {
+        id,
+      });
+      if (res) setWishlist(true);
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleMouseEnter = () => {
@@ -441,34 +479,36 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
         key={product.id}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        className="item"
       >
-        <NavLink
-          target="_blank"
-          to={`/${product.gender.toLowerCase()}/${product.brand
-            .replaceAll(" ", "-")
-            .toLowerCase()}/${product.description
-            .replaceAll(" ", "-")
-            .toLowerCase()}/${product._id}/buy`}
-        >
-          <SwiperCarousel
-            initialSlide={0}
-            speed={400}
-            onInit={onInit}
-            spaceBetween={0}
-            centeredSlides={true}
-            slidesPerView={1}
-            pagination={{
-              clickable: true,
-            }}
-            loop={true}
-            modules={[Autoplay, Pagination]}
-            isHover={isHover}
+        <ProductContainer>
+          <NavLink
+            target="_blank"
+            to={`/${product.gender.toLowerCase()}/${product.brand
+              .replaceAll(" ", "-")
+              .toLowerCase()}/${product.description
+              .replaceAll(" ", "-")
+              .toLowerCase()}/${product._id}/buy`}
           >
-            <ImageSliderContainer>
-              <ProductSliderContainer>
-                {product.images.map((image, i) => (
-                  <SwiperSlide key={i}>
-                    {/* <LazyComponent key={`${image.name}-${i}`}>
+            <SwiperCarousel
+              initialSlide={0}
+              speed={400}
+              onInit={onInit}
+              spaceBetween={0}
+              centeredSlides={true}
+              slidesPerView={1}
+              pagination={{
+                clickable: true,
+              }}
+              loop={true}
+              modules={[Autoplay, Pagination]}
+              isHover={isHover}
+            >
+              <ImageSliderContainer>
+                <ProductSliderContainer>
+                  {product.images.map((image, i) => (
+                    <SwiperSlide key={i}>
+                      {/* <LazyComponent key={`${image.name}-${i}`}>
                       <Image
                         data-src={`${image.url}&tr=w-250,h-320`}
                         alt={image.name}
@@ -478,111 +518,117 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
                         key={`${image.name}-${i}`}
                       />
                     </LazyComponent> */}
-                    <LazyImage
-                      src={`${image.url}&tr=q-80`}
-                      alt={image?.name}
-                      height="100%"
-                      width="100%"
-                      loading="lazy"
-                      key={`${image?.name}-${i}`}
-                      placeholderSrc={`${image?.url}&tr=w-50,h-50,bl-20,q-50:w-250,h-320`}
-                      blurHashUrl={image?.blurHashUrl}
-                    />
-                  </SwiperSlide>
-                ))}
-              </ProductSliderContainer>
-            </ImageSliderContainer>
+                      <LazyImage
+                        src={`${image.url}&tr=q-80`}
+                        alt={image?.name}
+                        height="100%"
+                        width="100%"
+                        loading="lazy"
+                        key={`${image?.name}-${i}`}
+                        placeholderSrc={`${image?.url}&tr=w-50,h-50,bl-20,q-50:w-250,h-320`}
+                        blurHashUrl={image?.blurHashUrl}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </ProductSliderContainer>
+              </ImageSliderContainer>
 
-            {product?.productRating > 0 && (
-              <RatingContainer>
-                <span>{product?.productRating}</span>
-                <span className="startIcon">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                  >
-                    <path
-                      fill="#14958f"
-                      fillRule="evenodd"
-                      d="M6 9.644l2.867 1.821c.464.296.743.093.623-.45L8.724 7.56l2.581-2.657c.384-.395.25-.716-.306-.716H7.686L6.374.93c-.206-.513-.542-.512-.748 0L4.314 4.187H1.001c-.553 0-.687.324-.306.716L3.276 7.56l-.766 3.455c-.12.544.165.742.623.45L6 9.645z"
-                    ></path>
-                  </svg>
-                </span>
-                {product?.noOfRatings > 0 && (
-                  <div className="product-ratingsCount">
-                    <div className="product-separator">|</div>
-                    {product?.noOfRatings}
-                  </div>
-                )}
-              </RatingContainer>
-            )}
-            <ProductMetaInfo>
-              <ProductHeader3 isHover={isHover}>{product.brand}</ProductHeader3>
-              <ProductHeader4 isHover={isHover}>
-                {product.description}
-              </ProductHeader4>
-              <ProductSizeContainer isHover={isHover}>
-                Size :
-                {product.size?.map((size, index) => (
-                  <span key={index} style={{ color: `#535665` }}>
-                    {(index ? ", " : "") + ` ${size}`}
+              {product?.productRating > 0 && (
+                <RatingContainer>
+                  <span>{product?.productRating}</span>
+                  <span className="startIcon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                    >
+                      <path
+                        fill="#14958f"
+                        fillRule="evenodd"
+                        d="M6 9.644l2.867 1.821c.464.296.743.093.623-.45L8.724 7.56l2.581-2.657c.384-.395.25-.716-.306-.716H7.686L6.374.93c-.206-.513-.542-.512-.748 0L4.314 4.187H1.001c-.553 0-.687.324-.306.716L3.276 7.56l-.766 3.455c-.12.544.165.742.623.45L6 9.645z"
+                      ></path>
+                    </svg>
                   </span>
-                ))}
-              </ProductSizeContainer>
-              <ProductPriceContainer>
-                <span>
-                  <ProductDiscountedPrice>
-                    {`Rs. ${product.mrp}`}
-                  </ProductDiscountedPrice>
-                </span>
-                {product.discountPercentage > 0 ? (
-                  <>
-                    <ProductOriginalPrice>{`Rs.${product.price}`}</ProductOriginalPrice>
-                    <ProductDiscountPercentage>
-                      {`(${product.discountPercentage}%OFF)`}
-                    </ProductDiscountPercentage>
-                  </>
-                ) : null}
-              </ProductPriceContainer>
-            </ProductMetaInfo>
-          </SwiperCarousel>
-        </NavLink>
+                  {product?.noOfRatings > 0 && (
+                    <div className="product-ratingsCount">
+                      <div className="product-separator">|</div>
+                      {product?.noOfRatings}
+                    </div>
+                  )}
+                </RatingContainer>
+              )}
+              <ProductMetaInfo>
+                <ProductHeader3 isHover={isHover}>
+                  {product.brand}
+                </ProductHeader3>
+                <ProductHeader4 isHover={isHover}>
+                  {product.description}
+                </ProductHeader4>
+                <ProductSizeContainer isHover={isHover}>
+                  Size :
+                  {product.size?.map((size, index) => (
+                    <span key={index} style={{ color: `#535665` }}>
+                      {(index ? ", " : "") + ` ${size}`}
+                    </span>
+                  ))}
+                </ProductSizeContainer>
+                <ProductPriceContainer>
+                  <span>
+                    <ProductDiscountedPrice>
+                      {`Rs. ${product.mrp}`}
+                    </ProductDiscountedPrice>
+                  </span>
+                  {product.discountPercentage > 0 ? (
+                    <>
+                      <ProductOriginalPrice>{`Rs.${product.price}`}</ProductOriginalPrice>
+                      <ProductDiscountPercentage>
+                        {`(${product.discountPercentage}%OFF)`}
+                      </ProductDiscountPercentage>
+                    </>
+                  ) : null}
+                </ProductPriceContainer>
+              </ProductMetaInfo>
+            </SwiperCarousel>
+          </NavLink>
 
-        {isHover ? (
-          <>
-            <WishlistContainer isHover={isHover} className="wishlistContainer">
-              <WishListDivWrapper
+          {isHover ? (
+            <>
+              <WishlistContainer
                 isHover={isHover}
-                onClick={() => handelAddToWishlist(product._id)}
-                isWishlist={isWishlist}
+                className="wishlistContainer"
               >
-                {isWishlist ? (
-                  <FavoriteRoundedIcon
-                    style={{
-                      fontSize: "20px",
-                      color: "red",
-                    }}
-                  />
-                ) : (
-                  <FavoriteIcon
-                    style={{
-                      fontSize: "20px",
-                    }}
-                  />
-                )}
-                <WishlistSpan>
-                  {isWishlist ? `wishlisted` : `wishlist`}
-                </WishlistSpan>
-              </WishListDivWrapper>
-            </WishlistContainer>
-            <ViewSimilar onClick={() => handelClick(open, product)}>
-              <span className="myntraweb-sprite  first image-grid-similarColorsIcon sprites-similarProductsIcon"></span>
-              <span className="image-grid-iconText second">VIEW SIMILAR</span>
-            </ViewSimilar>
-          </>
-        ) : null}
+                <WishListDivWrapper
+                  isHover={isHover}
+                  onClick={() => handelAddToWishlist(product._id)}
+                  isWishlist={isWishlist}
+                >
+                  {isWishlist ? (
+                    <FavoriteRoundedIcon
+                      style={{
+                        fontSize: "20px",
+                        color: "red",
+                      }}
+                    />
+                  ) : (
+                    <FavoriteIcon
+                      style={{
+                        fontSize: "20px",
+                      }}
+                    />
+                  )}
+                  <WishlistSpan>
+                    {isWishlist ? `wishlisted` : `wishlist`}
+                  </WishlistSpan>
+                </WishListDivWrapper>
+              </WishlistContainer>
+              <ViewSimilar onClick={() => handelClick(open, product)}>
+                <span className="myntraweb-sprite  first image-grid-similarColorsIcon sprites-similarProductsIcon"></span>
+                <span className="image-grid-iconText second">VIEW SIMILAR</span>
+              </ViewSimilar>
+            </>
+          ) : null}
+        </ProductContainer>
       </RLi>
     </>
   );

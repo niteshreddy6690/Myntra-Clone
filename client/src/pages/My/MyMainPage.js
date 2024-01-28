@@ -8,18 +8,17 @@ import OverView from "./OverView";
 import ProfileEdit from "./ProfileEdit";
 import MyAddress from "./MyAddress";
 import Profile from "./Profile";
+import { useSelector, useDispatch } from "react-redux";
+
 const MainContainerWrapper = styled.div`
   font-family: "Assistant";
+  margin: 0 2%;
 
   @media (min-width: 780px) {
-    margin: 30px 5%;
+    margin: 30px 2%;
     min-height: 650px;
     background-color: white;
   }
-  /* margin: 0 auto; */
-  /* margin-top: 30px; */
-  /* display: flex;
-  justify-content: center; */
 `;
 
 const MainContainer = styled.div`
@@ -42,10 +41,6 @@ const Account = styled.div`
     font-size: 18px;
     font-weight: 700;
   }
-
-  @media (min-width: 780px) {
-    display: block;
-  }
 `;
 
 const Sidebar = styled.div`
@@ -54,8 +49,10 @@ const Sidebar = styled.div`
   text-align: left;
   padding: 0px 25px 0px 0px;
   font-size: 15px;
+  display: none;
+  width: 25%;
 
-  @media (min-width: 780px) {
+  @media (min-width: 470px) {
     display: inline-block;
   }
   .segment-segment:first-child {
@@ -64,7 +61,7 @@ const Sidebar = styled.div`
   .segment-segment {
     border-top: 1px solid #d4d5d9;
     padding: 20px 0px;
-    width: 145px;
+    width: 100%;
     text-decoration: none;
   }
 
@@ -88,12 +85,14 @@ const Sidebar = styled.div`
 
 const PageComponents = styled.div`
   padding: 10px;
-  width: 71%;
+  width: 70%;
   display: inline-block;
   margin: 5px;
 `;
 const MyMainPage = () => {
   let location = useLocation();
+
+  const { currentUser } = useSelector((state) => ({ ...state.user }));
 
   return (
     <>
@@ -102,13 +101,12 @@ const MyMainPage = () => {
         <MainContainer>
           <Account>
             <div className="account-heading"> Account</div>
-            <div>Nitesh S</div>
+            <div>{currentUser ? currentUser?.name : "Myntra user"}</div>
           </Account>
           <Sidebar>
             <div className="segment-segment">
               <NavLink
                 to="/my/dashboard"
-                // className="segment-link"
                 className={({ isActive }) =>
                   isActive ? "active segment-link" : "segment-link"
                 }
@@ -195,11 +193,11 @@ const MyMainPage = () => {
             </div>
           </Sidebar>
           <PageComponents>
-            {location.pathname == "/my/orders" ? <MyOrders /> : null}
-            {location.pathname == "/my/dashboard" ? <OverView /> : null}
-            {location.pathname == "/my/profile/edit" ? <ProfileEdit /> : null}
-            {location.pathname == "/my/address" ? <MyAddress /> : null}
-            {location.pathname=="/my/profile"?<Profile /> : null}
+            {location.pathname === "/my/orders" ? <MyOrders /> : null}
+            {location.pathname === "/my/dashboard" ? <OverView /> : null}
+            {location.pathname === "/my/profile/edit" ? <ProfileEdit /> : null}
+            {location.pathname === "/my/address" ? <MyAddress /> : null}
+            {location.pathname === "/my/profile" ? <Profile /> : null}
           </PageComponents>
         </MainContainer>
       </MainContainerWrapper>

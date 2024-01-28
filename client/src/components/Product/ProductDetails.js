@@ -126,6 +126,7 @@ const ProductDetails = () => {
   const { isLoading, isError, productItem } = useSelector((state) => ({
     ...state.product,
   }));
+  const { currentUser } = useSelector((state) => ({ ...state.user }));
 
   const [product, setProduct] = useState({});
   const [sizes, setSizes] = useState([]);
@@ -137,6 +138,7 @@ const ProductDetails = () => {
   const id = location.pathname.split("/")[4];
   const [similarUniqueProducts, setSimilarUniqueProducts] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handelSelectSize = (sizeValue) => {
     setSelectedSize(sizeValue);
@@ -144,10 +146,14 @@ const ProductDetails = () => {
   };
 
   const handelAddToWishlist = async (id) => {
-    const res = await request.post("/wishlist/", {
-      id,
-    });
-    if (res) setProductInWishlist(true);
+    if (currentUser) {
+      const res = await request.post("/wishlist/", {
+        id,
+      });
+      if (res) setProductInWishlist(true);
+    } else {
+      navigate("/login");
+    }
   };
 
   const checkProductInWishlist = async (id) => {
@@ -186,6 +192,12 @@ const ProductDetails = () => {
     }
   };
 
+  const getReview = async () => {
+    const productId = id;
+    const review = await request.get(`/review/product/${productId}`);
+    if (review) SetReviews(review.data);
+  };
+
   useEffect(() => {
     const getProductById = async () => {
       try {
@@ -194,16 +206,8 @@ const ProductDetails = () => {
           checkProductInWishlist(action.payload._id);
           setProduct(action.payload);
           setSizes(action.payload.size);
+          getReview();
         }
-
-        if (isFulfilled(action)) {
-          // checkProductInWishlist(res.data._id);
-          // setProduct(res.data);
-          // setSizes(res.data.size);
-        }
-        const productId = id;
-        const review = await request.get(`/review/product/${productId}`);
-        if (review) SetReviews(review.data);
       } catch (err) {}
     };
     getSimilarProducts(id);
@@ -211,20 +215,39 @@ const ProductDetails = () => {
   }, []);
 
   const addToCart = async (product) => {
-    const { _id } = product;
-    if (selectedSize) {
-      try {
-        dispatch(
-          addItemToBag({
-            productId: _id,
-            size: selectedSize,
-            toast,
-          })
-        );
-      } catch (err) {}
-    } else {
+    if (!selectedSize) {
       setIsNotSizeSelected(true);
     }
+    if (!currentUser && selectedSize) {
+      navigate("/login");
+    } else {
+      const { _id } = product;
+      if (selectedSize) {
+        try {
+          dispatch(
+            addItemToBag({
+              productId: _id,
+              size: selectedSize,
+              toast,
+            })
+          );
+        } catch (err) {}
+      }
+    }
+  };
+
+  const likeAReview = async (reviewId) => {
+    currentUser &&
+      (await request.put("/review/like", { reviewId }).then(() => {
+        getReview();
+      }));
+  };
+
+  const unLikeAReview = async (reviewId) => {
+    currentUser &&
+      (await request.put("/review/unlike", { reviewId }).then(() => {
+        getReview();
+      }));
   };
 
   if (isLoading) {
@@ -388,7 +411,7 @@ const ProductDetails = () => {
                 <DetailedReviewContainer>
                   <div className="review-header">
                     <span>Ratings</span>
-                    <span class="ugc-iconContainer">
+                    <span className="ugc-iconContainer">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -433,9 +456,9 @@ const ProductDetails = () => {
                     </span>
                   </div>
 
-                  <div class="index-flexRow index-margin22">
-                    <div class="index-flexColumn">
-                      <div class="index-flexRow index-averageRating">
+                  <div className="index-flexRow index-margin22">
+                    <div className="index-flexColumn">
+                      <div className="index-flexRow index-averageRating">
                         <span>{product?.productRating}</span>
                         <span className="startIcon">
                           <svg
@@ -452,16 +475,16 @@ const ProductDetails = () => {
                           </svg>
                         </span>
                       </div>
-                      <div class="index-countDesc">
+                      <div className="index-countDesc">
                         {product?.noOfRatings} Verified Buyers
                       </div>
                     </div>
-                    <div class="index-separator"></div>
+                    <div className="index-separator"></div>
                     {reviews.allReviews?.length > 0 && (
                       <div>
-                        <div class="index-flexRow index-ratingBarContainer">
-                          <div class="index-rating">
-                            <span class="index-ratingLevel">5</span>
+                        <div className="index-flexRow index-ratingBarContainer">
+                          <div className="index-rating">
+                            <span className="index-ratingLevel">5</span>
                             <span className="startIcon">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -487,13 +510,13 @@ const ProductDetails = () => {
                             }
                             data-rating="5"
                           ></progress>
-                          <div class="index-count">
+                          <div className="index-count">
                             {reviews?.ratingOccurrence[5]}
                           </div>
                         </div>
-                        <div class="index-flexRow index-ratingBarContainer">
-                          <div class="index-rating">
-                            <span class="index-ratingLevel">4</span>
+                        <div className="index-flexRow index-ratingBarContainer">
+                          <div className="index-rating">
+                            <span className="index-ratingLevel">4</span>
                             <span className="startIcon">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -503,7 +526,7 @@ const ProductDetails = () => {
                               >
                                 <path
                                   fill="#c5c6c9"
-                                  fill-rule="evenodd"
+                                  fillRule="evenodd"
                                   d="M6 9.644l2.867 1.821c.464.296.743.093.623-.45L8.724 7.56l2.581-2.657c.384-.395.25-.716-.306-.716H7.686L6.374.93c-.206-.513-.542-.512-.748 0L4.314 4.187H1.001c-.553 0-.687.324-.306.716L3.276 7.56l-.766 3.455c-.12.544.165.742.623.45L6 9.645z"
                                 ></path>
                               </svg>
@@ -515,13 +538,13 @@ const ProductDetails = () => {
                             value={reviews?.ratingOccurrence[4]}
                             data-rating="4"
                           ></progress>
-                          <div class="index-count">
+                          <div className="index-count">
                             {reviews?.ratingOccurrence[4]}
                           </div>
                         </div>
-                        <div class="index-flexRow index-ratingBarContainer">
-                          <div class="index-rating">
-                            <span class="index-ratingLevel">3</span>
+                        <div className="index-flexRow index-ratingBarContainer">
+                          <div className="index-rating">
+                            <span className="index-ratingLevel">3</span>
                             <span className="startIcon">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -547,9 +570,9 @@ const ProductDetails = () => {
                             {reviews?.ratingOccurrence[3]}
                           </div>
                         </div>
-                        <div class="index-flexRow index-ratingBarContainer">
-                          <div class="index-rating">
-                            <span class="index-ratingLevel">2</span>
+                        <div className="index-flexRow index-ratingBarContainer">
+                          <div className="index-rating">
+                            <span className="index-ratingLevel">2</span>
                             <span className="startIcon">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -575,9 +598,9 @@ const ProductDetails = () => {
                             {reviews?.ratingOccurrence[2]}
                           </div>
                         </div>
-                        <div class="index-flexRow index-ratingBarContainer">
-                          <div class="index-rating">
-                            <span class="index-ratingLevel">1</span>
+                        <div className="index-flexRow index-ratingBarContainer">
+                          <div className="index-rating">
+                            <span className="index-ratingLevel">1</span>
                             <span className="startIcon">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -599,7 +622,7 @@ const ProductDetails = () => {
                             value={reviews?.ratingOccurrence[1]}
                             data-rating="1"
                           ></progress>
-                          <div class="index-count">
+                          <div className="index-count">
                             {reviews?.ratingOccurrence[1]}
                           </div>
                         </div>
@@ -664,11 +687,23 @@ const ProductDetails = () => {
                                 height="14"
                                 viewBox="0 0 15 14"
                                 className="user-review-thumbIcon user-review-thumbsDown user-review-rotate180"
+                                onClick={
+                                  !(
+                                    review?.like?.includes(currentUser?._id) ||
+                                    review?.unlike?.includes(currentUser?._id)
+                                  )
+                                    ? () => likeAReview(review?._id)
+                                    : null
+                                }
                               >
                                 <g fill="none" fillRule="evenodd">
                                   <path d="M-5-8h24v24H-5z"></path>
                                   <path
-                                    fill="#535766"
+                                    fill={
+                                      review?.like?.includes(currentUser?._id)
+                                        ? "#f16565"
+                                        : "#535766"
+                                    }
                                     fillRule="nonzero"
                                     d="M1.032.383H2.9c.307 0 .593.127.769.34C4.04.276 4.612 0 5.27 0h6.391c1.405 0 2.306.723 2.481 1.955L15 7.184v.127c0 1.106-.922 2.02-2.086 2.02H9.663v2.252c0 .957-.285 1.637-.856 2.04-.9.638-2.13.277-2.174.256l-.264-.085V11.01c0-1.998-2.394-2.678-2.482-2.7l-.197-.042a1.022 1.022 0 01-.813.382H1.01A.992.992 0 010 7.673V1.382a1.029 1.029 0 011.032-1zM7.162 11v2.246c.327.042.873.085 1.265-.212.37-.254.545-.742.545-1.462V8.606h3.948c.741 0 1.33-.593 1.33-1.293v-.042l-.85-5.19v-.022c-.11-.89-.698-1.335-1.723-1.335H5.33C4.59.724 4 1.317 4 2.017v5.55l.174.043c.11.042 2.988.848 2.988 3.39zM.75 7.693c0 .147.135.273.293.273h1.914c.158 0 .293-.126.293-.273V1.48c0-.147-.135-.273-.293-.273H1.043c-.158 0-.293.126-.293.273v6.213z"
                                   ></path>
@@ -683,11 +718,23 @@ const ProductDetails = () => {
                                 height="14"
                                 viewBox="0 0 15 14"
                                 className="user-review-thumbIcon"
+                                onClick={
+                                  !(
+                                    review?.like?.includes(currentUser?._id) ||
+                                    review?.unlike?.includes(currentUser?._id)
+                                  )
+                                    ? () => unLikeAReview(review?._id)
+                                    : null
+                                }
                               >
                                 <g fill="none" fillRule="evenodd">
                                   <path d="M-5-8h24v24H-5z"></path>
                                   <path
-                                    fill="#535766"
+                                    fill={
+                                      review?.unlike?.includes(currentUser?._id)
+                                        ? "#f16565"
+                                        : "#535766"
+                                    }
                                     fillRule="nonzero"
                                     d="M1.032.383H2.9c.307 0 .593.127.769.34C4.04.276 4.612 0 5.27 0h6.391c1.405 0 2.306.723 2.481 1.955L15 7.184v.127c0 1.106-.922 2.02-2.086 2.02H9.663v2.252c0 .957-.285 1.637-.856 2.04-.9.638-2.13.277-2.174.256l-.264-.085V11.01c0-1.998-2.394-2.678-2.482-2.7l-.197-.042a1.022 1.022 0 01-.813.382H1.01A.992.992 0 010 7.673V1.382a1.029 1.029 0 011.032-1zM7.162 11v2.246c.327.042.873.085 1.265-.212.37-.254.545-.742.545-1.462V8.606h3.948c.741 0 1.33-.593 1.33-1.293v-.042l-.85-5.19v-.022c-.11-.89-.698-1.335-1.723-1.335H5.33C4.59.724 4 1.317 4 2.017v5.55l.174.043c.11.042 2.988.848 2.988 3.39zM.75 7.693c0 .147.135.273.293.273h1.914c.158 0 .293-.126.293-.273V1.48c0-.147-.135-.273-.293-.273H1.043c-.158 0-.293.126-.293.273v6.213z"
                                   ></path>

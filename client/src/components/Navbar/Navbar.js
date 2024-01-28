@@ -23,7 +23,7 @@ import {
   StdImg,
   Overlay,
   BadgeNotification,
-  BannerAnnouncement
+  BannerAnnouncement,
 } from "./NavStyles";
 import SearchIcon from "@mui/icons-material/Search";
 import MyntraLogo from "../../Assets/Images/Myntra.png";
@@ -46,8 +46,6 @@ import Kids from "../SubMenu/Kids";
 import HomeLiving from "../SubMenu/HomeLiving";
 import Beauty from "../SubMenu/Beauty";
 import { useNavigate, useLocation } from "react-router-dom";
-
-
 
 const NavItem = ({ to, color, name, children }) => {
   const [ishover, setHover] = useState(false);
@@ -83,7 +81,6 @@ const Navbar = () => {
   const [searchDropdownCategory, setSearchDropdownCategory] = useState(null);
   const [openMobileNavbar, setOpenMobileNavbar] = useState(false);
 
-  
   // const debouceSearchTerm = useDebounce(searchText, 300);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -101,7 +98,7 @@ const Navbar = () => {
     const data = await request.get(
       `products/search/autosuggest?q=${searchText}`
     );
-    
+
     if (data?.data?.searchBrand.length > 0) {
       setSearchDropdownBrand(data?.data?.searchBrand);
     }
@@ -128,7 +125,7 @@ const Navbar = () => {
 
   const apiCall = async (decoded) => {
     const action = await dispatch(fetchUserById({ id: decoded.id }));
-    if ( localStorage.getItem("user")?._id || isFulfilled(action)) {
+    if (localStorage.getItem("user")?._id || isFulfilled(action)) {
       dispatch(fetchCartItems());
     }
   };
@@ -137,35 +134,33 @@ const Navbar = () => {
     if (token) {
       var decoded = jwt_decode(token);
       if (decoded) {
-        if(window.location.pathname !== "/login"){
+        if (window.location.pathname !== "/login") {
           apiCall(decoded);
         }
-        
       }
     }
   }, [dispatch]);
-
 
   const handleKeyPress = async (event) => {
     if (event?.key === "Enter") {
       const { name, value } = event?.target;
       const params = new URLSearchParams({ [name]: value });
       navigate({
-        pathname: "/"+value,
-        search: "rawQuery"+params.toString(),
+        pathname: "/" + value,
+        search: "rawQuery" + params.toString(),
       });
     }
   };
   const onClickSearch = (event) => {
-    const params = new URLSearchParams({ ['']:searchText});
+    const params = new URLSearchParams({ [""]: searchText });
     navigate({
-      pathname: "/"+searchText,
-      search: "rawQuery"+params.toString(),
+      pathname: "/" + searchText,
+      search: "rawQuery" + params.toString(),
     });
   };
   const handleLogout = async () => {
     const action = await dispatch(logOutUser({ refreshToken }));
-    if(isFulfilled(action)) {
+    if (isFulfilled(action)) {
       localStorage.clear();
       dispatch(fetchCartItems());
     }
@@ -303,7 +298,7 @@ const Navbar = () => {
         </GridItemOne>
         <SearchWrapper>
           <SearchContainer isFocus={isFocus}>
-            <SearchButton onClick={(e)=>onClickSearch(e)}>
+            <SearchButton onClick={(e) => onClickSearch(e)}>
               <SearchIcon
                 style={{ color: "#6c6c6c", transform: "scale(.8)" }}
               />
@@ -321,8 +316,8 @@ const Navbar = () => {
           </SearchContainer>
           {searchDropdownCategory?.length > 0 ||
           searchDropdownBrand?.length > 0 ? (
-            <SearchDropDown isFocus={isFocus} >
-              {searchDropdownCategory?.length > 0  ? (
+            <SearchDropDown isFocus={isFocus}>
+              {searchDropdownCategory?.length > 0 ? (
                 <>
                   <div
                     className="CategorySection"
@@ -333,9 +328,9 @@ const Navbar = () => {
                     Categories
                   </div>
 
-                  {searchDropdownCategory?.map((category,i) => (
+                  {searchDropdownCategory?.map((category, i) => (
                     <Link
-                     className="SearchDropdownResults"
+                      className="SearchDropdownResults"
                       to={`/${category?.namepath}`}
                       target="_blank"
                       key={i}
@@ -343,11 +338,10 @@ const Navbar = () => {
                     >
                       <div>{category?.namepath.replace("-", " ")}</div>
                     </Link>
-                
                   ))}
                 </>
               ) : null}
-              {searchDropdownBrand?.length > 0   ? (
+              {searchDropdownBrand?.length > 0 ? (
                 <>
                   <div
                     className="CategorySection"
@@ -358,9 +352,9 @@ const Navbar = () => {
                     Brand
                   </div>
 
-                  {searchDropdownBrand?.map((brand,i) => (
+                  {searchDropdownBrand?.map((brand, i) => (
                     <Link
-                    className="SearchDropdownResults"
+                      className="SearchDropdownResults"
                       to={`/${brand}?rawQuery=${brand}`}
                       target="_blank"
                       key={i}
@@ -398,7 +392,7 @@ const Navbar = () => {
               {currentUser ? (
                 <>
                   <div className="desktop-infoTitle">
-                    Hello {currentUser?.name}
+                    Hello {currentUser ? currentUser?.name : " myntra user"}
                   </div>
                   <div className="desktop-infoEmail">
                     {currentUser?.phonenumber}
@@ -432,21 +426,13 @@ const Navbar = () => {
                 >
                   <div className="desktop-infoSection">Wishlist</div>
                 </a>
-                <a
-                  href="/giftcard"
-                  data-track="coupons"
-                  className="desktop-info"
-                >
+                <a href="/" data-track="coupons" className="desktop-info">
                   <div className="desktop-infoSection">Gift Cards</div>
                 </a>
-                <a href="/contactus" className="desktop-info">
+                <a href="/" className="desktop-info">
                   <div className="desktop-infoSection">Contact Us</div>
                 </a>
-                <a
-                  href="/myntrainsider?cache=false"
-                  data-track="coupons"
-                  className="desktop-info"
-                >
+                <a href="/" data-track="coupons" className="desktop-info">
                   <div className="desktop-infoSection">
                     Myntra Insider
                     <span className="desktop-superscriptTag">New</span>
@@ -464,21 +450,17 @@ const Navbar = () => {
                 >
                   <div className="desktop-infoSection">Coupons</div>
                 </a>
-                <a
-                  href="/giftcard"
-                  data-track="coupons"
-                  className="desktop-info"
-                >
+                <a href="/" data-track="coupons" className="desktop-info">
                   <div className="desktop-infoSection">Saved Cards</div>
                 </a>
-                <a href="/contactus" className="desktop-info">
+                <a href="/" className="desktop-info">
                   <div className="desktop-infoSection">Saved VPA</div>
                 </a>
-                <a href="/contactus" className="desktop-info">
+                <a href="/my/address" className="desktop-info">
                   <div className="desktop-infoSection">Saved Address</div>
                 </a>
               </div>
-              {(currentUser || JSON.parse(localStorage.getItem("user"))?._id) ? (
+              {currentUser || JSON.parse(localStorage.getItem("user"))?._id ? (
                 <div className="desktop-accActions">
                   <a
                     href="/my/profile/edit"
@@ -541,7 +523,12 @@ const Navbar = () => {
           </SvgNavbarLink>
         </GridItemTwo>
       </NavContainer>
-      <BannerAnnouncement ><h3>This Application built only Education Purpose only, All the credit go to Myntra © 2024 www.myntra.com. All rights reserved.</h3></BannerAnnouncement>
+      <BannerAnnouncement>
+        <h3>
+          This Application built only Education Purpose only, All the credit go
+          to Myntra © 2024 www.myntra.com. All rights reserved.
+        </h3>
+      </BannerAnnouncement>
     </NavbarWrapper>
   );
 };

@@ -10,6 +10,8 @@ export const BannerContainer = styled.div`
   z-index: 6;
   color: #fff;
   letter-spacing: 1px;
+
+  display: none;
   cursor: pointer;
   .FreeShippingBanner-sidebar-content {
     -webkit-writing-mode: vertical-rl;
@@ -30,6 +32,10 @@ export const BannerContainer = styled.div`
     margin-block-start: 0;
     color: #fcfcfc;
     display: inline-block;
+  }
+
+  @media screen and (min-width: 720px) {
+    display: block;
   }
 `;
 

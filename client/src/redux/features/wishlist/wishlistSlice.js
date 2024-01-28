@@ -16,9 +16,7 @@ export const fetchWishListItems = createAsyncThunk(
     try {
       const response = await api.getWishlistItems();
       return response.data;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 );
 
@@ -28,7 +26,7 @@ export const removeWishListItems = createAsyncThunk(
     try {
       const response = await api.removeItemFromWishlist({ id });
       if (response)
-        toast("Remove item from wishlist", {
+        toast("Removed item from wishlist", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: true,
@@ -50,9 +48,7 @@ export const removeWishListItems = createAsyncThunk(
           ),
         });
       return response.data;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 );
 
@@ -61,11 +57,8 @@ export const removeWishListItemWithOutNotify = createAsyncThunk(
   async ({ id }) => {
     try {
       const response = await api.removeItemFromWishlist({ id });
-    if(response.status ===200)
-      return response.data;
-    } catch (error) {
-      
-    }
+      if (response.status === 200) return response.data;
+    } catch (error) {}
   }
 );
 const wishlistSlice = createSlice({

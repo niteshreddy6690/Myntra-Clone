@@ -5,7 +5,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   z-index: 10000;
   position: absolute;
-  top: 0 ;
+  top: 0;
   left: 0;
   display: flex;
   justify-content: center;
@@ -16,18 +16,19 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-
-position: relative;
+  position: relative;
   width: 40px;
   height: 40px;
-  overflow: hidden ;
+  overflow: hidden;
   border-radius: 50%;
- background: #ffffff;
-box-shadow:  1px 1px 10px #d9d9d9,
-             -1px -1px 10px #d9d9d9;
+  background: #ffffff;
+  box-shadow: 1px 1px 10px #d9d9d9, -1px -1px 10px #d9d9d9;
 `;
 
 const LoadingSpinner = ({ loading }) => {
+  if (!loading) {
+    return null;
+  }
   return (
     <Wrapper>
       <Container>
@@ -37,11 +38,11 @@ const LoadingSpinner = ({ loading }) => {
             background: "#ffffff",
             color: "#ff3f6c",
             fontSize: "12px",
-            position:"absolute",
-            top:"12.5%",
-            left:"12.5%",
-            display:"flex",
-            transform:"translate(-50%,-50%)",
+            position: "absolute",
+            top: "12.5%",
+            left: "12.5%",
+            display: "flex",
+            transform: "translate(-50%,-50%)",
             width: "30px",
             height: "30px",
           }}

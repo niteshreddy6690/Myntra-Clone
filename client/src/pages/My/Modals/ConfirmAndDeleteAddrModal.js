@@ -17,7 +17,7 @@ const ConfirmDeleteModalWrapper = styled.div`
 
 const ConfirmDeleteModalContainer = styled.div`
   position: fixed;
-  top: 30%;
+  top: 50%;
   left: 50%;
   height: 160px;
   width: 350px;

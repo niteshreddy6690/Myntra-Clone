@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./Test.css";
+import "./Test.module.css";
 import { useRef } from "react";
 import styled from "styled-components";
 

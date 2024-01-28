@@ -14,10 +14,15 @@ export const Overlay = styled.div`
   overflow: hidden;
   height: 100%;
   width: 100%;
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
 `;
 
 export const Wrapper = styled.div`
   width: 40%;
+  min-width: 468px;
   max-width: 500px;
   position: fixed;
   z-index: 101;
@@ -29,6 +34,11 @@ export const Wrapper = styled.div`
   transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
   height: 100%;
   transition: transform 0.3s ease-in-out;
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
 `;
 
 export const SimilarContainer = styled.div`
@@ -78,8 +88,8 @@ export const Ul = styled.ul`
 export const Li = styled.li`
   display: block;
   overflow: hidden;
-  margin: 0 0 30px;
-  width: 210px;
+  margin: 0 0 15px;
+  width: 205px;
   &:hover {
     box-shadow: 0 2px 16px 4px rgb(40 44 63 / 7%);
   }

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const TopDiv = styled.div`
   box-sizing: content-box;
-  margin-top: 20px
+  margin-top: 20px;
 `;
 export const Div = styled.div``;
 export const Main = styled.main`
@@ -21,42 +21,39 @@ export const Main = styled.main`
     display: block;
     width: 100%;
     padding-left: 18px;
-  padding-right: 18px;
-
-  } 
+    padding-right: 18px;
+  }
 `;
 export const ImageContainer = styled.div`
   width: 58%;
   @media screen and (max-width: 1024px) {
     width: 100%;
     margin: 0 5px;
-  } 
-  
+  }
 `;
 export const ImageContainer1 = styled.div`
   float: left;
   overflow: hidden;
   margin-bottom: 1%;
   position: relative;
-  width:49%;
-  height: 610px;;
+  width: 49%;
+  height: 610px;
   min-height: 350px;
   min-width: 200px;
   &:nth-child(2n) {
     margin-left: 1%;
   }
   @media screen and (max-width: 680px) {
-  height: 450px;
-  width: 49.5%
+    height: 450px;
+    width: 49.5%;
   }
   @media screen and (max-width: 530px) {
     width: 100%;
     height: 450px;
     &:nth-child(2n) {
-    margin-left: 0%;
+      margin-left: 0%;
+    }
   }
-  } 
-
 `;
 export const ImageContainer2 = styled.div`
   width: 100%;
@@ -79,24 +76,24 @@ export const ImageContainer2 = styled.div`
     left: 0;
     z-index: 2;
     transition: transform 0.4s;
-    
+
     &:hover {
       transform: scale(1.04);
     }
-    @media screen and (max-width:565px) {
+    @media screen and (max-width: 565px) {
       object-fit: cover;
-     
+
       &:hover {
-      transform: none;
-      cursor: default;
+        transform: none;
+        cursor: default;
+      }
     }
-    }
-    @media screen and (max-width:360px) {
-      object-fit:fill;
+    @media screen and (max-width: 360px) {
+      object-fit: fill;
       &:hover {
-      transform: none;
-      cursor: default;
-    }
+        transform: none;
+        cursor: default;
+      }
     }
   }
 `;
@@ -119,11 +116,11 @@ export const DescriptionContainer = styled.div`
   padding-left: 30px;
   clear: both;
   @media (max-width: 1200px) {
-    min-width:350px;
+    min-width: 350px;
     width: 40%;
     padding: 0 0 0 30px;
   }
-  @media screen and (max-width:1024px){
+  @media screen and (max-width: 1024px) {
     position: relative;
     padding-top: 10px;
     width: 100%;
@@ -397,7 +394,7 @@ export const AddToBagButton = styled.button`
 export const WishListButton = styled.button`
   border-radius: 3px;
   outline: 0;
-  margin:0;
+  margin: 0;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -544,6 +541,9 @@ export const UserReviewWrapper = styled.div`
     display: inline-block;
     margin-left: 30px;
   }
+  .user-review-thumb svg {
+    display: inline-block;
+  }
   .user-review-thumbIcon {
     margin: 0 8px;
     cursor: pointer;
@@ -684,33 +684,26 @@ export const DetailedReviewContainer = styled.div`
   }
 `;
 
-
-
-
-
-
 export const Wrapper = styled.div`
   position: relative;
   background-color: #fff;
   max-width: 1600px;
   margin: 0 auto;
-  padding:10px 20px;
+  padding: 10px 20px;
 
-  .similar-heading{
-    padding:5px;
+  .similar-heading {
+    padding: 5px;
     font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
     padding: 0;
     color: #282c3f;
-    margin: 25px 0  24px;
-
+    margin: 25px 0 24px;
 
     @media (min-width: 980px) {
-    padding-left: 0;
+      padding-left: 0;
     }
-}
-  
+  }
 `;
 
 export const SimilarContainer = styled.div`
@@ -756,7 +749,7 @@ export const Ul = styled.ul`
   list-style: none;
   flex-wrap: wrap;
   margin: 0 -10px 0 0px;
-  @media screen and (min-width:500px){
+  @media screen and (min-width: 500px) {
     justify-content: flex-start;
   }
 `;
@@ -770,7 +763,6 @@ export const Li = styled.li`
   &:hover {
     box-shadow: 0 2px 16px 4px rgb(40 44 63 / 7%);
   }
-
 `;
 export const SimilarContent = styled.div`
   padding: 0 24px 24px;
@@ -867,15 +859,15 @@ export const ProductDiscountPercentage = styled.span`
   font-size: 12px;
   margin-left: 5px;
 `;
-export const IndexCrossLinkContainer=styled.div`
-    display: inline-block;
-    margin: 35px 0 50px;
-    width: 100%;
-    text-align: center;
-`
+export const IndexCrossLinkContainer = styled.div`
+  display: inline-block;
+  margin: 35px 0 50px;
+  width: 100%;
+  text-align: center;
+`;
 
 export const MoreProductsNavLink = styled(Link)`
-display: inline-block;
+  display: inline-block;
   list-style: none;
   text-decoration: none;
   padding: 15px 25px;
@@ -885,13 +877,13 @@ display: inline-block;
   font-weight: 700;
   margin-right: 16px;
   text-transform: uppercase;
-  border: 1px solid #7e818c;;
-  border-radius:25px;
-  &:hover{
+  border: 1px solid #7e818c;
+  border-radius: 25px;
+  &:hover {
     border: 1px solid #ff3e6c;
   }
   .index-arrow {
-  display: inline-block;
+    display: inline-block;
     width: 6px;
     height: 6px;
     margin-left: 10px;

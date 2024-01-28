@@ -13,9 +13,10 @@ import { request } from "../api/axios.js";
 import Pagination from "../components/Pagination/Pagination.js";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProductByCategory } from "../redux/features/product/productSlice.js";
-import { isFulfilled } from "@reduxjs/toolkit";
+import { current, isFulfilled } from "@reduxjs/toolkit";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner.js";
 import NoProduct from "../components/NoProduct/NoProduct.js";
+import { useNavigate } from "react-router-dom";
 
 // import LazyComponent from "../components/LazyComponent";
 // import closeIconSvg from "../Assets/svg/CloseIcon.svg";
@@ -25,6 +26,7 @@ const Main = styled.div`
   max-width: 1600px;
   margin: 0 auto;
   font-size: 16px;
+  min-height: 60vh;
 `;
 
 const RowBase = styled.div`
@@ -99,8 +101,8 @@ const Span = styled.span`
   margin: 0;
 `;
 const LeftSection = styled.div`
-  min-width: 252px;
-  max-width: 252px;
+  min-width: 240px;
+  max-width: 250px;
   flex-grow: 0 !important;
   align-self: flex-start;
   flex-wrap: wrap;
@@ -139,7 +141,7 @@ const LeftSection = styled.div`
     z-index: 4;
   }
 
-  @media screen and (max-width: 620px) {
+  @media screen and (max-width: 768px) {
     display: none !important;
   }
 `;
@@ -224,15 +226,19 @@ const RightSection = styled.div`
   flex: 1 1 0%;
   overflow: none;
   min-height: 50vh;
+  position: relative;
+  overflow: hidden;
 `;
 const RSecttion = styled.div`
   width: 100%;
-  padding-top: 24px;
+  /* padding-top: 24px;
   padding-left: 15px;
-  padding-right: 20px;
-
-  /* overflow: hidden;
-  overflow-y: scroll; */
+  padding-right: 20px; */
+  @media screen and (min-width: 560px) {
+    padding-top: 24px;
+    padding-left: 15px;
+    padding-right: 20px;
+  }
   &::-webkit-scrollbar {
     display: none;
   }
@@ -245,9 +251,13 @@ const RightSectionRowBase = styled.div`
   justify-content: flex-start;
   align-items: stretch;
   /* align-content: stretch; */
-  padding-top: 24px;
-  padding-left: 15px;
-  padding-right: 20px;
+
+  @media screen and (min-width: 560px) {
+    padding-top: 24px;
+    padding-left: 15px;
+    padding-right: 20px;
+  }
+
   /* background-color: red; */
 `;
 
@@ -549,19 +559,22 @@ const useSearchQuery = () => {
   //
   const params = paramsToObject(searchEntries);
   //
-return { params, setSearchParams };
+  return { params, setSearchParams };
 };
 
 const ListOfProducts = () => {
   const { isLoading, isError, productsData } = useSelector((state) => ({
     ...state.product,
   }));
+
+  const { currentUser } = useSelector((state) => ({ ...state.user }));
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
   const [wishlistProducts, setWishlistProducts] = useState(null);
 
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const category = location.pathname.split("/")[1];
   const ref = React.useRef();
   const sortObject = [
@@ -700,12 +713,14 @@ const ListOfProducts = () => {
   };
 
   const getWishlistProducts = async () => {
-    const res = await request.get("wishlist/");
-    setWishlistProducts([
-      ...res?.data?.map((item) => {
-        return item.wishlistProduct._id;
-      }),
-    ]);
+    if (currentUser) {
+      const res = await request.get("wishlist/");
+      setWishlistProducts([
+        ...res?.data?.map((item) => {
+          return item.wishlistProduct._id;
+        }),
+      ]);
+    }
   };
 
   const getProducts = async ({ params }) => {
@@ -776,7 +791,6 @@ const ListOfProducts = () => {
 
   const handelChangeGender = (e) => {
     const value = e.target.value;
-
     const _params = omit({ ...params, ...(value && { gender: value }) }, "p");
     setSearchParams(_params);
     getProducts({ params: _params });
@@ -891,8 +905,6 @@ const ListOfProducts = () => {
   const handelSort = (e) => {
     const value = e.target.value;
 
-    //
-
     // let entries = Object.entries(sortObject);
     // let data = sortObject.filter((item) => {
     //   if (item.value == value) return item.label;
@@ -940,6 +952,7 @@ const ListOfProducts = () => {
   return (
     <div>
       <Navbar />
+      <LoadingSpinner loading={isLoading} />
       {open && (
         <Similar
           open={open}
@@ -1165,9 +1178,7 @@ const ListOfProducts = () => {
               </Section>
             </LeftSection>
 
-            {isLoading ? (
-              <LoadingSpinner loading={isLoading} />
-            ) : (
+            {
               <RightSection>
                 <RightSearchResults id="rightSection">
                   <RowBase>
@@ -1363,7 +1374,7 @@ const ListOfProducts = () => {
                   </PaginationContainer>
                 </RightSearchResults>
               </RightSection>
-            )}
+            }
           </RowBase>
         </Main>
       )}

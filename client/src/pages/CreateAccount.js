@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { request } from "../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { useSelector, useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 
+import { useSelector, useDispatch } from "react-redux";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
@@ -34,10 +36,11 @@ const Wrapper = styled.div`
   left: 50%;
   transform: translateX(-50%);
   width: 400px;
-  min-height: 600px;
-  height: calc(100% - 10%);
+  min-height: 650px;
+  height: calc(100% - 30%);
   background-color: #ffffff;
   text-align: center;
+  overflow: hidden;
 `;
 const Container = styled.div`
   padding: 10px 10%;
@@ -322,7 +325,7 @@ const SelectGender = styled.div`
     height: 10px;
     position: absolute;
     top: 5px;
-    left: 9px;
+    left: 8px;
     content: " ";
     display: block;
     background: #0bc6a0;
@@ -339,21 +342,21 @@ const GenderSpan = styled.span`
 `;
 
 const CreateAccountButton = styled.button`
-  width: 400px;
+  width: 80%;
   position: fixed;
-  margin-left: -200px;
-  left: 50%;
-  bottom: 26px;
+  /* margin-left: -200px; */
+  /* left: 0%; */
+  margin: 0 auto;
   color: #fff;
   background-color: #ff3e6c;
   border-color: #ff2459;
   margin-top: 4px;
-  padding: 11px 16px;
+  padding: 11px 45px;
   font-size: 14px;
   letter-spacing: 0.6px;
   border-radius: 2px;
   line-height: 16px;
-  margin-bottom: 0;
+  margin-bottom: 5px;
   text-transform: uppercase;
   font-weight: 700;
   text-align: center;
@@ -365,8 +368,36 @@ const CreateAccountButton = styled.button`
   white-space: nowrap;
   outline: 0;
 `;
+
+const ErrorParagraph = styled.p`
+  color: #ff5a5a;
+  margin: 3px 0px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+`;
 const CreateAccount = () => {
   // const { currentUser } = useSelector((state) => ({ ...state.user }));
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+    reset,
+    getValues,
+    watch,
+  } = useForm({
+    mode: "all",
+    defaultValues: {
+      email: "",
+      password: "",
+      gender: "",
+      name: "",
+      altPhone: "",
+      hint: "",
+    },
+  });
 
   const initialState = {
     email: "",
@@ -378,7 +409,7 @@ const CreateAccount = () => {
   };
   const [formData, setFormData] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const phoneNumber = localStorage?.getItem("mobileNumber");
@@ -388,15 +419,34 @@ const CreateAccount = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const createAccount = async () => {
+  const onSubmit = async (data) => {
+    console.log(data);
     const useAccount = await request.put(
-      `/createAccount/${phoneNumber}`,
-      formData
+      `/auth/createAccount/${phoneNumber}`,
+      data
     );
-
     if (useAccount) navigate("/");
   };
 
+  // const createAccount = async () => {
+  //   const useAccount = await request.put(
+  //     `/auth/createAccount/${phoneNumber}`,
+  //     formData
+  //   );
+  //   if (useAccount) navigate("/");
+  // };
+
+  useEffect(() => {
+    reset({
+      email: "",
+      password: "",
+      gender: "",
+      name: "",
+      altPhone: "",
+      hint: "",
+    });
+  }, []);
+  const isPassword = watch("password");
   return (
     <>
       <Navbar />
@@ -433,14 +483,7 @@ const CreateAccount = () => {
                 </g>
               </svg>
             </div>
-            <form>
-              {/* <Input
-                type="password"
-                name="password"
-                placeholder="Create password"
-                required
-              /> */}
-
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="form-group ">
                 <div className="password">
                   <input
@@ -450,15 +493,24 @@ const CreateAccount = () => {
                     className="form-control"
                     placeholder=""
                     aria-autocomplete="list"
-                    value={formData?.password}
+                    // value={formData?.password}
                     name="password"
-                    onChange={handelChange}
+                    // onChange={handelChange}
+                    {...register("password", {
+                      required: "Please enter password",
+                      pattern: {
+                        value:
+                          /^(?=.*[0-9])(?=.*[!@#$%^&*.,])[a-zA-Z0-9!@#$%^&*.,]{6,16}$/,
+                        message:
+                          "Password Must Contain Minium 6 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character",
+                      },
+                    })}
                   />
                   <span className="placeholderAlternative">
                     Create Password
                     <span style={{ color: "rgb(255, 87, 34)" }}>*</span>{" "}
                   </span>
-                  {formData?.password ? (
+                  {isPassword ? (
                     <span
                       className="form-control-feedback"
                       style={{ marginTop: "4px" }}
@@ -531,6 +583,7 @@ const CreateAccount = () => {
                   ) : (
                     ""
                   )}
+                  <ErrorParagraph>{errors?.password?.message}</ErrorParagraph>
                 </div>
               </div>
               <br></br>
@@ -547,11 +600,16 @@ const CreateAccount = () => {
                     placeholder=""
                     aria-autocomplete="list"
                     name="name"
-                    value={formData?.name}
-                    onChange={handelChange}
+                    // value={formData?.name}
+                    // onChange={handelChange}
+                    // defaultValue={""}
+                    {...register("name", {
+                      required: "Please enter your name",
+                    })}
                   />
                   <span className="placeholderAlternative">FullName</span>
                 </div>
+                <ErrorParagraph>{errors?.name?.message}</ErrorParagraph>
               </div>
               {/* <Input type="text" name="fullName" placeholder="Full Name" />
               <Input type="email" name="email" placeholder="email" /> */}
@@ -564,8 +622,9 @@ const CreateAccount = () => {
                     placeholder=""
                     aria-autocomplete="list"
                     name="email"
-                    value={formData?.email}
-                    onChange={handelChange}
+                    // value={formData?.email}
+                    // onChange={handelChange}
+                    {...register("email")}
                   />
                   <span className="placeholderAlternative">
                     Email(Optional)
@@ -581,8 +640,11 @@ const CreateAccount = () => {
                       name="gender"
                       value="male"
                       id="genderMen"
-                      checked={Boolean(formData?.gender == "male")}
-                      onChange={handelChange}
+                      // checked={Boolean(formData?.gender == "male")}
+                      // onChange={handelChange}
+                      {...register("gender", {
+                        required: "Please select the gender",
+                      })}
                     />
 
                     <label htmlFor="genderMen">Men</label>
@@ -593,12 +655,16 @@ const CreateAccount = () => {
                       name="gender"
                       value="female"
                       id="ritemb"
-                      checked={Boolean(formData?.gender == "female")}
-                      onChange={handelChange}
+                      // checked={Boolean(formData?.gender == "female")}
+                      // onChange={handelChange}
+                      {...register("gender", {
+                        required: "Please select the gender",
+                      })}
                     />
                     <label htmlFor="ritemb">Women</label>
                   </GenderSpan>
                 </SelectGender>
+                <ErrorParagraph>{errors?.gender?.message}</ErrorParagraph>
               </div>
               <div className="form-group ">
                 <div className="alt-phone-number">
@@ -610,8 +676,9 @@ const CreateAccount = () => {
                     placeholder=""
                     maxLength="10"
                     name="altPhone"
-                    onChange={handelChange}
-                    value={formData?.altPhone}
+                    // onChange={handelChange}
+                    // value={formData?.altPhone}
+                    {...register("altPhone")}
                   />
                   <span className="mobileNumber">
                     +91
@@ -642,8 +709,9 @@ const CreateAccount = () => {
                     placeholder=""
                     aria-autocomplete="list"
                     name="hint"
-                    value={formData?.hint}
-                    onChange={handelChange}
+                    // value={formData?.hint}
+                    // onChange={handelChange}
+                    {...register("hint")}
                   />
                   <span className="placeholderAlternative">
                     Hint(Alternate Number)
@@ -653,14 +721,17 @@ const CreateAccount = () => {
               <div className="textInputInfo">
                 This name will be a hint for your alternate number
               </div>
+              <div className="form-group">
+                <CreateAccountButton
+                  // onClick={createAccount}
+                  type="submit"
+                >
+                  Create Account
+                </CreateAccountButton>
+              </div>
             </form>
           </Container>
         </Wrapper>
-        <div className="form-group">
-          <CreateAccountButton onClick={createAccount}>
-            Create Account
-          </CreateAccountButton>
-        </div>
       </Main>
     </>
   );

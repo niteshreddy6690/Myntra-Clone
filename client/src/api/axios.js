@@ -1,6 +1,5 @@
 import axios from "axios";
 import LocalStorageService from "./localStorage";
-
 const isLocal = process.env.NODE_ENV === "development";
 const isBrowser = typeof window !== "undefined";
 

@@ -192,7 +192,6 @@ const EditAndRemoveContainer = styled.div`
   }
 `;
 
-
 const MyAddress = () => {
   const [address, setAddress] = useState([]);
   const [currentAddr, setCurrentAddr] = useState(0);
@@ -234,7 +233,7 @@ const MyAddress = () => {
   //     });
   //   };
 
-  //   
+  //
 
   //   return (
   //     <>
@@ -474,7 +473,7 @@ const MyAddress = () => {
   //   return myAddress;
   // };
   async function callApi() {
-    // 
+    //
     // const myAddress = await request.get("http://localhost:8080/api/address/");
     // setAddress(myAddress.data.address);
     dispatch(fetchUserAddress());
@@ -488,13 +487,12 @@ const MyAddress = () => {
   }, [userAddresses]);
 
   const addAddrApiCall = async (addAddress) => {
-    const action= await dispatch(addNewUserAddress({ addAddress }));
-    if(isFulfilled(action)){
-    setShowAddAddressModal((showAddAddressModal) => !showAddAddressModal);
-  }
+    const action = await dispatch(addNewUserAddress({ addAddress }));
+    if (isFulfilled(action)) {
+      setShowAddAddressModal((showAddAddressModal) => !showAddAddressModal);
+    }
   };
   const callEditApi = async (data) => {
-    
     const myAddress = await request.put("address/edit", data);
     if (myAddress) {
       handleShowEditModal();
@@ -515,11 +513,9 @@ const MyAddress = () => {
   };
 
   const callDeleteApi = async () => {
-    
-    const deletedAddress = await request.put(
-      "address/",
-      { addressId: selectedAddress }
-    );
+    const deletedAddress = await request.put("address/", {
+      addressId: selectedAddress,
+    });
     if (deletedAddress) {
       setShowConfirmDeleteModal(false);
       setDeletedAddress(deletedAddress);
@@ -530,7 +526,6 @@ const MyAddress = () => {
   };
 
   const handleShowModal = () => {
-    
     setShowConfirmDeleteModal(!showConfirmDeleteModal);
   };
   const handleShowEditModal = () => {
@@ -550,22 +545,19 @@ const MyAddress = () => {
       mobileNumber,
       landmark,
     } = addr;
-    const updatedAddress = await request.put(
-      "address/edit",
-      {
-        addressId: _id,
-        name,
-        addressType,
-        streetAddress,
-        locality,
-        pinCode,
-        city,
-        state,
-        mobileNumber,
-        landmark,
-        isDefault: true,
-      }
-    );
+    const updatedAddress = await request.put("address/edit", {
+      addressId: _id,
+      name,
+      addressType,
+      streetAddress,
+      locality,
+      pinCode,
+      city,
+      state,
+      mobileNumber,
+      landmark,
+      isDefault: true,
+    });
     if (updatedAddress) {
       callApi();
     }
@@ -574,7 +566,7 @@ const MyAddress = () => {
   const handleShowAddAddressModal = () => {
     setShowAddAddressModal(!showAddAddressModal);
   };
-  
+
   if (isLoading) return <LoadingSpinner loading={isLoading} />;
   return (
     <AddressContainer className="page-fullWidthComponent">

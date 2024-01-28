@@ -53,6 +53,8 @@ const LazyImage = ({ src, alt, blurHashUrl, width, height }) => {
           opacity: isLoaded ? 1 : 0,
           transition: "filter 0.5s linear transform 0.4s", // Smoothly transition opacity and filter
           position: "absolute",
+          objectFit: "cover",
+          objectPosition: "top",
           top: 0,
           left: 0,
         }}

@@ -409,7 +409,7 @@ const Checkout = () => {
     const { amount, id: order_id, currency } = result.data.data;
 
     const options = {
-      key: "rzp_test_AgwP7BCvtP0uGq", // Enter the Key ID generated from the Dashboard
+      key: process.env.REACT_APP_RAZORPAYKEY, // Enter the Key ID generated from the Dashboard
       amount: amount,
       currency: currency,
       name: "Myntra Clone",

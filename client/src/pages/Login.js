@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import LoginImage from "../Assets/Images/login.webp";
 import { request } from "../api/axios";
-
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -77,7 +78,6 @@ const LoginSpan = styled.span`
   font-weight: 400;
   color: #535766;
 `;
-const Form = styled.form``;
 
 const MobileContainer = styled.div`
   position: relative;
@@ -137,28 +137,76 @@ const Button = styled.button`
   width: 100%;
 `;
 
+const ErrorParagraph = styled.p`
+  color: #ff5a5a;
+  margin: 3px 0px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+`;
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+    reset,
+    getValues,
+    watch,
+  } = useForm({
+    mode: "all",
+  });
+
   const [isFocus, setFocus] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const navigate = useNavigate();
 
-  const handelLogin = async (e) => {
-    e.preventDefault();
+  // const handelLogin = async (e) => {
+  //   e.preventDefault();
 
-    localStorage.setItem("mobileNumber", phoneNumber);
+  //   localStorage.setItem("mobileNumber", phoneNumber);
+  //   try {
+  //     if (phoneNumber) {
+  //       const login = await request.post("auth/registermobile", {
+  //         phonenumber: phoneNumber,
+  //       });
+
+  //       if (login.data?.user) {
+  //         console.log("Login -data", login);
+  //         toast(`OTP : ${login?.data?.otp}`, {
+  //           position: "top-right",
+  //           autoClose: 2000,
+  //           hideProgressBar: true,
+  //           closeOnClick: true,
+  //           pauseOnHover: false,
+  //           draggable: true,
+  //           progress: undefined,
+  //           theme: "colored",
+  //         });
+  //         setTimeout(() => {
+  //           navigate("/verifyotp");
+  //         }, 3000);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const onSubmit = async (data) => {
+    console.log("Data", data);
+    setPhoneNumber(data?.phone);
+    localStorage.setItem("mobileNumber", data?.phone);
     try {
-      if (phoneNumber) {
+      if (data?.phone) {
         const login = await request.post("auth/registermobile", {
-          phonenumber: phoneNumber,
+          phonenumber: data?.phone,
         });
-
-        if (!login.data?.user?.isExistingUser) {
-          navigate("/createaccount");
-        } else {
+        if (login.data?.user) {
           console.log("Login -data", login);
           toast(`OTP : ${login?.data?.otp}`, {
             position: "top-right",
-            autoClose: 2000,
+            autoClose: 3000,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: false,
@@ -168,10 +216,12 @@ const Login = () => {
           });
           setTimeout(() => {
             navigate("/verifyotp");
-          }, 3000);
+          }, 3500);
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -197,18 +247,27 @@ const Login = () => {
             <LoginWelcomeHeader>
               Login <LoginSpan> or </LoginSpan> Signup
             </LoginWelcomeHeader>
-            <Form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <MobileContainer>
                 <FormGroup>
                   <Input
-                    type="text"
+                    type="tel"
                     maxLength="10"
+                    name="phone"
                     onFocus={() => setFocus(true)}
                     onBlur={() => setFocus(false)}
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    // value={phoneNumber}
+                    // onChange={(e) => setPhoneNumber(e.target.value)}
                     required
+                    {...register("phone", {
+                      required: "Please enter your phone number",
+                      pattern: {
+                        value: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                        message: "Please enter valid Mobile Number",
+                      },
+                    })}
                   />
+                  <ErrorParagraph>{errors?.phone?.message}</ErrorParagraph>
                   <Span
                     className="Placeholder"
                     isFocus={isFocus}
@@ -237,14 +296,21 @@ const Login = () => {
                   <NavLink to="/termsofuse"> Terms of Use </NavLink>&
                   <NavLink to="/termsofuse">Privacy Policy</NavLink>
                 </MediaLinkDiv>
-                <Button onClick={handelLogin}>Continue</Button>
+                <Button
+                  // onClick={handelLogin}
+
+                  type="submit"
+                >
+                  Continue
+                </Button>
                 <MediaLinkDiv style={{ marginTop: "30px" }}>
                   Have trouble logging in?
                   <NavLink to="/termsofuse">Get help</NavLink>
                 </MediaLinkDiv>
               </MobileContainer>
-            </Form>
+            </form>
           </LoginContent>
+          {/* <DevTool control={control} /> */}
         </LoginWrapper>
       </LoginContainer>
     </>

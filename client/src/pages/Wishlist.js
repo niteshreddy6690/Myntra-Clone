@@ -115,7 +115,6 @@ const Li = styled.li`
     height: 20px;
   }
   .itemcard-removeMark {
-    margin-top: 5px;
     margin-left: 0px;
     zoom: 0.8;
   }
@@ -183,16 +182,15 @@ const Wishlist = () => {
   const imgRef = useRef(null);
   const CallApi = async () => {
     const action = await dispatch(fetchWishListItems());
-    
-    if (isFulfilled(action)) {    
+
+    if (isFulfilled(action)) {
       setWishlistProducts(action.payload);
     }
 
     // const res = await axios.get("http://localhost:8080/api/wishlist/");
-    // 
+    //
   };
   const handelDelete = async (id) => {
-    
     const action = await dispatch(removeWishListItems({ id, toast }));
     //axios.delete(
     //   `http://localhost:8080/api/wishlist/${id}`
@@ -203,17 +201,17 @@ const Wishlist = () => {
       CallApi();
     }
 
-    // 
+    //
     // if (res) {
     //   CallApi();
     // }
   };
   const handleDeleteWithoutNotify = async (id) => {
     const action = await dispatch(removeWishListItemWithOutNotify({ id }));
-    if (isFulfilled(action)) 
+    if (isFulfilled(action))
       // setWishlistProducts(action.payload);
       CallApi();
-    }
+  };
 
   const handelMoveToBag = async (pid, id) => {
     const cartProduct = await request.post(`carts/`, {
@@ -314,5 +312,5 @@ const Wishlist = () => {
       )}
     </Layout>
   );
-  }
+};
 export default Wishlist;

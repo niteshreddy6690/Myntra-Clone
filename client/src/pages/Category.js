@@ -169,9 +169,6 @@ const Category = () => {
   };
   const handleClick = (e, parentId, categoryName) => {
     e.stopPropagation();
-    
-    
-    
     // setShow(!show);
     setData({ ...data, parentId: parentId, parentCategory: categoryName });
   };

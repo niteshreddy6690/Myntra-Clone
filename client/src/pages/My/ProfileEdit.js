@@ -350,29 +350,27 @@ const ProfileEdit = () => {
 
   const [formData, setFormData] = useState({});
 
-  const handelChange = (e) => {
-    e.persist();
-    setFormData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-    // setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // const handelChange = (e) => {
+  //   e.persist();
+  //   setFormData((prev) => {
+  //     return { ...prev, [e.target.name]: e.target.value };
+  //   });
+  //   // setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
 
   const onSubmit = async (data) => {
-    
     const updateUser = await request.put("/user", data);
-    
   };
 
   // const handleSubmiting = async (data) => {
-  //   
+  //
   //   // e.preventDefault();
   //   const updateUser = await request.put("/user", data);
-  //   
+  //
   // };
 
   // useEffect(() => {
-  //   
+  //
   //   currentUser &&
   //     setFormData({
   //       name: currentUser?.name,
@@ -398,11 +396,6 @@ const ProfileEdit = () => {
       });
   }, [currentUser]);
 
-  // 
-  //   "moment(formData?.dob).format",
-  //   moment("1998-06-29T00:00:00.000Z").format("DD/MM/YYYY")
-  // );
-
   const currentGender = watch("gender");
   const currentUserAltPhoneNo = watch("altPhone");
 
@@ -423,7 +416,7 @@ const ProfileEdit = () => {
             Mobile Number*
           </p>
           <div className="mobileNumber-verifiedNumber">
-            <span>9901145387</span>
+            <span>{currentUser?.phonenumber}</span>
             <svg
               width="20px"
               height="20px"
@@ -492,7 +485,7 @@ const ProfileEdit = () => {
           <div className="profileEdit-formElement">
             <div className="textInput-form-group">
               <input
-                type="text"
+                type="email"
                 // autoComplete="new-password"
                 // value={formData?.email || ""}
                 name="email"
@@ -679,7 +672,7 @@ const ProfileEdit = () => {
             </div>
             <div
               className={
-                String(currentUserAltPhoneNo)?.match(/\d/g)?.length == 10
+                String(currentUserAltPhoneNo)?.match(/\d/g)?.length === 10
                   ? ""
                   : "profileEdit-disabled"
               }
@@ -710,7 +703,7 @@ const ProfileEdit = () => {
           </div>
         </ProfileEditEntries>
       </form>
-      <DevTool control={control} />
+      {/* <DevTool control={control} /> */}
     </ProfileEditCard>
   );
 };

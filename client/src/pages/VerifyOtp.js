@@ -117,7 +117,7 @@ const VerifyOtp = () => {
         .then((response) => {
           LocalStorageService.setToken(response?.data);
           localStorage.setItem("user", JSON.stringify(response?.data?.user));
-          if (response.data.user.isExistingUser) {
+          if (response?.data?.user?.isExistingUser) {
             navigate("/");
           } else {
             navigate("/createaccount");

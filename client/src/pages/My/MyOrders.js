@@ -115,9 +115,7 @@ const OrderList = styled.div`
     border-radius: 2px;
     object-fit: scale-down;
   }
-  /* .orderItemImage {
-    float: left;
-  } */
+
   .orderItemInfo {
     padding-left: 20px;
   }
@@ -137,12 +135,11 @@ const OrderList = styled.div`
     margin: 5px 0px;
   }
 `;
-
-// const OrdersContentPage = styled.div``;
 const MyOrders = () => {
   const { isLoading, isError, orderItems } = useSelector((state) => ({
     ...state.order,
   }));
+
   const [allUserReviews, setAllUserReviews] = useState(null);
 
   const dispatch = useDispatch();
@@ -151,7 +148,8 @@ const MyOrders = () => {
   };
   const getAllUserReviews = async () => {
     const allUserReviews = await request.get("/review/getAllUser");
-    if(allUserReviews){  setAllUserReviews(allUserReviews.data.allReviews);
+    if (allUserReviews) {
+      setAllUserReviews(allUserReviews.data.allReviews);
     }
   };
   const addReview = async (productId, ratingNo, comment = "") => {
@@ -160,7 +158,9 @@ const MyOrders = () => {
       comment,
       ratingNo,
     });
-    if (userReview.status===200) {getAllUserReviews();}
+    if (userReview.status === 200) {
+      getAllUserReviews();
+    }
   };
   useEffect(() => {
     getOrders();

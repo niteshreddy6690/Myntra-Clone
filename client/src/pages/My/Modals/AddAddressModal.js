@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
+
 import { request } from "../../../api/axios";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -29,16 +33,21 @@ const AddAddressContainer = styled.div`
   overflow-y: scroll;
   top: 50%;
   left: 50%;
-  width: 450px;
-  height:80%;
+  width: 80%;
+  height: 75%;
   transform: translate(-50%, -50%);
   background: #f5f5f6;
-  z-index: 13;
+  z-index: 20;
   overflow: hidden;
 
   @media screen and (min-width: 768px) {
+    height: 75%;
+    width: 450px;
+  }
+  @media screen and (min-height: 780px) {
     height: 750px;
   }
+
   .addAddressModal-heading {
     font-weight: 700;
     background: #fff;
@@ -98,6 +107,13 @@ const AddAddressContainer = styled.div`
     border-bottom: 1px solid #14cda8;
   }
 
+  .form-group myInput-error input[type="text"]:focus .myInput-error,
+  .form-group input[type="password"]:focus .myInput-error,
+  .form-group input[type="number"]:focus .myInput-error,
+  .form-group input[type="tel"]:focus .myInput-error {
+    border-bottom: 1px solid #ff5a5a;
+  }
+
   /* input[type="text"] {
     width: 100%;
     border: 0px;
@@ -142,8 +158,7 @@ const AddAddressContainer = styled.div`
     position: absolute;
   }
   .myInput-error {
-    visibility: hidden;
-    height: 20px;
+    /* visibility: hidden; */
     margin: 2px 0px 0px 0px;
     color: #ff5a5a;
     font-size: 12px;
@@ -182,11 +197,24 @@ const AddAddressModal = ({
   addAddrApiCall,
   callApi,
 }) => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+    reset,
+    getValues,
+    watch,
+  } = useForm({
+    mode: "all",
+  });
+
   const [addAddress, setAddAddress] = useState({});
   const dispatch = useDispatch();
 
   const handleChangeEditAddress = (e) => {
-    e.persist();
+    // e.persist();
     const { name, value, type, checked } = e.target;
     setAddAddress((prev) => {
       return { ...prev, [name]: type === "checkbox" ? checked : value };
@@ -200,8 +228,16 @@ const AddAddressModal = ({
     };
   }, []);
 
+  const onSubmit = (data) => {
+    // console.log("data: ", data);
+    addAddrApiCall(data);
+  };
+
+  const name = watch("name");
+  const mobileNumber = watch("mobileNumber");
+
   // const addAddrApiCall = async () => {
-  //   
+  //
   //   dispatch(addNewUserAddress({ addAddress }));
 
   //   // const myAddress = await request.post("/address/add", addAddress);
@@ -217,30 +253,42 @@ const AddAddressModal = ({
       <AddAddressContainer>
         <div className="addAddressModal-heading">Add New Address</div>
         <div className="addAddressModal-bodyContainer">
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="addressModalCards">
               <div className="form-group">
                 <input
                   type="text"
                   name="name"
-                  value={addAddress?.name || ""}
-                  onChange={handleChangeEditAddress}
+                  value={name || ""}
+                  autoFocus={true}
+                  // onChange={handleChangeEditAddress}
+
+                  {...register("name", {
+                    required: "Please enter your name",
+                  })}
                 />
                 <label className="placeholderAlternative">Name *</label>
-                <div className="myInput-error"></div>
+                <p className="myInput-error">{errors?.name?.message}</p>
               </div>
               <div className="form-group">
                 <input
                   type="tel"
                   name="mobileNumber"
                   maxLength="10"
-                  value={addAddress?.mobileNumber || ""}
-                  onChange={handleChangeEditAddress}
+                  value={mobileNumber || ""}
+                  // onChange={handleChangeEditAddress}
+                  {...register("mobileNumber", {
+                    required: "Please enter your phone number",
+                    pattern: {
+                      value: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                      message: "Please enter valid phone number",
+                    },
+                  })}
                 />
                 <label className="placeholderAlternative">
                   Mobile Number *
                 </label>
-                <div className="myInput-error"></div>
+                <p className="myInput-error">{errors?.mobileNumber?.message}</p>
               </div>
             </div>
             <div className="addressModalCards">
@@ -250,59 +298,80 @@ const AddAddressModal = ({
                     type="tel"
                     name="pinCode"
                     maxLength="6"
-                    value={addAddress?.pinCode || ""}
-                    onChange={handleChangeEditAddress}
+                    // value={addAddress?.pinCode || ""}
+                    // onChange={handleChangeEditAddress}
+                    {...register("pinCode", {
+                      required: "Please enter your area pin code",
+                      pattern: {
+                        value: /^[1-9][0-9]{5}$/,
+                        message: "Please enter valid area pin code",
+                      },
+                    })}
                   />
                   <label className="placeholderAlternative">Pincode *</label>
-                  <div className="myInput-error"></div>
+                  <p className="myInput-error">{errors?.pinCode?.message}</p>
                 </div>
                 <div className="form-group">
                   <input
                     type="text"
                     name="state"
-                    value={addAddress?.state || ""}
-                    onChange={handleChangeEditAddress}
+                    {...register("state", {
+                      required: "Please enter your state",
+                    })}
+                    // value={addAddress?.state || ""}
+                    // onChange={handleChangeEditAddress}
                   />
                   <label className="placeholderAlternative">State *</label>
-                  <div className="myInput-error"></div>
+                  <p className="myInput-error">{errors?.state?.message}</p>
                 </div>
               </div>
               <div className="form-group">
                 <input
                   type="text"
                   name="streetAddress"
-                  value={addAddress?.streetAddress || ""}
-                  onChange={handleChangeEditAddress}
+                  // value={addAddress?.streetAddress || ""}
+                  // onChange={handleChangeEditAddress}
+                  {...register("streetAddress", {
+                    required: "Please enter your street Address",
+                  })}
                 />
                 <label className="placeholderAlternative">
                   Address (House No,Building,Street,Area)*
                 </label>
-                <div className="myInput-error"></div>
+                <p className="myInput-error">
+                  {errors?.streetAddress?.message}
+                </p>
               </div>
               <div className="form-group">
                 <input
                   type="text"
                   name="locality"
-                  value={addAddress?.locality || ""}
-                  onChange={handleChangeEditAddress}
+                  // value={addAddress?.locality || ""}
+                  // onChange={handleChangeEditAddress}
+                  {...register("locality", {
+                    required: "Please enter your street Locality/Town",
+                  })}
                 />
                 <label className="placeholderAlternative">
                   Locality/ Town *
                 </label>
-                <div className="myInput-error"></div>
+                <p className="myInput-error">{errors?.locality?.message}</p>
               </div>
 
               <div className="form-group">
                 <input
                   type="text"
                   name="city"
-                  value={addAddress?.city || ""}
-                  onChange={handleChangeEditAddress}
+                  // value={addAddress?.city || ""}
+                  // onChange={handleChangeEditAddress}
+                  {...register("city", {
+                    required: "Please enter your City/District",
+                  })}
                 />
                 <label className="placeholderAlternative">
                   City/ District *
                 </label>
-                <div className="myInput-error"></div>
+                <p className="myInput-error">{errors?.city?.message}</p>
               </div>
             </div>
             <div className="addressModalCards">
@@ -314,8 +383,11 @@ const AddAddressModal = ({
                     value="home"
                     id="home"
                     name="addressType"
-                    onChange={handleChangeEditAddress}
-                    checked={Boolean(addAddress?.addressType == "home")}
+                    // onChange={handleChangeEditAddress}
+                    // checked={Boolean(addAddress?.addressType == "home")}
+                    {...register("addressType", {
+                      required: "Please select your address type",
+                    })}
                   />
                   <label htmlFor="home" style={{ margin: "0px 10px" }}>
                     Home
@@ -327,14 +399,18 @@ const AddAddressModal = ({
                     value="work"
                     id="work"
                     name="addressType"
-                    onChange={handleChangeEditAddress}
-                    checked={Boolean(addAddress?.addressType == "work")}
+                    {...register("addressType", {
+                      required: "Please select your address type",
+                    })}
+                    // onChange={handleChangeEditAddress}
+                    // checked={Boolean(addAddress?.addressType === "work")}
                   />
                   <label htmlFor="work" style={{ margin: "0px 10px" }}>
                     Work
                   </label>
                 </div>
               </div>
+              <p className="myInput-error">{errors?.addressType?.message}</p>
               <div className="addAddressModal-horizontalSeparator"></div>
               <div>
                 <input
@@ -342,8 +418,8 @@ const AddAddressModal = ({
                   className="input"
                   name="isDefault"
                   // value={""}
-                  onChange={handleChangeEditAddress}
-                  checked={Boolean(addAddress?.isDefault)}
+                  // onChange={handleChangeEditAddress}
+                  // checked={Boolean(addAddress?.isDefault)}
                 />
                 <span style={{ margin: "0px 15px" }}>
                   Make this as my default address
@@ -357,14 +433,17 @@ const AddAddressModal = ({
               >
                 Cancel
               </div>
-              <div
+              <button
                 className="addAddress-buttons"
-                onClick={() => addAddrApiCall(addAddress)}
+                // onClick={() => addAddrApiCall(addAddress)}
+
+                type="submit"
               >
                 Save
-              </div>
+              </button>
             </div>
           </form>
+          {/* <DevTool control={control} /> */}
         </div>
       </AddAddressContainer>
     </>

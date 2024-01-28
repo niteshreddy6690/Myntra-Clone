@@ -38,7 +38,7 @@ app.options("*", cors());
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => {
-    console.log("Sucessfully connected to Data Base");
+    console.log("Successfully connected to Data Base");
   })
   .catch((err) => console.log(err?.message));
 
@@ -56,6 +56,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/order", ordersRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/brand", brantRoutes);
+
 app.listen(process.env.PORT, () => {
   console.log("server is running on Port :", process.env.PORT);
 });

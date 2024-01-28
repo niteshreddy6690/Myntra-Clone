@@ -22,8 +22,6 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import emptyBag from "../../Assets/Images/empty-bag.webp";
-
-import axios from "axios";
 import CartOverlay from "./CartOverlay";
 import CartQuantityOverlay from "./CartQuantityOverlay";
 
