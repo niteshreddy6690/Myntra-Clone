@@ -99,9 +99,8 @@ const getCart = async (req, res) => {
   try {
     let cart = await cartService.cart(userId);
     if (!cart) {
-      return res.status(400).json({
-        type: "Invalid",
-        msg: "Cart Not Found",
+      return res.status(200).json({
+        msg: "No active Cart found for the user",
       });
     }
     const totalMRP = cart.items.reduce((preValue, currentValue) => {

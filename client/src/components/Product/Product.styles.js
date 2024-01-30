@@ -391,6 +391,40 @@ export const AddToBagButton = styled.button`
   }
 `;
 
+export const GoToBag = styled(Link)`
+  border-radius: 5px;
+  padding: 12px 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 108px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #ff3e6c;
+  border: 1px solid #ff3e6c;
+  color: #fff;
+  flex: 3;
+  text-align: center;
+  /* width: 100%; */
+  margin-right: 3%;
+  text-transform: uppercase;
+  @media (min-width: 980px) {
+    text-align: center;
+    padding: 15px 0;
+  }
+  @media (min-width: 980px) {
+    margin-top: 0;
+    border-radius: 4px;
+  }
+  @media (min-width: 360px) {
+    min-width: 108px;
+  }
+  @media (min-width: 320px) {
+    min-width: 88px;
+  }
+`;
+
 export const WishListButton = styled.button`
   border-radius: 3px;
   outline: 0;

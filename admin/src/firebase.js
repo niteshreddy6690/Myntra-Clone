@@ -6,12 +6,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCmp3TdEu_CtDMBZUAQxtsW0AoBU42j0H4",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "shopify-58aac.firebaseapp.com",
   projectId: "shopify-58aac",
   storageBucket: "shopify-58aac.appspot.com",
-  messagingSenderId: "138755403911",
-  appId: "1:138755403911:web:0a53b162cd689acb284822",
+  messagingSenderId: process.env.REACT_APP_FIREBASEMESSAGESENDERID,
+  appId: process.env.FIREBASE_APP_ID,
 };
 
 // Initialize Firebase

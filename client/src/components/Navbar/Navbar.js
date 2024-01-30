@@ -143,6 +143,7 @@ const Navbar = () => {
 
   const handleKeyPress = async (event) => {
     if (event?.key === "Enter") {
+      setFocus(false);
       const { name, value } = event?.target;
       const params = new URLSearchParams({ [name]: value });
       navigate({

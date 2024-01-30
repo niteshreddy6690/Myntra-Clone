@@ -19,22 +19,22 @@ import menSlider4 from "../../Assets/Images/MenSlider4.webp";
 export const menSlider = [
   {
     id: 1,
-    to: "/shop/men",
+    to: "/men",
     img: `${menSlider1}`,
   },
   {
     id: 1,
-    to: "/shop/men",
+    to: "/men",
     img: `${menSlider2}`,
   },
   {
     id: 1,
-    to: "/shop/men",
+    to: "/men-tshirts?brand=Puma",
     img: `${menSlider3}`,
   },
   {
     id: 1,
-    to: "/shop/men",
+    to: "/men-tshirts?brand=HRX+by+Hrithik+Roshan",
     img: `${menSlider4}`,
   },
 ];
@@ -42,32 +42,32 @@ export const menSlider = [
 export const sliders = [
   {
     id: "1",
-    to: "/shop/men",
+    to: "/shirts?rawQuery=shirts",
     img: `${slide1}`,
   },
   {
     id: "2",
-    to: "/shop/indian-wear",
+    to: "/women-ethnic-wear",
     img: `${slide2}`,
   },
   {
     id: "3",
-    to: "/shop/men",
+    to: "/men-casual-shirt",
     img: `${slide4}`,
   },
   {
     id: "4",
-    to: "/shop/men",
+    to: "/men-tshirts?brand=HRX+by+Hrithik+Roshan",
     img: `${slide5}`,
   },
   {
     id: "5",
-    to: "/shop/men",
+    to: "/men-tshirts?brand=WROGN",
     img: `${slide6}`,
   },
   {
     id: "6",
-    to: "/shop/men",
+    to: "/women",
     img: `${slide7}`,
   },
 ];

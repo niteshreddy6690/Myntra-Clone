@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import MyMainPage from "./MyMainPage";
 import styled from "styled-components";
 import noOrders from "../../Assets/png/noOrders.png";
 import { request } from "../../api/axios";

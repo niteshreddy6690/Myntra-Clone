@@ -960,7 +960,7 @@ const ListOfProducts = () => {
           handelClick={handelClick}
         />
       )}
-      {(products?.length < 1 && params?.rawQuery) || !params ? (
+      {(products?.length < 1 && params?.rawQuery && !isLoading) || !params ? (
         <NoProduct />
       ) : (
         <Main open={open}>
@@ -1004,10 +1004,10 @@ const ListOfProducts = () => {
                     ) : null}
                   </FilterDiv>
                   <div>
-                    {Gender?.length > 0 && (
+                    {Gender?.length > 1 && (
                       <CategoriesDiv1>
                         <Ul1>
-                          {GenderArrays?.map((gender, i) => (
+                          {Gender?.map((gender, i) => (
                             <Li1 key={i}>
                               <Label1>
                                 <Input

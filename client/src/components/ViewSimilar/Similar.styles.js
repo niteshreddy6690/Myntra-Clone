@@ -89,7 +89,7 @@ export const Li = styled.li`
   display: block;
   overflow: hidden;
   margin: 0 0 15px;
-  width: 205px;
+  width: 47.5%;
   &:hover {
     box-shadow: 0 2px 16px 4px rgb(40 44 63 / 7%);
   }

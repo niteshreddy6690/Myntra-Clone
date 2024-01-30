@@ -13,9 +13,10 @@ const StartContainer = styled.div`
   .starSelected {
     color: #f75278;
     cursor: pointer;
+    transition: all 0.5 ease-in-out;
   }
-  .star.selected {
-    color: red;
+  .starSelected:hover {
+    scale: 1.4;
   }
 
   .review-section {
@@ -48,13 +49,14 @@ const StarComp = ({
       ? Number(userRatingForProduct[0]?.rating)
       : null
   );
-  const [commentValue,SetCommentValue] = useState("")
+  const [commentValue, SetCommentValue] = useState("");
   const [showWriteReview, setShowWriteReview] = useState(false);
 
-
-  useEffect(()=>{
-    SetCommentValue(userRatingForProduct[0]?.comment? userRatingForProduct[0]?.comment: "")
-  },[])
+  useEffect(() => {
+    SetCommentValue(
+      userRatingForProduct[0]?.comment ? userRatingForProduct[0]?.comment : ""
+    );
+  }, []);
 
   const mouseLeave = () => {
     setSelectedStars(
@@ -66,7 +68,9 @@ const StarComp = ({
 
   const handleStarClick = (num) => {
     setSelectedStars(num);
-    SetCommentValue(userRatingForProduct[0]?.comment? userRatingForProduct[0]?.comment: "")
+    SetCommentValue(
+      userRatingForProduct[0]?.comment ? userRatingForProduct[0]?.comment : ""
+    );
   };
   const callAddReview = (productId, ratingNo = 1, comment = "") => {
     if (ratingNo) addReview(productId, ratingNo, comment);
@@ -75,7 +79,6 @@ const StarComp = ({
     setShowWriteReview(!showWriteReview);
   };
 
- 
   return (
     <StartContainer>
       <div className="review-section">
@@ -95,7 +98,9 @@ const StarComp = ({
                   onMouseEnter={() => handleStarClick(num)}
                   // onMouseLeave={() => handleStarClick(selectedStars)}
                   className="starSelected"
-                  onClick={() => callAddReview(productId, selectedStars,commentValue)}
+                  onClick={() =>
+                    callAddReview(productId, selectedStars, commentValue)
+                  }
                 />
               )}
             </span>
@@ -103,7 +108,7 @@ const StarComp = ({
         </div>
 
         <div className="write-review" onClick={handleShowModal}>
-          Write Review
+          {userRatingForProduct[0]?.comment ? "Edit Review" : "Write Review"}
         </div>
       </div>
       {showWriteReview && (

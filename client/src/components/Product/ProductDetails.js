@@ -31,6 +31,7 @@ import {
   NoSizeSpan,
   AddAndWhish,
   AddToBagButton,
+  GoToBag,
   WishListButton,
   ReviewContainer,
   UserReviewWrapper,
@@ -80,6 +81,7 @@ import BlurHashComponent from "../BlurHashComponent";
 // import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const PreDefinedSize = ["S", "M", "L", "XL", "XXL"];
 const SizeComponent = ({
@@ -137,6 +139,8 @@ const ProductDetails = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
   const [similarUniqueProducts, setSimilarUniqueProducts] = useState([]);
+  const [productAddedToCart, setProductAddedToCart] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -224,13 +228,15 @@ const ProductDetails = () => {
       const { _id } = product;
       if (selectedSize) {
         try {
-          dispatch(
+          const action = await dispatch(
             addItemToBag({
               productId: _id,
               size: selectedSize,
               toast,
             })
-          );
+          ).then((response) => {
+            setProductAddedToCart(true);
+          });
         } catch (err) {}
       }
     }
@@ -368,17 +374,24 @@ const ProductDetails = () => {
                 </SelectSizeButtonWrapper>
               </SizeContainer>
               <AddAndWhish>
-                <AddToBagButton
-                  onClick={() => {
-                    addToCart(product);
-                    // navigate("/checkout/cart");
-                  }}
-                >
-                  <ShoppingBagOutlinedIcon
-                    style={{ margin: "0px 10px 0px 0px" }}
-                  />
-                  Add To Bag
-                </AddToBagButton>
+                {productAddedToCart ? (
+                  <GoToBag to="/checkout/cart">
+                    GO TO BAG
+                    <ArrowForwardIcon style={{ margin: "0px 0px 0px 10px" }} />
+                  </GoToBag>
+                ) : (
+                  <AddToBagButton
+                    onClick={() => {
+                      addToCart(product);
+                      // navigate("/checkout/cart");
+                    }}
+                  >
+                    <ShoppingBagOutlinedIcon
+                      style={{ margin: "0px 10px 0px 0px" }}
+                    />
+                    Add To Bag
+                  </AddToBagButton>
+                )}
 
                 {productInWishlist ? (
                   <WishListButton

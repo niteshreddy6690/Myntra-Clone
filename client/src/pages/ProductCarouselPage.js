@@ -474,7 +474,6 @@ const ProductCarousel = ({ product, open, handelClick, wishlistProducts }) => {
 
   return (
     <>
-      {/* <Similar open={open} handelClick={handelClick} /> */}
       <RLi
         key={product.id}
         onMouseEnter={handleMouseEnter}

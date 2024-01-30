@@ -23,7 +23,7 @@ import { request } from "../../utils/api/axios";
 import Category from "../../components/Category/Category";
 import CircularLoader from "../../FramerMotionComponents/CircularLoader";
 import { encode } from "blurhash";
-import {useNavigation} from "react-router-dom"
+import { useNavigation } from "react-router-dom";
 import { encodeImageToBlurhash } from "../../utils/BlurhashEncoder";
 
 const MainContainer = styled.div`
@@ -837,9 +837,7 @@ const ImagePreview = styled.div`
 //   },
 // ];
 
-
-
-export const Colors =[
+export const Colors = [
   { name: "Green", hex: "#008000", rgb: "rgb(0, 128, 0)" },
   { name: "Pink", hex: "#FFC0CB", rgb: "rgb(255, 192, 203)" },
   { name: "Blue", hex: "#0000FF", rgb: "rgb(0, 0, 255)" },
@@ -898,8 +896,7 @@ export const Colors =[
   { name: "Plum Purple", hex: "#8E4585", rgb: "rgb(142, 69, 133)" },
   { name: "Electric Blue", hex: "#7DF9FF", rgb: "rgb(125, 249, 255)" },
   { name: "Emerald Green", hex: "#00C957", rgb: "rgb(0, 201, 87)" },
-
-]
+];
 
 export default function NewProduct() {
   const options = [
@@ -938,7 +935,7 @@ export default function NewProduct() {
     parentId: null,
     parentCategory: null,
   };
-  
+
   const [inputs, setInputs] = useState({});
   const [category, setCategory] = useState({});
   const [brand, setBrand] = useState([]);
@@ -956,7 +953,6 @@ export default function NewProduct() {
 
   const [isLoading, setLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
-
 
   const handelSort = () => {
     let _previewFiles = [...previewFiles];
@@ -981,7 +977,7 @@ export default function NewProduct() {
         imageType: file.type,
       };
     });
-    
+
     setPreviewFiles((prev) => prev.concat(imageArray).slice(0, 8));
     e.currentTarget.value = null;
   };
@@ -1027,16 +1023,13 @@ export default function NewProduct() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          
           setLoading(true);
           const progress = Math.round(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
           setPercents(progress);
-          
         },
         (error) => {
-          
           reject(error);
         },
         () => {
@@ -1076,9 +1069,8 @@ export default function NewProduct() {
             const blurhash = await encodeImageToBlurhash(url);
             const data = { url: url, name: file.name, blurHashUrl: blurhash };
 
-            
             resolve(data);
-            // 
+            //
             // return urls;
           });
         }
@@ -1102,9 +1094,7 @@ export default function NewProduct() {
         }, 2000);
         setSelectedImageFiles(imageData);
       })
-      .catch((err) => {
-        
-      });
+      .catch((err) => {});
   };
   const handleClick = async (e) => {
     e.preventDefault();
@@ -1117,19 +1107,14 @@ export default function NewProduct() {
         categories: data.categoryId,
         size: selectedSize,
       };
-     const resp= await addProduct(product, dispatch);
-   if (resp.status===200){
-    setProductCreated(resp)
-
-     
-    } else {
-      
+      const resp = await addProduct(product, dispatch);
+      if (resp.status === 200) {
+        setProductCreated(resp);
+      } else {
+      }
     }
   };
-}
 
-  
-  
   return (
     <>
       <form className="addProductForm">

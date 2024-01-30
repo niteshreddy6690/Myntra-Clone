@@ -186,22 +186,21 @@ const HeaderText = styled.h1`
   text-align: start;
 
   @media screen and (max-width: 1200px) {
-     font-size: 1.6em;
+    font-size: 1.6em;
   }
-    @media screen and (max-width: 992px) {
-     font-size: 1.4em;
-     transition: all ease-in-out;
-     padding: 30px 0 30px 20px;
+  @media screen and (max-width: 992px) {
+    font-size: 1.4em;
+    transition: all ease-in-out;
+    padding: 30px 0 30px 20px;
   }
   @media screen and (max-width: 768px) {
-     font-size: 1.2em;
-     padding: 30px 0 30px 10px;
+    font-size: 1.2em;
+    padding: 30px 0 30px 10px;
   }
-   @media screen and (max-width: 560px) {
-     font-size: 1em;
-     padding: 30px 0 30px 5px;
+  @media screen and (max-width: 560px) {
+    font-size: 1em;
+    padding: 30px 0 30px 5px;
   }
-
 `;
 const NavLink = styled(Link)`
   text-decoration: none;
@@ -258,65 +257,101 @@ const Home = () => {
   const DealOfTheDayImages = [
     {
       id: "1",
-      to: "/shop/men",
+      to: "/shirts?rawQuery=shirts",
       img: `${DealOfTheDayImage1}`,
     },
     {
       id: "2",
-      to: "/shop/men",
+      to: "/men-tshirts",
       img: `${DealOfTheDayImage2}`,
     },
     {
       id: "3",
-      to: "/shop/men",
+      to: "/women-ethnic-wear",
       img: `${DealOfTheDayImage3}`,
     },
     {
       id: "4",
-      to: "/shop/men",
+      to: "/jackets?rawQuery=jackets&gender=men&brand=Roadster",
       img: `${DealOfTheDayImage4}`,
     },
     {
       id: "5",
-      to: "/shop/men",
+      to: "/women",
       img: `${DealOfTheDayImage5}`,
     },
     {
       id: "6",
-      to: "/shop/men",
+      to: "/men",
       img: `${DealOfTheDayImage6}`,
     },
     {
       id: "7",
-      to: "/shop/men",
+      to: "/men",
       img: `${DealOfTheDayImage7}`,
     },
     {
       id: "8",
-      to: "/shop/men",
+      to: "/women",
       img: `${DealOfTheDayImage8}`,
     },
   ];
 
   const BestOfMyntraContainer1 = [
-    { id: "1", to: "/shop/men", img: `${BestOfMyntraImage1}` },
-    { id: "2", to: "/shop/men", img: `${BestOfMyntraImage2}` },
-    { id: "3", to: "/shop/men", img: `${BestOfMyntraImage3}` },
-    { id: "4", to: "/shop/men", img: `${BestOfMyntraImage4}` },
-    { id: "5", to: "/shop/men", img: `${BestOfMyntraImage5}` },
-    { id: "6", to: "/shop/men", img: `${BestOfMyntraImage6}` },
-    { id: "7", to: "/shop/men", img: `${BestOfMyntraImage7}` },
-    { id: "8", to: "/shop/men", img: `${BestOfMyntraImage8}` },
+    {
+      id: "1",
+      to: "/men-tshirts?brand=WROGN%2CRoadster",
+      img: `${BestOfMyntraImage1}`,
+    },
+    { id: "2", to: "/women%20kurta%20sets", img: `${BestOfMyntraImage2}` },
+    { id: "3", to: "/kurtas?rawQuery=kurtas", img: `${BestOfMyntraImage3}` },
+    { id: "4", to: "/women-tshirts", img: `${BestOfMyntraImage4}` },
+    {
+      id: "5",
+      to: "/men-casual-shirt?brand=Roadster",
+      img: `${BestOfMyntraImage5}`,
+    },
+    { id: "6", to: "//women-jackets?brand=Soch", img: `${BestOfMyntraImage6}` },
+    {
+      id: "7",
+      to: "/Roadster?rawQuery=Roadster&gender=men",
+      img: `${BestOfMyntraImage7}`,
+    },
+    {
+      id: "8",
+      to: "/tshirt?rawQuery=tshirt&gender=women&brand=Roadster",
+      img: `${BestOfMyntraImage8}`,
+    },
   ];
   const BestOfMyntraContainer2 = [
-    { id: "9", to: "/shop/men", img: `${BestOfMyntraImage9}` },
-    { id: "10", to: "/shop/men", img: `${BestOfMyntraImage10}` },
-    { id: "11", to: "/shop/men", img: `${BestOfMyntraImage11}` },
-    { id: "12", to: "/shop/men", img: `${BestOfMyntraImage12}` },
-    { id: "13", to: "/shop/men", img: `${BestOfMyntraImage13}` },
-    { id: "14", to: "/shop/men", img: `${BestOfMyntraImage14}` },
-    { id: "15", to: "/shop/men", img: `${BestOfMyntraImage15}` },
-    { id: "16", to: "/shop/men", img: `${BestOfMyntraImage16}` },
+    {
+      id: "9",
+      to: "/men-tshirts?brand=HRX+by+Hrithik+Roshan",
+      img: `${BestOfMyntraImage9}`,
+    },
+    {
+      id: "10",
+      to: "?rawQuery=WROGN&gender=men",
+      img: `${BestOfMyntraImage10}`,
+    },
+    {
+      id: "11",
+      to: "/men-tshirts?brand=HRX+by+Hrithik+Roshan",
+      img: `${BestOfMyntraImage11}`,
+    },
+    { id: "12", to: "/women-tunics", img: `${BestOfMyntraImage12}` },
+    {
+      id: "13",
+      to: "/Roadster?rawQuery=Roadster&gender=men",
+      img: `${BestOfMyntraImage13}`,
+    },
+    { id: "14", to: "/women-tops", img: `${BestOfMyntraImage14}` },
+    { id: "15", to: "/men", img: `${BestOfMyntraImage15}` },
+    {
+      id: "16",
+      to: "/tshirt?rawQuery=tshirt&gender=women",
+      img: `${BestOfMyntraImage16}`,
+    },
   ];
   const TopPicks = [
     {
