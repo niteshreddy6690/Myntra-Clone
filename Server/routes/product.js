@@ -149,6 +149,7 @@ router.get("/:combineCategory", async (req, res) => {
     remainingQueryObject = Object.assign({}, queryObject);
     delete remainingQueryObject.gender;
   }
+
   var ProductsWithoutAnyQueryParams = await Product.find(
     remainingQueryObject
   ).populate("categories");
@@ -184,8 +185,6 @@ router.get("/:combineCategory", async (req, res) => {
       $gte: Number(discount.split("%")[0].trim()),
     };
   }
-
-  console.log("object", queryObject);
 
   let apiData = Product.find(queryObject).populate("categories");
 
