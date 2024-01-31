@@ -26,8 +26,9 @@ const WriteReviewModalContainer = styled.div`
   overflow-y: scroll;
   top: 50%;
   left: 50%;
-  width: 550px;
+  width: 100%;
   height: 55%;
+  max-height: 768px;
   transform: translate(-50%, -50%);
   background: #fff;
   z-index: 12;
@@ -88,7 +89,8 @@ const WriteReviewModalContainer = styled.div`
     cursor: pointer;
   }
   .writeReview-textarea {
-    height: 180px;
+    /* height: 180px; */
+    height: 100px;
     width: 100%;
     overflow: auto;
     padding: 10px;
@@ -120,10 +122,29 @@ const WriteReviewModalContainer = styled.div`
     letter-spacing: 2px;
     font-weight: 700;
     font-size: 14px;
-    width: 137px;
-    padding: 13px;
+    width: 100px;
+    padding: 8px 10px;
     text-transform: uppercase;
     cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  @media screen and (min-width: 576px) {
+    width: 550px;
+  }
+  @media screen and (min-width: 768px) {
+    .submit-button {
+      border-radius: 2px;
+      background-color: #ff3e6c;
+      color: #fff;
+      letter-spacing: 2px;
+      font-weight: 700;
+      font-size: 14px;
+      width: 137px;
+      padding: 10px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
   }
 `;
 
