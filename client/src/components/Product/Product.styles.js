@@ -787,7 +787,7 @@ export const Ul = styled.ul`
   }
 
   @media screen and (min-width: 768px) {
-    column-gap: 4%;
+    column-gap: 2%;
     margin: 0 -10px 0 0px;
 
     li:nth-child(odd) {
@@ -827,7 +827,7 @@ export const NavLink = styled(Link)`
 
   .image-Container {
     position: relative;
-    width: 210px;
+    width: 100%;
     height: 280px;
   }
 `;
