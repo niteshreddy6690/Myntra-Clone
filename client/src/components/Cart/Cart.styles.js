@@ -342,6 +342,10 @@ export const EmptyBagWrapper = styled.div`
   }
 `;
 export const EmptyBagContainer = styled.div`
-  width: 650px;
   margin: 24px auto;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: 650px;
+  }
 `;

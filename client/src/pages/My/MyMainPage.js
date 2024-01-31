@@ -52,7 +52,7 @@ const Sidebar = styled.div`
   display: none;
   width: 25%;
 
-  @media (min-width: 470px) {
+  @media (min-width: 768px) {
     display: inline-block;
   }
   .segment-segment:first-child {
@@ -85,9 +85,14 @@ const Sidebar = styled.div`
 
 const PageComponents = styled.div`
   padding: 10px;
-  width: 70%;
+  width: 100%;
   display: inline-block;
   margin: 5px;
+
+  @media screen and (min-width: 768px) {
+    width: 70%;
+    display: inline-block;
+  }
 `;
 const MyMainPage = () => {
   let location = useLocation();

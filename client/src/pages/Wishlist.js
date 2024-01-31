@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import axios from "axios";
+
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import {
   fetchWishListItems,
@@ -17,16 +17,13 @@ import { request } from "../api/axios";
 import Navbar from "../components/Navbar/Navbar";
 import LazyComponent from "../components/LazyComponent";
 
-import { Blurhash } from "react-blurhash";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "react-lazy-load-image-component/src/effects/black-and-white.css";
 import "react-lazy-load-image-component/src/effects/opacity.css";
 
 const Layout = styled.div`
   width: 100%;
-  /* padding: 0px 45px; */
+  padding: 0px 45px;
   display: flex;
   justify-content: center;
   /* align-items: center; */
@@ -35,9 +32,13 @@ const Layout = styled.div`
 const Container = styled.div`
   padding: 0 40px;
   max-width: 1400px;
-  min-width: 780px;
+
   margin-top: 40px;
   /* margin: 60px auto 0; */
+
+  @media screen and (min-width: 768px) {
+    min-width: 780px;
+  }
 `;
 const Header = styled.div`
   font-size: 20px;

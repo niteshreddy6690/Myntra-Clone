@@ -11,15 +11,15 @@ export const data = [
           },
           {
             title: "Casual Shirts",
-            path: "/men-casual-shirts",
+            path: "/men-casual-shirt",
           },
           {
             title: "Formal Shirts",
-            path: "/men-formal-shirts",
+            path: "/men-formal-shirt",
           },
           {
             title: "Sweat Shirts",
-            path: "/men-sweat-shirts",
+            path: "/men-sweat-shirt",
           },
           {
             title: "Sweaters",
@@ -31,15 +31,15 @@ export const data = [
           },
           {
             title: "Blazers & Coats",
-            path: "/men-blazers",
+            path: "/men",
           },
           {
             title: "Suits",
-            path: "/men-suits",
+            path: "/men",
           },
           {
             title: "Rain Jackets",
-            path: "/rain-jacket",
+            path: "/men",
           },
         ],
       },
@@ -48,11 +48,11 @@ export const data = [
         childrens: [
           {
             title: "Kurtas & kurta Sets",
-            path: "/men-tshirt",
+            path: "/men",
           },
           {
             title: "Sherwanis",
-            path: "/men-tshirt",
+            path: "/men",
           },
           {
             title: "Nehru Jackets",
@@ -69,19 +69,19 @@ export const data = [
         childrens: [
           {
             title: "jeans",
-            path: "/men-jeans",
+            path: "/men",
           },
           {
             title: "Casual Trousers",
-            path: "/men-casual-trousers",
+            path: "/men",
           },
           {
             title: "Formal Trousers",
-            path: "/men-formal-trousers",
+            path: "/men",
           },
           {
             title: "Shorts",
-            path: "/men-shorts",
+            path: "/men",
           },
         ],
       },
@@ -90,23 +90,23 @@ export const data = [
         childrens: [
           {
             title: "Brief & trunks",
-            path: "/men-briefs",
+            path: "/men",
           },
           {
             title: "Boxers",
-            path: "/men-boxers",
+            path: "/men",
           },
           {
             title: "Vests",
-            path: "/men-Vests",
+            path: "/men",
           },
           {
             title: "Sleepwear & Loungewear",
-            path: "/men-loungewear",
+            path: "/men",
           },
           {
             title: "Thermals",
-            path: "/men-thermals",
+            path: "/men",
           },
         ],
       },
@@ -116,31 +116,31 @@ export const data = [
         childrens: [
           {
             title: "casual Shoes",
-            path: "/men-casual-shoes",
+            path: "/men",
           },
           {
             title: "Sports Shoes",
-            path: "/men-sports-shoes",
+            path: "/men",
           },
           {
             title: "Formal Shoes",
-            path: "/men-formal-shoes",
+            path: "/men",
           },
           {
             title: "Sneakers",
-            path: "/men-sneakers",
+            path: "/men",
           },
           {
             title: "Sandals & Floaters",
-            path: "/men-sandals",
+            path: "/men",
           },
           {
             title: "Flip Flops",
-            path: "/men-Flip-flops",
+            path: "/men",
           },
           {
             title: "Socks",
-            path: "/men-socks",
+            path: "/men",
           },
         ],
       },
@@ -150,23 +150,23 @@ export const data = [
       {
         title: "Sports & Active Wear",
         childrens: [
-          { title: " sports Shoes", path: "/men-sports-shoes" },
-          { title: " sports Sandals", path: "/men-sports-sandals" },
+          { title: " sports Shoes", path: "/men" },
+          { title: " sports Sandals", path: "/men" },
           { title: "Active T-Shirt", path: "/men-tshirt" },
-          { title: "Track Pants & Shorts", path: "/men-track-pants" },
-          { title: "Track Suits", path: "/men-track-suits" },
-          { title: "Jackets & Sweatshirts", path: "/men-sports-jackets" },
-          { title: "Sports Accessories", path: "/men-sports-accessories" },
+          { title: "Track Pants & Shorts", path: "/men" },
+          { title: "Track Suits", path: "/men" },
+          { title: "Jackets & Sweatshirts", path: "/men" },
+          { title: "Sports Accessories", path: "/men" },
           { title: "Swimwear", path: "/men-swimwear" },
         ],
       },
       {
         title: "Gadgets",
         childrens: [
-          { title: "Smart Wearables", path: "/smart-wearables" },
-          { title: "fitness Gadgets", path: "/fitness-gadgets" },
-          { title: "Headphones", path: "/headphones" },
-          { title: "speakers", path: "/speakers" },
+          { title: "Smart Wearables", path: "/men" },
+          { title: "fitness Gadgets", path: "/men" },
+          { title: "Headphones", path: "/men" },
+          { title: "speakers", path: "/men" },
         ],
       },
       {

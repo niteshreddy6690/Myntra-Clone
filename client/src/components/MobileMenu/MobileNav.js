@@ -75,12 +75,12 @@ const SideBarNav = styled.div`
   padding-bottom: 15px;
   margin-bottom: 5px;
 
-  .user-authentication{
+  .user-authentication {
     font-size: 16px;
     text-decoration: none;
     color: #3e4152;
     display: block;
-    padding:14px 20px;
+    padding: 14px 20px;
     cursor: pointer;
   }
 `;
@@ -103,7 +103,7 @@ const MobileNav = ({ handleMobileNav, openMobileNavbar }) => {
   const { currentUser } = useSelector((state) => ({ ...state.user }));
   const handleLogout = async () => {
     const action = await dispatch(logOutUser({ refreshToken }));
-    if(isFulfilled(action)) {
+    if (isFulfilled(action)) {
       localStorage.clear();
       dispatch(fetchCartItems());
     }
@@ -142,7 +142,33 @@ const MobileNav = ({ handleMobileNav, openMobileNavbar }) => {
                 handleMobileNav={handleMobileNav}
               />
             ))}
-           {currentUser?<div className="user-authentication" onClick={()=>{handleLogout();handleMobileNav()}}>Logout</div> :<Link className="user-authentication" to="/login" onClick={() => handleMobileNav()}>Login</Link>}
+            <div className="user-authentication">
+              <Link to="/checkout/cart">Cart</Link>
+            </div>
+            {currentUser ? (
+              <>
+                <Link className="user-authentication" to="/my/orders">
+                  Orders
+                </Link>
+                <div
+                  className="user-authentication"
+                  onClick={() => {
+                    handleLogout();
+                    handleMobileNav();
+                  }}
+                >
+                  Logout
+                </div>
+              </>
+            ) : (
+              <Link
+                className="user-authentication"
+                to="/login"
+                onClick={() => handleMobileNav()}
+              >
+                Login
+              </Link>
+            )}
           </SideBarNav>
         </SideBarcon>
       </AppNav>

@@ -778,13 +778,21 @@ export const Ul = styled.ul`
   width: 100%;
   margin: 0;
   padding-left: 0;
-  justify-content: center;
-  column-gap: 4%;
+  justify-content: flex-start;
   list-style: none;
   flex-wrap: wrap;
-  margin: 0 -10px 0 0px;
-  @media screen and (min-width: 500px) {
-    justify-content: flex-start;
+
+  li:nth-child(odd) {
+    margin-right: 5px;
+  }
+
+  @media screen and (min-width: 768px) {
+    column-gap: 4%;
+    margin: 0 -10px 0 0px;
+
+    li:nth-child(odd) {
+      margin-right: 0px;
+    }
   }
 `;
 
@@ -792,7 +800,11 @@ export const Li = styled.li`
   display: block;
   overflow: hidden;
   margin: 0 0 30px;
-  width: 210px;
+  width: 48%;
+
+  @media screen and (min-width: 768px) {
+    width: 210px;
+  }
 
   &:hover {
     box-shadow: 0 2px 16px 4px rgb(40 44 63 / 7%);
