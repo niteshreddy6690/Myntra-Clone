@@ -279,9 +279,9 @@ export const SizeAndQuantityImage = styled.img`
 
 export const EmptyBagWrapper = styled.div`
   min-height: 420px;
-  padding-top: 100px;
+  padding-top: 50px;
   .empty-bag-base-container {
-    min-height: 600px;
+    min-height: 450px;
     position: relative;
     background-color: #fff;
   }

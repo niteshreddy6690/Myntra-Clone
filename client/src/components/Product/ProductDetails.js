@@ -147,6 +147,7 @@ const ProductDetails = () => {
   const handelSelectSize = (sizeValue) => {
     setSelectedSize(sizeValue);
     setIsNotSizeSelected(false);
+    setProductAddedToCart(false);
   };
 
   const handelAddToWishlist = async (id) => {
@@ -262,7 +263,13 @@ const ProductDetails = () => {
   return (
     <>
       <ToastContainer
-        style={{ position: "absolute", top: "90px", right: "-50px" }}
+        style={{
+          position: "absolute",
+          top: "90px",
+          right: "-50px",
+          height: "80px",
+          left: "unset",
+        }}
         toastStyle={{
           backgroundColor: "#171830",
           width: "200px",

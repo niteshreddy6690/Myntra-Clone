@@ -91,6 +91,14 @@ li {
   right: 1em;
   transform: none;
 }
+
+@media only screen and (max-width: 480px) {
+  .Toastify__toast-container {
+    width: 300px !important;
+    padding: 0 !important;
+    left: unset !;
+  }
+}
 /* .Toastify__toast-container {
   transform: translateY(-153px);
 } */
@@ -195,42 +203,47 @@ li {
   font-style: normal;
   font-weight: 500;
   src: local("whitneybook"), url("./fonts/whitneybook.ttf") format("truetype");
-} 
+}
 
-
 @font-face {
-  font-family:Assistant;
+  font-family: Assistant;
   font-style: normal;
   font-weight: 500;
-  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-Regular.ttf") format("truetype");
+  src: local(Assistant-Regular),
+    url("./fonts/Assistant/Assistant-Regular.ttf") format("truetype");
 }
 @font-face {
-  font-family:Assistant SemiBold ;
+  font-family: Assistant SemiBold;
   font-style: normal;
   font-weight: 500;
-  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-SemiBold.ttf") format("truetype");
+  src: local(Assistant-Regular),
+    url("./fonts/Assistant/Assistant-SemiBold.ttf") format("truetype");
 }
 @font-face {
-  font-family:Assistant Bold;
+  font-family: Assistant Bold;
   font-style: normal;
   font-weight: 500;
-  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-Bold.ttf") format("truetype");
+  src: local(Assistant-Regular),
+    url("./fonts/Assistant/Assistant-Bold.ttf") format("truetype");
 }
 @font-face {
-  font-family:Assistant ExtraBold;
+  font-family: Assistant ExtraBold;
   font-style: normal;
   font-weight: 500;
-  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-ExtraBold.ttf") format("truetype");
+  src: local(Assistant-Regular),
+    url("./fonts/Assistant/Assistant-ExtraBold.ttf") format("truetype");
 }
 @font-face {
-  font-family:Assistant Light;
+  font-family: Assistant Light;
   font-style: normal;
   font-weight: 500;
-  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-Light.ttf") format("truetype");
+  src: local(Assistant-Regular),
+    url("./fonts/Assistant/Assistant-Light.ttf") format("truetype");
 }
 @font-face {
-  font-family:Assistant ExtraLight;
+  font-family: Assistant ExtraLight;
   font-style: normal;
   font-weight: 500;
-  src: local(Assistant-Regular),url("./fonts/Assistant/Assistant-ExtraLight.ttf") format("truetype");
+  src: local(Assistant-Regular),
+    url("./fonts/Assistant/Assistant-ExtraLight.ttf") format("truetype");
 }

@@ -232,7 +232,14 @@ const Wishlist = () => {
     <Layout>
       <Navbar />
       <ToastContainer
-        style={{ position: "absolute", top: "10px", right: "0px" }}
+        style={{
+          position: "absolute",
+          top: "90px",
+          right: "0px",
+          width: "300px",
+          left: "unset",
+          height: "80px",
+        }}
         toastStyle={{
           backgroundColor: "#171830",
           width: "250px",

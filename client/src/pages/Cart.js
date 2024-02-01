@@ -89,7 +89,13 @@ const Cart = () => {
     <div>
       <NavBarForCartAndPayment />
       <ToastContainer
-        style={{ position: "absolute", top: "90px", right: "0px" }}
+        style={{
+          position: "absolute",
+          top: "90px",
+          right: "0px",
+          width: "300px",
+          left: "unset",
+        }}
         toastStyle={{
           backgroundColor: "#171830",
           width: "250px",

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MobileVerify from "../Assets/Images/mobile-verification.webp";
 import LocalStorageService from "../api/localStorage";
 import { request } from "../api/axios";
+import Navbar from "../components/Navbar/Navbar";
 const BACKSPACE = 8;
 const LEFT_ARROW = 37;
 const RIGHT_ARROW = 39;
@@ -211,8 +212,8 @@ const VerifyOtp = () => {
 
   return (
     <>
+      <Navbar />
       <FixedBackground />
-
       <Main>
         <Section>
           <Container>

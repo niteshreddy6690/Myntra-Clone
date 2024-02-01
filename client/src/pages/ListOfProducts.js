@@ -313,21 +313,23 @@ const Label1 = styled.label`
 `;
 
 const SortByContainerWrapper = styled.div`
-  /* display: inline-block; */
   float: right;
   margin-right: 30px;
   margin-bottom: 0;
   margin-top: -7px;
   position: relative;
   top: 5px;
+  display: none;
+
+  @media screen and (min-width: 576px) {
+    display: block;
+  }
 `;
 const SortByContainer = styled.div`
   z-index: 2;
   font-family: "Assistant";
   position: relative;
   top: 0px;
-  /* left: 1150px; */
-  /* right: -2px; */
   padding: 8px 14px;
   font-size: 14px;
   color: #282c3f;
@@ -343,13 +345,8 @@ const SortByContainer = styled.div`
     font-weight: 700;
     color: #282c3f;
   }
-  /* .sortBy {
-    margin-top: 5px;
-  } */
-  .sort-downArrow {
-    /* margin-left: 5px;
-    margin-top: 5px; */
 
+  .sort-downArrow {
     float: right;
   }
 
@@ -360,8 +357,6 @@ const SortByContainer = styled.div`
   .sort-list {
     box-sizing: border-box;
     width: 255px;
-    /* background-color: #fff; */
-
     position: absolute;
     top: 40px;
     margin: 0;
@@ -409,6 +404,7 @@ const ChipsContainer = styled.div`
   position: relative;
   list-style: none;
   padding-top: 20px;
+  display: none;
 
   .filter-summary-filterList {
     display: flex;
@@ -467,6 +463,10 @@ const ChipsContainer = styled.div`
     opacity: 0.7;
     -webkit-transform: scale(0.7);
     transform: scale(0.7);
+  }
+
+  @media screen and (min-width: 768px) {
+    display: block;
   }
 `;
 

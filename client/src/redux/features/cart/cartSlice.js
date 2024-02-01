@@ -50,9 +50,7 @@ export const removeCartItem = createAsyncThunk(
         dispatch(fetchCartItems());
         return response?.data;
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 );
 
@@ -61,7 +59,7 @@ export const addItemToBag = createAsyncThunk(
   async ({ productId, size, toast }, { dispatch }) => {
     try {
       const response = await api.addItemToCart({ productId, size });
-      
+
       if (response)
         toast("Added to bag", {
           position: "top-right",
@@ -90,15 +88,17 @@ export const addItemToBag = createAsyncThunk(
   }
 );
 
-export const updateSizeAndQuantityOfProductInBag=createAsyncThunk(
+export const updateSizeAndQuantityOfProductInBag = createAsyncThunk(
   "carts/update",
-  async({  productId,selectedSize,productGId,productQnt})=>{
+  async ({ productId, selectedSize, productGId, productQnt }) => {
     try {
-      await api.updateSizeAndQuantity({  productId,selectedSize,productGId,productQnt});
-    } catch (error) {
-      
-    }
-
+      await api.updateSizeAndQuantity({
+        productId,
+        selectedSize,
+        productGId,
+        productQnt,
+      });
+    } catch (error) {}
   }
 );
 

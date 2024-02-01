@@ -227,7 +227,14 @@ const Login = () => {
     <>
       <FixedBackground />
       <ToastContainer
-        style={{ position: "absolute", top: "90px", right: "-100px" }}
+        style={{
+          position: "absolute",
+          top: "90px",
+          right: "-100px",
+          width: "300px",
+          left: "unset",
+          height: "80px",
+        }}
         toastStyle={{
           backgroundColor: "#171830",
           width: "120px",
