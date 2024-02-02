@@ -64,7 +64,7 @@ const ErrorResponse = async (error) => {
     } catch (e) {
       const authUrl = isLocal
         ? "http://localhost:3000/login"
-        : `https://myntra-clone-a6xl.onrender.com/api/login`;
+        : `https://myntra-clone-by-nitesh.netlify.app/login`;
 
       // : `${window.location.origin}/login`;
       window.location.href = authUrl;
