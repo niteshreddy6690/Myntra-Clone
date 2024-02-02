@@ -75,56 +75,62 @@ const Similar = ({ open, similarProduct, handelClick }) => {
               </Icon>
             </SimilarHeaderContainer>
             <SimilarContent>
-              <div className="results-similarItemContainer">
-                <Ul>
-                  {similarUniqueProducts?.map((product, i) => (
-                    <Li key={i}>
-                      <NavLink
-                        to={`/${product.gender.toLowerCase()}/${product.brand
-                          .replaceAll(" ", "-")
-                          .toLowerCase()}/${product.description
-                          .replaceAll(" ", "-")
-                          .toLowerCase()}/${product._id}/buy`}
-                      >
-                        <div className="image-Container">
-                          {/* <Image src={product.images[0]?.url} /> */}
-                          <LazyImage
-                            key={`${product.images[0]?.name}-${i}`}
-                            src={`${product.images[0]?.url}&tr=q-70`}
-                            alt={product.images[0]?.name}
-                            width="100%"
-                            height="100%"
-                            loading="lazy"
-                            placeholderSrc={`${product.images[0]?.url}&tr=w-50,h-50,bl-20,q-50:w-250,h-320`}
-                            blurHashUrl={product.images[0]?.blurHashUrl}
-                          />
-                        </div>
-                        <ProductMetaInfo>
-                          <ProductHeader3>{product.brand}</ProductHeader3>
-                          <ProductHeader4>{product.Desc}</ProductHeader4>
-                          <ProductPriceContainer>
-                            <span>
-                              <ProductDiscountedPrice>
-                                {`Rs. ${Math.floor(
-                                  product.price -
-                                    product.price *
-                                      (product.discountPercentage / 100)
-                                )}`}
-                              </ProductDiscountedPrice>
-                              <ProductOriginalPrice>
-                                {product.price}
-                              </ProductOriginalPrice>
-                            </span>
-                            <ProductDiscountPercentage>
-                              {`(${product.discountPercentage}%OFF)`}
-                            </ProductDiscountPercentage>
-                          </ProductPriceContainer>
-                        </ProductMetaInfo>
-                      </NavLink>
-                    </Li>
-                  ))}
-                </Ul>
-              </div>
+              {similarUniqueProducts?.length > 0 ? (
+                <div className="results-similarItemContainer">
+                  <Ul>
+                    {similarUniqueProducts?.map((product, i) => (
+                      <Li key={i}>
+                        <NavLink
+                          to={`/${product.gender.toLowerCase()}/${product.brand
+                            .replaceAll(" ", "-")
+                            .toLowerCase()}/${product.description
+                            .replaceAll(" ", "-")
+                            .toLowerCase()}/${product._id}/buy`}
+                        >
+                          <div className="image-Container">
+                            {/* <Image src={product.images[0]?.url} /> */}
+                            <LazyImage
+                              key={`${product.images[0]?.name}-${i}`}
+                              src={`${product.images[0]?.url}&tr=q-70`}
+                              alt={product.images[0]?.name}
+                              width="100%"
+                              height="100%"
+                              loading="lazy"
+                              placeholderSrc={`${product.images[0]?.url}&tr=w-50,h-50,bl-20,q-50:w-250,h-320`}
+                              blurHashUrl={product.images[0]?.blurHashUrl}
+                            />
+                          </div>
+                          <ProductMetaInfo>
+                            <ProductHeader3>{product.brand}</ProductHeader3>
+                            <ProductHeader4>{product.Desc}</ProductHeader4>
+                            <ProductPriceContainer>
+                              <span>
+                                <ProductDiscountedPrice>
+                                  {`Rs. ${Math.floor(
+                                    product.price -
+                                      product.price *
+                                        (product.discountPercentage / 100)
+                                  )}`}
+                                </ProductDiscountedPrice>
+                                <ProductOriginalPrice>
+                                  {product.price}
+                                </ProductOriginalPrice>
+                              </span>
+                              <ProductDiscountPercentage>
+                                {`(${product.discountPercentage}%OFF)`}
+                              </ProductDiscountPercentage>
+                            </ProductPriceContainer>
+                          </ProductMetaInfo>
+                        </NavLink>
+                      </Li>
+                    ))}
+                  </Ul>
+                </div>
+              ) : (
+                <div className="results-similarItemContainer">
+                  <p>No similarProduct found</p>
+                </div>
+              )}
             </SimilarContent>
           </SimilarContainer>
         ) : (
