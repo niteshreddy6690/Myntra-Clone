@@ -185,7 +185,7 @@ const MyOrders = () => {
                         {order?.orderStatus[0]?.type}
                       </div>
                       <div className="orderItemDate">
-                        {`on ${moment(order?.orderStatus[-1]?.date).format(
+                        {`on ${moment(order?.orderStatus[0]?.date).format(
                           "ddd,DD-MMM-YYYY"
                         )}`}
                       </div>
