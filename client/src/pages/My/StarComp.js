@@ -7,7 +7,7 @@ import WriteReview from "../My/Modals/WriteReview";
 const StartContainer = styled.div`
   .starComp {
     color: lightGrey;
-    /* cursor: pointer; */
+    cursor: pointer;
     /* border: 1px solid black; */
   }
   .starSelected {
@@ -49,6 +49,8 @@ const StarComp = ({
       ? Number(userRatingForProduct[0]?.rating)
       : null
   );
+
+  const [selectedHoverStars, setSelectedHoverStars] = useState(0);
   const [commentValue, SetCommentValue] = useState("");
   const [showWriteReview, setShowWriteReview] = useState(false);
 
@@ -59,15 +61,16 @@ const StarComp = ({
   }, []);
 
   const mouseLeave = () => {
-    setSelectedStars(
-      userRatingForProduct[0]?.rating
-        ? Number(userRatingForProduct[0]?.rating)
-        : null
-    );
+    setSelectedStars(selectedStars);
+    setSelectedHoverStars(0);
   };
 
   const handleStarClick = (num) => {
     setSelectedStars(num);
+    callAddReview(productId, num, commentValue);
+  };
+  const handleMouseEnter = (num) => {
+    setSelectedHoverStars(num);
     SetCommentValue(
       userRatingForProduct[0]?.comment ? userRatingForProduct[0]?.comment : ""
     );
@@ -85,28 +88,25 @@ const StarComp = ({
         <div className="reviewContainer">
           {[1, 2, 3, 4, 5].map((num) => (
             <span key={num} onMouseLeave={() => mouseLeave()}>
-              {selectedStars < num ? (
+              {(selectedHoverStars || selectedStars) < num ? (
                 <StarOutlineRoundedIcon
                   key={num}
-                  onMouseEnter={() => handleStarClick(num)}
+                  onMouseEnter={() => handleMouseEnter(num)}
                   // onMouseLeave={() => handleStarClick(selectedStars)}
                   className="starComp"
                 />
               ) : (
                 <StarRoundedIcon
                   key={num}
-                  onMouseEnter={() => handleStarClick(num)}
+                  onMouseEnter={() => handleMouseEnter(num)}
                   // onMouseLeave={() => handleStarClick(selectedStars)}
                   className="starSelected"
-                  onClick={() =>
-                    callAddReview(productId, selectedStars, commentValue)
-                  }
+                  onClick={() => handleStarClick(num)}
                 />
               )}
             </span>
           ))}
         </div>
-
         <div className="write-review" onClick={handleShowModal}>
           {userRatingForProduct[0]?.comment ? "Edit Review" : "Write Review"}
         </div>
