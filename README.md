@@ -1,61 +1,97 @@
+# Myntra Clone 
+
+Myntra clone is E-commeres project built using React, Styled components,Tailwind CSS,RTK,node.js,express.js and MongoDB.
 
 
 
 
-<img width="866" alt="Screenshot 2024-02-04 at 2 12 06 PM" src="https://github.com/niteshreddy6690/Myntra-Clone/assets/37637254/3fcc753e-b205-49a9-a20f-b8f3f3922bd6">
-This project was bootstrapped with Create React App.
 
-Available Scripts
-In the project directory, you can run:
 
-yarn start
-Runs the app in the development mode.
-Open http://localhost:3000 to view it in the browser.
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+## Live Demo
 
-yarn test
-Launches the test runner in the interactive watch mode.
-See the section about running tests for more information.
+https://myntra-clone-by-nitesh.netlify.app
+## Features
 
-yarn build
-Builds the app for production to the build folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-  Responsive design
+-  Clean and modern UI
+-  Image Lazyloading
+-  JWT Authentication and Authorization 
+-  Role based Authentication
+-  Cart
+-  Wishlist
+-  Review 
+-  Profile
+-  Like or Unlike Review
+-  Address  
+-  Razorpay payment
+-  Order details
+-  Cross platform
 
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
+## Technologies Used
 
-See the section about deployment for more information.
+-  ImageKit real-time image (https://imagekit.io/)
+-  Blurhash Image placeholder (https://blurha.sh/)
+-  Google Firebase for Image storage (https://firebase.google.com/)
+## Tech Stack
 
-yarn eject
-Note: this is a one-way operation. Once you eject, you can’t go back!
+**Client:** React, RTK,TailwindCSS, Styled Components.
 
-If you aren’t satisfied with the build tool and configuration choices, you can eject at any time. This command will remove the single build dependency from your project.
+**Server:** Node, Express
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except eject will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**Data Base:** MongoDB
 
-You don’t have to ever use eject. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-Learn More
-You can learn more in the Create React App documentation.
+## Getting Started
 
-To learn React, check out the React documentation.
+ 1. Clone the repository:
 
-Code Splitting
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+   git clone https://github.com/niteshreddy6690/Myntra-Clone.git 
 
-Analyzing the Bundle Size
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+2. Navigate to the project
 
-Making a Progressive Web App
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+   cd client   
 
-Advanced Configuration
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+     - Install dependencies
 
-Deployment
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+            npm install
 
-yarn build fails to minify
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    - Run the development server
+
+          npm start
+
+       Open http://localhost:3000 in your browser to view the app.
+
+
+   cd server
+
+    - Install dependencies
+
+        npm install
+
+    - Run the server at port 8080
+
+          npm start
+
+
+  cd admin
+
+       - Install dependencies
+
+            npm install
+
+    - Run the development server
+
+          npm start
+   
+     Open http://localhost:3001 in your browser to view the app.
+
+       
+
+## Appendix
+
+Make sure to creat your own accounts in Firebase,imagekit and add those API key in the .env file 
+
+## Authors
+
+- [@Nitesh S](https://github.com/niteshreddy6690/)
