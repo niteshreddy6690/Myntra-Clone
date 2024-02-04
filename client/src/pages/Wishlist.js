@@ -252,7 +252,9 @@ const Wishlist = () => {
         <LoadingSpinner />
       ) : (
         <Container>
-          <Header>{`My Wishlist contains ${wishlistProducts.length} items`}</Header>
+          <Header>{`My Wishlist ${
+            wishlistProducts.length > 0 ? wishlistProducts.length : null
+          } items`}</Header>
           <ProductContainer>
             <Ul>
               {wishlistProducts.map((item, i) => (
