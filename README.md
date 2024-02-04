@@ -1,3 +1,8 @@
+
+
+
+
+<img width="866" alt="Screenshot 2024-02-04 at 2 12 06 PM" src="https://github.com/niteshreddy6690/Myntra-Clone/assets/37637254/3fcc753e-b205-49a9-a20f-b8f3f3922bd6">
 This project was bootstrapped with Create React App.
 
 Available Scripts
