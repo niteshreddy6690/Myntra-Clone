@@ -151,7 +151,9 @@ const ProductDetails = () => {
   };
 
   const handelAddToWishlist = async (id) => {
-    if (currentUser) {
+    console.log("add to wishlist", id);
+    if(!productInWishlist){
+    if (currentUser ) {
       const res = await request.post("/wishlist/", {
         id,
       });
@@ -159,6 +161,7 @@ const ProductDetails = () => {
     } else {
       navigate("/login");
     }
+  }
   };
 
   const checkProductInWishlist = async (id) => {
