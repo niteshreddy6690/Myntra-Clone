@@ -8,62 +8,10 @@ const bcrypt = require("bcryptjs");
 const userService = require("../services/userServices");
 // const { sendMessage } = require("fast-two-sms");
 // const TwoFactor = new (require("2factor"))(
-//   "1ba23eeb-b77d-11ed-813b-0200cd936042"
+//   "process.env.TW"
 // );
+
 const Token = require("../models/Token");
-
-// fast2sms.sendMessage(options).then((response) => {
-//   
-// });
-
-// exports.register = catchAsync(async (req, res) => {
-//   const { phonenumber } = req.body;
-
-//   
-//   const userr = await User.findOne({ phonenumber: phonenumber });
-
-//   if (!userr) {
-//     const user = await User.create({
-//       phonenumber,
-//     });
-//   }
-
-//   const user = await User.findOne({ phonenumber: phonenumber });
-
-//   //   let otp = Math.floor((1 + Math.random()) * 90000);
-
-//   //   let options = {
-//   //     authorization: process.env.Fast2SMS_API,
-//   //     message: `This Website is made by Vikas Verma Thank You to use my Website Your OTP: is ${otp}`,
-//   //     numbers: [phonenumber],
-//   //   };
-
-//   //   sendMessage(options)
-//   //     .then((response) => {
-//   //       if (response.return === true) {
-//   //         async function fun() {
-//   //           user.otp = otp;
-//   //           await user.save();
-//   //         }
-//   //         fun();
-
-//   //         res.status(200).json({
-//   //           success: true,
-//   //           user,
-//   //           message: `OTP Sent on ${user.phonenumber} Successfully`,
-//   //         });
-//   //       } else {
-//   //         
-//   //         res.status(400).json({
-//   //           success: false,
-//   //         });
-//   //       }
-//   //     })
-//   //     .catch((error) => {
-//   //       
-//   //     });
-// });
-
 
 // Register user
 const register = catchAsync(async (req, res) => {
@@ -76,25 +24,23 @@ const register = catchAsync(async (req, res) => {
   });
   if (phonenumber.match(phoneRegEx)) {
     var user = await User.findOne({ phonenumber: phonenumber });
-    
+
     if (!user) {
       user = await User.create({
         phonenumber,
       });
-      
+
       // isNewUser = true;
     }
 
     //   Math.floor((1 + Math.random()) * 90000);
-    
+
     // let options = {
     //   authorization: process.env.Fast2SMS_API,
     //   message: ` Your Myntra otp ${otp}`,
     //   numbers: ["9901145387"],
     // };
     const userOtp = await Otp.deleteMany({ userId: user.id });
-
-    
 
     // if (userOtp) {
     //   await userOtp.deleteMany();
@@ -112,15 +58,15 @@ const register = catchAsync(async (req, res) => {
   //   template: "CLONE Myntra OTP",
   // }).then(
   //   (sessionId) => {
-  //     
+  //
   //   },
   //   (error) => {
-  //     
+  //
   //   }
   // );
 
   //   fast2sms.sendMessage(options).then((response) => {
-  //     
+  //
   //     if (response.return === true) {
   //       async function fun() {
   //         user.otp = otp;
@@ -134,7 +80,7 @@ const register = catchAsync(async (req, res) => {
   //         message: `OTP Sent on ${user.phonenumber} Successfully`,
   //       });
   //     } else {
-  //       
+  //
   //       res.status(400).json({
   //         success: false,
   //       });
@@ -147,7 +93,10 @@ const register = catchAsync(async (req, res) => {
 // Verify otp
 const verifyOtp = async (req, res) => {
   const { otp, phoneNumber } = req.body;
-  const user = await User.findOne({ phonenumber: phoneNumber },{createdAt:0,updatedAt:0});
+  const user = await User.findOne(
+    { phonenumber: phoneNumber },
+    { createdAt: 0, updatedAt: 0 }
+  );
   const otpUser = await Otp.findOne({ userId: user?.id });
   if (!otpUser?.otp) {
     return res.status(401).json({
@@ -155,7 +104,6 @@ const verifyOtp = async (req, res) => {
     });
   }
   if (otp === otpUser?.otp) {
-    
     user.verify = "verified";
     otpUser.otp = null;
     await user.save();
@@ -184,12 +132,14 @@ const verifyOtp = async (req, res) => {
     //   await userToken.remove();
     // }
 
-     await Token.deleteMany({ userId: user.id})
+    await Token.deleteMany({ userId: user.id });
     const token = await new Token({
       userId: user.id,
       token: RefreshToken,
     }).save();
-    return res.status(200).json({ AccessToken, RefreshToken:token?.token, user });
+    return res
+      .status(200)
+      .json({ AccessToken, RefreshToken: token?.token, user });
   } else {
     return res.status(403).json({
       message: "Invalid OTP",
@@ -199,11 +149,10 @@ const verifyOtp = async (req, res) => {
 
 //Resend Otp
 const resendOtp = catchAsync(async (req, res) => {
-  
   const { phonenumber } = req.body;
-  
+
   const user = await userService.getUserByPhoneNumber(phonenumber);
-  
+
   const otpUser = await Otp.deleteMany({ userId: user.id });
 
   let otp = otpGenerator.generate(4, {
@@ -222,9 +171,8 @@ const resendOtp = catchAsync(async (req, res) => {
 });
 // Create Account
 const createAccount = catchAsync(async (req, res) => {
-  
   const user = await userService.updateUser(req.params.phone, req.body);
-  
+
   res.send(user);
 });
 
@@ -234,8 +182,7 @@ const refreshToken = catchAsync(async (req, res) => {
   if (!refreshToken)
     return res.status(401).json({ message: "Refresh token required" });
   const token = await Token.findOne({ token: refreshToken });
-  if (!token)
-    return res.status(404).json({ message: "not found in DB" });
+  if (!token) return res.status(404).json({ message: "not found in DB" });
   jwt.verify(
     refreshToken,
     process.env.JWT_REFRESH_SECRET_KEY,
@@ -260,14 +207,13 @@ const refreshToken = catchAsync(async (req, res) => {
 
 // logout
 const logout = catchAsync(async (req, res) => {
-  
   const { refreshToken } = req.body;
-  
+
   if (!refreshToken)
     return res.status(401).json({ message: "Refresh token required" });
   const refreshTokenDoc = await Token.findOne({ token: refreshToken });
   if (!refreshTokenDoc)
-    return res.status(200).json({message: "User already logged out" });
+    return res.status(200).json({ message: "User already logged out" });
   refreshTokenDoc.remove();
   return res.status(200).json({ message: "successfully logged out" });
 });
