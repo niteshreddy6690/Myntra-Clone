@@ -14,7 +14,7 @@ const addItemToWishList = catchAsync(async (req, res) => {
     wishlistProduct: product._id,
   });
   if (containProductInWishlist) {
-    throw new ApiError(httpStatus.FOUND, "Product is already in wishlist");
+    return res.status(httpStatus.OK).send("Product is already in wishlist");
   }
   const wlist = WhishList.create({ wishlistProduct: product, user: userId });
   res.status(httpStatus.CREATED).send(wlist);
